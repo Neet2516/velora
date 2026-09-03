@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle2, Sparkles, ExternalLink } from 'lucide-react';
+import { X, CheckCircle2, ArrowRight } from 'lucide-react';
 import { EcosystemProduct } from '../../types';
 
 interface ProductModalProps {
@@ -9,20 +9,20 @@ interface ProductModalProps {
 }
 
 const productImages: Record<string, string> = {
-  'broker-house': '/images/broker_house_unveil.png',
-  'prop-firm': '/images/prop_firm_golden_bull.png',
-  'crypto-arbitrage': '/images/crypto_arbitrage_cube.png',
-  'ai-agent': '/images/ai_agent_neural_brain.png',
-  'education-platform': '/images/education_platform_academy.png',
-  'forex-cards': '/images/forex_cards_luxury_trio.png',
-  'fund-management': '/images/fund_management_wealth.png',
-  'automation-bot': '/images/ai_automation_robot.png',
+  'broker-house': '/images/ecosystem_broker_phone.jpg',
+  'prop-firm': '/images/ecosystem_prop_bull.jpg',
+  'crypto-arbitrage': '/images/ecosystem_crypto_cube.jpg',
+  'ai-agent': '/images/ecosystem_ai_brain.jpg',
+  'education-platform': '/images/ecosystem_education_academy.jpg',
+  'forex-cards': '/images/ecosystem_forex_cards.jpg',
+  'fund-management': '/images/ecosystem_fund_vault.jpg',
+  'automation-bot': '/images/ecosystem_automation_bot.jpg',
 };
 
 export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) => {
   if (!product) return null;
 
-  const imgSrc = productImages[product.id] || '/images/ecosystem_vision_hub.png';
+  const imgSrc = productImages[product.id] || '/images/ecosystem_broker_phone.jpg';
 
   return (
     <AnimatePresence>
@@ -44,7 +44,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
           className="relative w-full max-w-3xl bg-[#091540] border border-[#7692FF]/40 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(27,44,193,0.35)] z-10"
         >
           {/* Image Header */}
-          <div className="relative h-56 sm:h-72">
+          <div className="relative h-64 sm:h-80 overflow-hidden">
             <img src={imgSrc} alt={product.title} className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#091540] via-transparent to-transparent" />
 
@@ -58,7 +58,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
 
             {/* Status */}
             <div className="absolute bottom-4 left-5">
-              <span className="text-[10px] px-3 py-1 rounded-full bg-[#1B2CC1]/50 backdrop-blur-md border border-[#7692FF]/40 text-[#ABD2FA] font-mono uppercase tracking-wider">
+              <span className="text-[10px] px-3.5 py-1.5 rounded-full bg-[#1B2CC1]/70 backdrop-blur-md border border-[#7692FF]/40 text-[#ABD2FA] font-mono uppercase tracking-wider font-semibold">
                 {product.status}
               </span>
             </div>
@@ -87,10 +87,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
                 Close
               </button>
               <button
-                onClick={() => { onClose(); document.getElementById('ecosystem')?.scrollIntoView({ behavior: 'smooth' }); }}
+                onClick={() => {
+                  onClose();
+                  document.getElementById('ecosystem')?.scrollIntoView({ behavior: 'smooth' });
+                }}
                 className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] text-white text-xs font-display font-semibold flex items-center gap-1.5"
               >
-                View in Ecosystem <ExternalLink className="w-3 h-3" />
+                <span>View in Ecosystem</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>

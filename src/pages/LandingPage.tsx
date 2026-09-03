@@ -3,7 +3,6 @@ import { Navbar } from '../components/landing/Navbar';
 import { HeroSection } from '../components/landing/HeroSection';
 import { VisionSection } from '../components/landing/VisionSection';
 import { EcosystemSection } from '../components/landing/EcosystemSection';
-import { AIAgentSection } from '../components/landing/AIAgentSection';
 import { RoadmapSection } from '../components/landing/RoadmapSection';
 import { UpcomingSection } from '../components/landing/UpcomingSection';
 import { FinalCTASection } from '../components/landing/FinalCTASection';
@@ -17,6 +16,7 @@ import { EcosystemProduct } from '../types';
 export const LandingPage: React.FC = () => {
   useLenis();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<EcosystemProduct | null>(null);
 
   const handleExploreEcosystem = () => {
@@ -31,9 +31,9 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#050c26] text-slate-100 flex flex-col relative selection:bg-[#7692FF]/30 selection:text-[#ABD2FA]">
-      <VeloraHandwritingLoader />
+      <VeloraHandwritingLoader onLoaded={() => setIsLoading(false)} />
 
-      <Navbar onExploreEcosystem={handleExploreEcosystem} />
+      {!isLoading && <Navbar onExploreEcosystem={handleExploreEcosystem} />}
 
       <main className="flex-grow">
         <HeroSection
@@ -51,17 +51,11 @@ export const LandingPage: React.FC = () => {
 
         <SectionDivider />
 
-        <AIAgentSection />
-
-        <SectionDivider />
-
         <RoadmapSection />
 
         <SectionDivider />
 
         <UpcomingSection />
-
-        <SectionDivider />
 
         <FinalCTASection onExploreEcosystem={handleExploreEcosystem} />
       </main>

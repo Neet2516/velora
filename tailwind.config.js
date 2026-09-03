@@ -25,6 +25,8 @@ export default {
         display: ['Outfit', '"Space Grotesk"', 'system-ui', 'sans-serif'],
         // Monospace for data & code
         mono: ['"JetBrains Mono"', 'Fira Code', 'monospace'],
+        // Handwritten cursive for luxury flourishes & thank you
+        cursive: ['"Betania Patmos"', '"Great Vibes"', '"Alex Brush"', 'cursive'],
       },
       backgroundImage: {
         'gradient-velora': 'linear-gradient(135deg, #091540 0%, #1B2CC1 50%, #7692FF 100%)',

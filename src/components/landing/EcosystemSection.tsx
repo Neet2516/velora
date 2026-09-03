@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ExternalLink } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { ArrowRight, ShieldCheck, Zap, Target, MessageSquare, TrendingUp, Shield, BarChart3, Activity, Cpu, Sparkles, HelpCircle, Lock, Unlock } from 'lucide-react';
 import { VELORA_PRODUCTS } from '../../data/productsData';
 import { EcosystemProduct } from '../../types';
 
@@ -9,39 +9,628 @@ interface EcosystemSectionProps {
 }
 
 const productImages: Record<string, string> = {
-  'broker-house': '/images/broker_house_phone.png',
-  'prop-firm': '/images/prop_firm_golden_bull.png',
-  'crypto-arbitrage': '/images/crypto_arbitrage_cube.png',
-  'ai-agent': '/images/ai_agent_neural_brain.png',
-  'education-platform': '/images/education_platform_academy.png',
-  'forex-cards': '/images/forex_cards_luxury_trio.png',
-  'fund-management': '/images/fund_management_wealth.png',
-  'automation-bot': '/images/ai_automation_robot.png',
+  'broker-house': '/images/ecosystem_broker_phone.jpg',
+  'prop-firm': '/images/ecosystem_prop_bull.jpg',
+  'crypto-arbitrage': '/images/ecosystem_crypto_cube.jpg',
+  'ai-agent': '/images/ecosystem_ai_brain.jpg',
+  'education-platform': '/images/ecosystem_education_academy.jpg',
+  'forex-cards': '/images/ecosystem_forex_cards.jpg',
+  'fund-management': '/images/ecosystem_fund_vault.jpg',
+  'automation-bot': '/images/ecosystem_automation_bot.jpg',
 };
 
-const productQuotes: Record<string, string> = {
-  'broker-house': 'Technology + Trust + Flexibility + Security + Innovation + Execution.',
-  'prop-firm': 'We fund. You trade. Together, we build the future.',
-  'crypto-arbitrage': 'The future of arbitrage is almost here.',
-  'ai-agent': 'Think. Analyze. Decide. Evolve.',
-  'education-platform': 'Learn. Trade. Grow.',
-  'forex-cards': 'YOUR MONEY. YOUR WORLD. Exclusive. Global. Limitless.',
-  'fund-management': 'Expertise you trust. Growth you deserve.',
-  'automation-bot': 'Intelligence that trades. Automation that delivers.',
+interface PillarDetail {
+  introducingNumber: string;
+  badgeStatus: string;
+  mainHeadingLine1: string;
+  mainHeadingLine2: string;
+  tagline: string;
+  description: string;
+  features: { icon: React.ElementType; title: string; text: string }[];
+  hudCards: { label: string; value: string; sub?: string }[];
+  quote: string;
+}
+
+const PILLAR_DETAILS: Record<string, PillarDetail> = {
+  'broker-house': {
+    introducingNumber: '01',
+    badgeStatus: 'LIVE & OPERATIONAL',
+    mainHeadingLine1: 'VELORA',
+    mainHeadingLine2: 'BROKER HOUSE',
+    tagline: 'Your Gateway to Global Institutional Liquidity.',
+    description:
+      'Deep institutional liquidity and zero-slippage execution unifying hybrid MM matching with direct STP/ECN prime feeds.',
+    features: [
+      { icon: Zap, title: 'Hybrid Routing', text: 'Optimal split between MM liquidity and direct Tier-1 bank matching.' },
+      { icon: Target, title: 'Raw Interbank Spreads', text: 'Spreads starting from 0.0 pips on major FX pairs, Gold and Crypto.' },
+      { icon: Shield, title: 'Segregated Vaults', text: 'Bank-grade client asset custody with multi-jurisdiction compliance.' },
+      { icon: TrendingUp, title: 'MetaTrader 5 Ultra', text: 'Sub-millisecond trade execution with advanced algorithmic tools.' },
+    ],
+    hudCards: [
+      { label: 'SPREAD SENSITIVITY', value: '0.0 Pips', sub: 'EUR/USD RAW' },
+      { label: 'EXECUTION SPEED', value: '1.2ms', sub: 'FIBER LATENCY' },
+      { label: 'DAILY LIQUIDITY', value: '$6.6T', sub: 'GLOBAL POOL' },
+    ],
+    quote: 'Technology + Trust + Flexibility + Security + Execution.',
+  },
+  'prop-firm': {
+    introducingNumber: '02',
+    badgeStatus: 'ACTIVE EVALUATION',
+    mainHeadingLine1: 'VELORA',
+    mainHeadingLine2: 'PROP FIRM',
+    tagline: 'We Fund. You Trade. Together, We Build The Future.',
+    description:
+      'Trade institutional capital up to $200,000+ with 90% profit splits and zero personal risk.',
+    features: [
+      { icon: Target, title: 'Funded Allocations', text: 'Simulated funding accounts scaling up to $200,000+.' },
+      { icon: Zap, title: 'High Profit Retention', text: 'Keep up to 90% of your trading gains with bi-weekly payouts.' },
+      { icon: Shield, title: 'Zero Personal Risk', text: 'Never risk your personal life savings. Trade institutional capital.' },
+      { icon: BarChart3, title: 'Transparent Rules', text: 'Clear profit targets, realistic daily drawdown limits, and zero hidden traps.' },
+    ],
+    hudCards: [
+      { label: 'MAX ALLOCATION', value: '$200K+', sub: 'SCALING READY' },
+      { label: 'PROFIT SHARE', value: '90%', sub: 'TRADER SPLIT' },
+      { label: 'ACTIVE TRADERS', value: '4,200+', sub: 'GLOBAL COMMUNITY' },
+    ],
+    quote: 'We fund. You trade. Together, we build the future.',
+  },
+  'crypto-arbitrage': {
+    introducingNumber: '03',
+    badgeStatus: 'REVEALING SOON',
+    mainHeadingLine1: 'CRYPTO',
+    mainHeadingLine2: 'ARBITRAGE',
+    tagline: 'Capturing Disparities Across Global Order Books.',
+    description:
+      'Capturing sub-millisecond triangular price disparities across Tier-1 crypto order books with zero directional risk.',
+    features: [
+      { icon: Cpu, title: 'Cross-Exchange Mesh', text: 'Simultaneous low-latency connection across top centralized & decentralized venues.' },
+      { icon: Zap, title: 'Sub-Millisecond Engine', text: 'High-frequency algorithmic trade execution before market equilibration.' },
+      { icon: Shield, title: 'Slippage Shield', text: 'Pre-flight transaction simulations preventing unprofitable slippage.' },
+      { icon: Activity, title: '24/7 Non-Stop Harvest', text: 'Continuous automated order execution requiring zero manual monitoring.' },
+    ],
+    hudCards: [
+      { label: 'SPREAD CAPTURE', value: '+0.42%', sub: 'AVG PER TRIANGLE' },
+      { label: 'EXCHANGES LINKED', value: '14 Venues', sub: 'TIER-1 CEX/DEX' },
+      { label: 'CYCLE LATENCY', value: '< 1.5ms', sub: 'HIGH-FREQUENCY' },
+    ],
+    quote: 'The future of arbitrage is almost here.',
+  },
+  'ai-agent': {
+    introducingNumber: '04',
+    badgeStatus: 'IN DEVELOPMENT',
+    mainHeadingLine1: 'VELORA',
+    mainHeadingLine2: 'AI AGENT',
+    tagline: 'Your Intelligent Partner in Trading & Markets.',
+    description:
+      'Real-time market intelligence, institutional sentiment scoring, and automated neural trading execution.',
+    features: [
+      { icon: Zap, title: 'Smarter Analysis', text: 'AI-powered insights for deeper market understanding.' },
+      { icon: Target, title: 'Better Decisions', text: 'Real-time data. Smarter calls. Stronger outcomes.' },
+      { icon: MessageSquare, title: 'Strategy Discussions', text: 'Collaborate with AI to refine ideas and build winning strategies.' },
+      { icon: TrendingUp, title: 'Future Planning', text: 'Predict trends. Anticipate moves. Stay ahead of the game.' },
+      { icon: Shield, title: 'Risk Management', text: 'Intelligent alerts. Protect capital. Trade with confidence.' },
+    ],
+    hudCards: [
+      { label: 'NEWS SENTIMENT', value: '87%', sub: 'EUR/USD BULLISH' },
+      { label: 'VOLATILITY INDEX', value: '34/100', sub: 'MODERATE FLUX' },
+      { label: 'RISK SCORE', value: '23/100', sub: 'PROTECTION ACTIVE' },
+    ],
+    quote: 'Real-time insights. AI-powered precision. Endless possibilities.',
+  },
+  'education-platform': {
+    introducingNumber: '05',
+    badgeStatus: 'ACTIVE PORTAL',
+    mainHeadingLine1: 'VELORA',
+    mainHeadingLine2: 'ACADEMY',
+    tagline: 'Learn. Trade. Grow. Master Global Markets.',
+    description:
+      'Comprehensive masterclasses, live mentor trading desks, and direct pathways to institutional prop funding.',
+    features: [
+      { icon: Target, title: 'Complete Curriculum', text: 'Step-by-step masterclasses spanning Forex, Gold, Crypto and Macro.' },
+      { icon: MessageSquare, title: 'Live Trading Rooms', text: 'Daily live market breakdown sessions with veteran institutional traders.' },
+      { icon: Cpu, title: 'Trading Simulators', text: 'Risk-free paper trading environments connected to live exchange tick data.' },
+      { icon: Shield, title: 'Fast-Track Funding', text: 'Graduates receive prioritized evaluation access to Velora Prop Firm capital.' },
+    ],
+    hudCards: [
+      { label: 'COURSE HOURS', value: '140+ Hrs', sub: 'MASTERCLASS CONTENT' },
+      { label: 'LIVE SESSIONS', value: '5 Daily', sub: 'GLOBAL TIMEZONES' },
+      { label: 'ACTIVE STUDENTS', value: '28,000+', sub: '120+ COUNTRIES' },
+    ],
+    quote: 'Learn. Trade. Grow.',
+  },
+  'forex-cards': {
+    introducingNumber: '06',
+    badgeStatus: 'COMING SOON',
+    mainHeadingLine1: 'VELORA',
+    mainHeadingLine2: 'FOREX CARDS',
+    tagline: 'Your Money. Your World. Exclusive. Global. Limitless.',
+    description:
+      'Three luxury physical cards accepted in 190+ countries with instant off-ramp and zero FX surcharges.',
+    features: [
+      { icon: Shield, title: 'Three Luxury Tiers', text: 'Handcrafted titanium and obsidian cards with biometric security.' },
+      { icon: Zap, title: 'Instant Off-Ramp', text: 'Direct balance transfer from broker and prop firm accounts in seconds.' },
+      { icon: Target, title: 'Worldwide Acceptance', text: 'Accepted at over 40 million merchants and ATMs across 190+ nations.' },
+      { icon: Activity, title: 'Zero FX Surcharges', text: 'Transparent wholesale institutional currency exchange rates.' },
+    ],
+    hudCards: [
+      { label: 'ATM LIMIT', value: '$15,000/Day', sub: 'DIAMOND TIER' },
+      { label: 'GLOBAL ACCESS', value: '190+ Nations', sub: 'WORLDWIDE REACH' },
+      { label: 'OFF-RAMP SPEED', value: 'Instant', sub: 'ACCOUNT TO CARD' },
+    ],
+    quote: 'YOUR MONEY. YOUR WORLD. Exclusive. Global. Limitless.',
+  },
+  'fund-management': {
+    introducingNumber: '07',
+    badgeStatus: 'INSTITUTIONAL',
+    mainHeadingLine1: 'FUND',
+    mainHeadingLine2: 'MANAGEMENT',
+    tagline: 'Expertise You Trust. Growth You Deserve.',
+    description:
+      'Institutional asset allocation, dynamic risk hedging, and transparent real-time performance auditing.',
+    features: [
+      { icon: Shield, title: 'Capital Preservation', text: 'Multi-layered hedging models designed to withstand extreme market drawdowns.' },
+      { icon: TrendingUp, title: 'Targeted Alpha', text: 'Consistent, risk-adjusted returns generated through algorithmic asset allocation.' },
+      { icon: Target, title: 'Segregated Accounts', text: 'Direct investor ownership in regulated European and UAE custodian banks.' },
+      { icon: BarChart3, title: 'Real-Time Audits', text: 'Live on-chain and broker ledger transparency with zero lock-in opacity.' },
+    ],
+    hudCards: [
+      { label: 'TARGET ALPHA', value: '+28.4%', sub: 'ANNUAL NET GOAL' },
+      { label: 'MAX DRAWDOWN', value: '< 4.2%', sub: 'HISTORICAL CAP' },
+      { label: 'CUSTODY RATING', value: 'AAA', sub: 'TIER-1 BANK VAULTS' },
+    ],
+    quote: 'Expertise you trust. Growth you deserve.',
+  },
+  'automation-bot': {
+    introducingNumber: '08',
+    badgeStatus: 'ALGORITHMIC',
+    mainHeadingLine1: 'AUTOMATION',
+    mainHeadingLine2: 'BOT SUITE',
+    tagline: 'Intelligence That Trades. Automation That Delivers.',
+    description:
+      'Algorithmic execution strategies, automated risk guards, and 1-click verified copy trading.',
+    features: [
+      { icon: Cpu, title: 'Automated Algorithms', text: 'Quantitative mathematical models executing non-stop with precision logic.' },
+      { icon: Zap, title: 'One-Click Copy Trading', text: 'Automatically replicate trades of top-tier verified master traders.' },
+      { icon: Shield, title: 'Custom Risk Guards', text: 'Set hard drawdown caps, max daily loss rules, and automated kill-switches.' },
+      { icon: Activity, title: 'Cloud-Hosted Low Latency', text: 'Runs 24/7 on dedicated institutional VPS servers with 99.99% uptime.' },
+    ],
+    hudCards: [
+      { label: 'WIN RATE', value: '74.8%', sub: 'BACKTESTED POOL' },
+      { label: 'AVG DAILY TRADES', value: '32 Cycles', sub: 'MICRO-ARBITRAGE' },
+      { label: 'CLOUD UPTIME', value: '99.99%', sub: 'SUB-MS HOSTING' },
+    ],
+    quote: 'Intelligence that trades. Automation that delivers.',
+  },
 };
 
-const productSubtitles: Record<string, string> = {
-  'broker-house': 'Hybrid Broker — the best of MM + STP/ECN with deep liquidity and bank-grade segregation.',
-  'prop-firm': 'Funded accounts up to $200,000+. Zero personal risk. 85–90% profit split.',
-  'crypto-arbitrage': 'Sub-millisecond price disparity capture across Tier-1 crypto order books.',
-  'ai-agent': 'Neural AI powering real-time sentiment, risk scoring, and strategy co-piloting.',
-  'education-platform': 'Foundational basics to institutional masterclasses. Live mentors & webinars.',
-  'forex-cards': 'Three luxury tiers — Sapphire, Obsidian, Diamond. 190+ countries accepted.',
-  'fund-management': 'Professional portfolio management. Institutional strategies. Transparent reporting.',
-  'automation-bot': 'License-based trading bots with copy-trade and intelligent execution.',
-};
+/* ─── DEDICATED INTERACTIVE VISUAL FRAME FOR EACH PILLAR ─── */
+function PillarVisualShowcase({
+  productId,
+  scrollYProgress,
+}: {
+  productId: string;
+  scrollYProgress: any;
+}) {
+  // 1. Broker House 3D Scroll Rotation
+  const phoneRotateY = useTransform(scrollYProgress, [0, 0.45, 0.9], [-24, 4, 22]);
+  const phoneRotateX = useTransform(scrollYProgress, [0, 0.45, 0.9], [14, 0, -8]);
+  const phoneRotateZ = useTransform(scrollYProgress, [0, 0.45, 0.9], [-8, 0, 6]);
 
-/* ─── Single Sticky Card ─── */
+  // 2. Prop Firm Bull Forward Charge
+  const bullScale = useTransform(scrollYProgress, [0, 0.5, 0.9], [0.94, 1.06, 1]);
+  const bullRotateY = useTransform(scrollYProgress, [0, 0.5, 0.9], [-12, 0, 10]);
+
+  // 3. Crypto Arbitrage Unveil & Click State
+  const [isUnveiled, setIsUnveiled] = useState(false);
+  const cubeRotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
+
+  // 4. Forex Cards 3D Fan-out Active Index
+  const [activeCardIndex, setActiveCardIndex] = useState(1); // 0: Sapphire, 1: Obsidian, 2: Diamond
+
+  const imgSrc = productImages[productId] || '/images/ecosystem_broker_phone.jpg';
+
+  return (
+    <div className="relative w-full h-full flex items-center justify-center select-none">
+      {/* ─── BASE AMBIENT GLOW ─── */}
+      <div className="absolute w-[440px] h-[440px] rounded-full bg-gradient-to-tr from-[#1B2CC1]/35 via-[#7692FF]/25 to-[#ABD2FA]/15 blur-[120px] pointer-events-none" />
+
+      {/* ─── HOLOGRAPHIC EMITTER PEDESTAL AT BASE ─── */}
+      <div className="absolute bottom-6 sm:bottom-10 w-80 h-24 flex items-center justify-center pointer-events-none">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 26, repeat: Infinity, ease: 'linear' }}
+          className="absolute w-72 h-16 rounded-[100%] border border-[#7692FF]/40 shadow-[0_0_25px_rgba(118,146,255,0.35)]"
+        />
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
+          className="absolute w-56 h-12 rounded-[100%] border border-[#ABD2FA]/50"
+        />
+        <div className="absolute w-44 h-8 rounded-[100%] bg-gradient-to-t from-[#ABD2FA]/40 via-[#7692FF]/20 to-transparent blur-sm" />
+        <div className="absolute -top-36 w-52 h-44 bg-gradient-to-t from-[#7692FF]/25 via-[#ABD2FA]/10 to-transparent blur-xl" />
+      </div>
+
+      {/* ─── CASE 1: BROKER HOUSE (SCROLL-DRIVEN 3D PHONE ROTATION + FLOATING CHIPS) ─── */}
+      {productId === 'broker-house' && (
+        <div className="relative w-[340px] sm:w-[420px] aspect-square flex items-center justify-center [perspective:1200px]">
+          {/* 3D Rotating Phone Container */}
+          <motion.div
+            style={{
+              rotateY: phoneRotateY,
+              rotateX: phoneRotateX,
+              rotateZ: phoneRotateZ,
+              transformStyle: 'preserve-3d',
+              WebkitMaskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
+              maskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
+            }}
+            animate={{ y: [-6, 6, -6] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-full h-full flex items-center justify-center"
+          >
+            <img
+              src={imgSrc}
+              alt="Broker House 3D Phone"
+              className="w-full h-full object-cover scale-105"
+            />
+          </motion.div>
+
+          {/* Floating Contextual Chips Around Phone (Exact WhatsApp Screenshot) */}
+          <motion.div
+            animate={{ y: [-4, 6, -4], x: [-2, 3, -2] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-2 left-4 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/85 border border-[#7692FF]/50 backdrop-blur-xl shadow-[0_0_20px_rgba(27,44,193,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              Hybrid Model
+            </span>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [6, -5, 6], x: [2, -3, 2] }}
+            transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+            className="absolute top-1/3 -right-2 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/85 border border-[#ABD2FA]/50 backdrop-blur-xl shadow-[0_0_20px_rgba(118,146,255,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#7692FF] animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              Advanced Technology
+            </span>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [-5, 5, -5], x: [-3, 2, -3] }}
+            transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
+            className="absolute bottom-6 left-6 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/85 border border-[#7692FF]/50 backdrop-blur-xl shadow-[0_0_20px_rgba(27,44,193,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              Full Transparency
+            </span>
+          </motion.div>
+        </div>
+      )}
+
+      {/* ─── CASE 2: CRYPTO ARBITRAGE (INTERACTIVE MYSTERY CRATE / CUBE WITH CLICK UNVEIL) ─── */}
+      {productId === 'crypto-arbitrage' && (
+        <div
+          onClick={() => setIsUnveiled(!isUnveiled)}
+          className="relative w-[340px] sm:w-[420px] aspect-square flex items-center justify-center cursor-pointer group"
+        >
+          {/* Main 3D Cube Container */}
+          <motion.div
+            style={{
+              WebkitMaskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
+              maskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
+            }}
+            animate={{
+              y: [-7, 7, -7],
+              scale: isUnveiled ? 1.08 : 1,
+            }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-full h-full flex items-center justify-center transition-transform duration-500"
+          >
+            <img
+              src={imgSrc}
+              alt="Crypto Arbitrage Cube"
+              className="w-full h-full object-cover scale-105"
+            />
+          </motion.div>
+
+          {/* Central Mystery Box Overlay with Glowing "?" (WhatsApp Screenshot) */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-30 pointer-events-none">
+            <motion.div
+              animate={{
+                scale: isUnveiled ? [1, 1.25, 0] : [1, 1.1, 1],
+                opacity: isUnveiled ? [1, 1, 0] : 1,
+              }}
+              transition={{ duration: 0.6 }}
+              className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#1B2CC1]/80 via-[#7692FF]/60 to-[#ABD2FA]/40 border-2 border-[#ABD2FA] backdrop-blur-xl shadow-[0_0_35px_rgba(118,146,255,0.9)] flex items-center justify-center text-white"
+            >
+              <span className="text-3xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-t from-[#ABD2FA] to-white filter drop-shadow-[0_0_8px_#ffffff]">
+                ?
+              </span>
+            </motion.div>
+
+            {/* Status Tooltip Button */}
+            <motion.div
+              animate={{ y: [0, -3, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="mt-4 px-4 py-1.5 rounded-full bg-[#050c26]/90 border border-[#ABD2FA]/50 backdrop-blur-md shadow-card-lux"
+            >
+              <span className="text-[10px] font-mono tracking-[0.2em] text-[#ABD2FA] uppercase font-bold flex items-center gap-1.5">
+                {isUnveiled ? (
+                  <>
+                    <Unlock className="w-3 h-3 text-emerald-400" />
+                    <span>ENGINE UNLOCKED</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-3 h-3 text-[#ABD2FA]" />
+                    <span>CLICK TO UNVEIL</span>
+                  </>
+                )}
+              </span>
+            </motion.div>
+          </div>
+
+          {/* Bursting Crypto Tokens on Unveil */}
+          <AnimatePresence>
+            {isUnveiled && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0, x: -60, y: -60 }}
+                  animate={{ opacity: 1, scale: 1, x: -90, y: -90 }}
+                  exit={{ opacity: 0, scale: 0 }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  className="absolute z-40 w-12 h-12 rounded-full bg-[#091540] border-2 border-[#ABD2FA] shadow-[0_0_25px_#ABD2FA] flex items-center justify-center text-[#ABD2FA] font-display font-bold text-lg"
+                >
+                  ₿
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0, x: 60, y: -50 }}
+                  animate={{ opacity: 1, scale: 1, x: 95, y: -75 }}
+                  exit={{ opacity: 0, scale: 0 }}
+                  transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
+                  className="absolute z-40 w-11 h-11 rounded-full bg-[#091540] border-2 border-[#7692FF] shadow-[0_0_25px_#7692FF] flex items-center justify-center text-white font-display font-bold text-base"
+                >
+                  Ξ
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0, x: 0, y: 70 }}
+                  animate={{ opacity: 1, scale: 1, x: 10, y: 105 }}
+                  exit={{ opacity: 0, scale: 0 }}
+                  transition={{ duration: 0.5, ease: 'easeOut', delay: 0.15 }}
+                  className="absolute z-40 w-10 h-10 rounded-full bg-[#091540] border-2 border-[#1B2CC1] shadow-[0_0_25px_#1B2CC1] flex items-center justify-center text-[#ABD2FA] font-display font-bold text-sm"
+                >
+                  ◎
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+
+      {/* ─── CASE 3: FOREX CARDS (3D MULTI-CARD FAN-OUT & CAROUSEL PAGINATION) ─── */}
+      {productId === 'forex-cards' && (
+        <div className="relative w-[340px] sm:w-[440px] aspect-square flex flex-col items-center justify-center">
+          {/* Main 3D Zero-Gravity Cards Fan-Out */}
+          <div className="relative w-full h-[300px] flex items-center justify-center [perspective:1000px]">
+            {/* Card 0: Sapphire Blue Edition */}
+            <motion.div
+              onClick={() => setActiveCardIndex(0)}
+              animate={{
+                x: activeCardIndex === 0 ? 0 : -85,
+                y: activeCardIndex === 0 ? -12 : 10,
+                rotateZ: activeCardIndex === 0 ? 0 : -14,
+                scale: activeCardIndex === 0 ? 1.08 : 0.88,
+                zIndex: activeCardIndex === 0 ? 30 : 10,
+              }}
+              transition={{ duration: 0.45, ease: 'easeInOut' }}
+              className="absolute w-44 sm:w-52 h-64 sm:h-72 rounded-2xl bg-gradient-to-br from-[#1B2CC1] via-[#091540] to-[#050c26] border-2 border-[#7692FF] p-4 shadow-[0_15px_40px_rgba(27,44,193,0.5)] cursor-pointer flex flex-col justify-between"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] font-mono tracking-widest text-[#ABD2FA] uppercase font-bold">
+                  SAPPHIRE TIER
+                </span>
+                <span className="w-5 h-4 rounded bg-[#ABD2FA]/30 border border-[#ABD2FA]/60" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-lg font-display font-extrabold tracking-widest text-white block">
+                  VELORA
+                </span>
+                <span className="text-[8px] font-mono tracking-[0.3em] text-[#ABD2FA] uppercase block">
+                  GLOBAL ELITE
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Card 1: Obsidian Black Edition (Center) */}
+            <motion.div
+              onClick={() => setActiveCardIndex(1)}
+              animate={{
+                x: activeCardIndex === 1 ? 0 : activeCardIndex === 0 ? 85 : -85,
+                y: activeCardIndex === 1 ? -12 : 10,
+                rotateZ: activeCardIndex === 1 ? 0 : activeCardIndex === 0 ? 14 : -14,
+                scale: activeCardIndex === 1 ? 1.08 : 0.88,
+                zIndex: activeCardIndex === 1 ? 30 : 20,
+              }}
+              transition={{ duration: 0.45, ease: 'easeInOut' }}
+              className="absolute w-44 sm:w-52 h-64 sm:h-72 rounded-2xl bg-gradient-to-br from-[#121216] via-[#090b14] to-black border-2 border-[#ABD2FA] p-4 shadow-[0_15px_40px_rgba(118,146,255,0.4)] cursor-pointer flex flex-col justify-between"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] font-mono tracking-widest text-white uppercase font-bold">
+                  OBSIDIAN TIER
+                </span>
+                <span className="w-5 h-4 rounded bg-amber-400/40 border border-amber-400" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-lg font-display font-extrabold tracking-widest text-white block">
+                  VELORA
+                </span>
+                <span className="text-[8px] font-mono tracking-[0.3em] text-[#7692FF] uppercase block">
+                  BLACK EDITION
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Card 2: Diamond Quartz Edition */}
+            <motion.div
+              onClick={() => setActiveCardIndex(2)}
+              animate={{
+                x: activeCardIndex === 2 ? 0 : 85,
+                y: activeCardIndex === 2 ? -12 : 10,
+                rotateZ: activeCardIndex === 2 ? 0 : 14,
+                scale: activeCardIndex === 2 ? 1.08 : 0.88,
+                zIndex: activeCardIndex === 2 ? 30 : 10,
+              }}
+              transition={{ duration: 0.45, ease: 'easeInOut' }}
+              className="absolute w-44 sm:w-52 h-64 sm:h-72 rounded-2xl bg-gradient-to-br from-[#f0f4ff] via-[#d0e0ff] to-[#99bcf7] text-[#091540] border-2 border-white p-4 shadow-[0_15px_40px_rgba(171,210,250,0.5)] cursor-pointer flex flex-col justify-between"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] font-mono tracking-widest text-[#1B2CC1] uppercase font-bold">
+                  DIAMOND QUARTZ
+                </span>
+                <span className="w-5 h-4 rounded bg-[#1B2CC1]/20 border border-[#1B2CC1]" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-lg font-display font-extrabold tracking-widest text-[#091540] block">
+                  VELORA
+                </span>
+                <span className="text-[8px] font-mono tracking-[0.3em] text-[#1B2CC1] uppercase block">
+                  PRIVATE VAULT
+                </span>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Interactive Pagination Dots (Matching WhatsApp Screenshot) */}
+          <div className="flex items-center gap-3 mt-4 z-30">
+            <button
+              onClick={() => setActiveCardIndex(0)}
+              className={`transition-all rounded-full ${
+                activeCardIndex === 0
+                  ? 'w-6 h-2.5 bg-[#7692FF] shadow-[0_0_10px_#7692FF]'
+                  : 'w-2.5 h-2.5 bg-[#7692FF]/40 hover:bg-[#7692FF]'
+              }`}
+              aria-label="Sapphire Card"
+            />
+            <button
+              onClick={() => setActiveCardIndex(1)}
+              className={`transition-all rounded-full ${
+                activeCardIndex === 1
+                  ? 'w-6 h-2.5 bg-[#1B2CC1] shadow-[0_0_10px_#1B2CC1]'
+                  : 'w-2.5 h-2.5 bg-slate-500 hover:bg-slate-300'
+              }`}
+              aria-label="Obsidian Card"
+            />
+            <button
+              onClick={() => setActiveCardIndex(2)}
+              className={`transition-all rounded-full ${
+                activeCardIndex === 2
+                  ? 'w-6 h-2.5 bg-white shadow-[0_0_10px_#ffffff]'
+                  : 'w-2.5 h-2.5 bg-white/40 hover:bg-white'
+              }`}
+              aria-label="Diamond Quartz Card"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ─── CASE 4: PROP FIRM (GOLDEN BULL CHARGE) ─── */}
+      {productId === 'prop-firm' && (
+        <motion.div
+          style={{
+            scale: bullScale,
+            rotateY: bullRotateY,
+            WebkitMaskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
+            maskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
+          }}
+          animate={{ y: [-8, 8, -8] }}
+          transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="relative z-10 w-[320px] sm:w-[420px] aspect-square flex items-center justify-center"
+        >
+          <img
+            src={imgSrc}
+            alt="Prop Firm Golden Bull"
+            className="w-full h-full object-cover scale-105"
+            loading="eager"
+          />
+        </motion.div>
+      )}
+
+      {/* ─── CASE 5: AI AGENT, EDUCATION, FUND MANAGEMENT, AUTOMATION (ORGANIC RADIAL BLEND) ─── */}
+      {productId !== 'broker-house' &&
+        productId !== 'crypto-arbitrage' &&
+        productId !== 'forex-cards' &&
+        productId !== 'prop-firm' && (
+          <motion.div
+            animate={{ y: [-8, 8, -8] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative z-10 w-[320px] sm:w-[420px] aspect-square flex items-center justify-center select-none"
+            style={{
+              WebkitMaskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
+              maskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
+            }}
+          >
+            <img
+              src={imgSrc}
+              alt="Ecosystem 3D Visual"
+              className="w-full h-full object-cover scale-105"
+              loading="eager"
+            />
+          </motion.div>
+        )}
+
+      {/* ─── FLOATING HOLOGRAPHIC TELEMETRY HUD CARDS (RIGHT EDGE) ─── */}
+      {productId !== 'forex-cards' && (
+        <div className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 space-y-3 pointer-events-none hidden sm:block">
+          {(PILLAR_DETAILS[productId]?.hudCards || []).map((hud, hIdx) => (
+            <motion.div
+              key={hIdx}
+              animate={{
+                y: hIdx % 2 === 0 ? [-4, 4, -4] : [4, -4, 4],
+              }}
+              transition={{
+                duration: 4 + hIdx * 0.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: hIdx * 0.3,
+              }}
+              className="p-3 rounded-2xl bg-[#091540]/80 border border-[#7692FF]/35 backdrop-blur-xl shadow-[0_4px_25px_rgba(5,12,38,0.7)] w-38 sm:w-42 text-left"
+            >
+              <span className="text-[9px] font-mono text-slate-400 uppercase block">
+                {hud.label}
+              </span>
+              <span className="text-sm font-display font-extrabold text-[#ABD2FA] block mt-0.5">
+                {hud.value}
+              </span>
+              {hud.sub && (
+                <span className="text-[9px] font-mono text-[#7692FF] block mt-0.5">
+                  {hud.sub}
+                </span>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {/* ─── VERTICAL COUNTER INDICATOR (0X / 08 PRODUCTS) ─── */}
+      <div className="absolute right-4 bottom-8 z-20 flex items-center gap-2 text-right pointer-events-none select-none">
+        <div>
+          <span className="text-xs font-mono font-bold text-white block leading-none">
+            {PILLAR_DETAILS[productId]?.introducingNumber || '01'} / 08
+          </span>
+          <span className="text-[8px] font-mono tracking-[0.25em] text-[#7692FF] uppercase block mt-1">
+            PRODUCTS
+          </span>
+        </div>
+        <div className="w-[2px] h-8 bg-gradient-to-b from-[#ABD2FA] to-[#1B2CC1] rounded-full" />
+      </div>
+    </div>
+  );
+}
+
+/* ─── Single Sticky Card with Seamless Environment Blending ─── */
 function StickyProductCard({
   product,
   index,
@@ -60,76 +649,107 @@ function StickyProductCard({
     offset: ['start end', 'end start'],
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.55, 0.82], [0, 1, 1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.15, 0.55, 0.82], [0.93, 1, 1, 0.95]);
-  const imgScale = useTransform(scrollYProgress, [0, 0.25, 0.65], [1.12, 1, 1.04]);
-  const y = useTransform(scrollYProgress, [0, 0.15], [50, 0]);
-  const textX = useTransform(scrollYProgress, [0.05, 0.22], [-30, 0]);
-  const textOpacity = useTransform(scrollYProgress, [0.08, 0.25], [0, 1]);
+  const isEven = index % 2 === 0;
 
-  const pillarNum = (index + 1).toString().padStart(2, '0');
-  const imgSrc = productImages[product.id] || '/images/ecosystem_vision_hub.png';
-  const quote = productQuotes[product.id] || '';
-  const subtitle = productSubtitles[product.id] || product.description;
+  // Opacity: smoothly becomes clear as it slides in
+  const opacity = useTransform(scrollYProgress, [0, 0.22, 0.75, 0.92], [0.15, 1, 1, 0]);
+  // Scale: expands to full scale by half-page
+  const scale = useTransform(scrollYProgress, [0, 0.35, 0.75, 0.92], [0.92, 1, 1, 0.96]);
+  const y = useTransform(scrollYProgress, [0, 0.35], [30, 0]);
+
+  // Alternating 50% entry: Even cards glide from LEFT (-50%), Odd cards from RIGHT (+50%), completing at half-page (0.35)
+  const x = useTransform(
+    scrollYProgress,
+    [0, 0.35, 0.75, 0.92],
+    [isEven ? '-50%' : '50%', '0%', '0%', isEven ? '-15%' : '15%']
+  );
+
+  // Organic rotational tilt leveling out precisely at half-page
+  const rotate = useTransform(
+    scrollYProgress,
+    [0, 0.35, 0.75, 0.92],
+    [isEven ? -3.5 : 3.5, 0, 0, isEven ? -1 : 1]
+  );
+
+  const detail = PILLAR_DETAILS[product.id] || PILLAR_DETAILS['broker-house'];
 
   return (
-    <div ref={cardRef} className="h-[110vh] flex items-center justify-center">
+    <div ref={cardRef} className="min-h-[115vh] flex items-center justify-center py-10">
       <motion.div
-        style={{ opacity, scale, y }}
-        className="sticky top-[7vh] w-full max-w-7xl mx-auto h-[86vh] rounded-3xl overflow-hidden border border-[#7692FF]/25 shadow-card-lux cursor-pointer group"
-        onClick={() => onSelect(product)}
+        style={{ opacity, scale, y, x, rotate }}
+        className="sticky top-[8vh] w-full max-w-[1680px] mx-auto min-h-[84vh] rounded-[2.5rem] bg-[#050c26]/95 border border-[#7692FF]/20 shadow-[0_20px_80px_rgba(5,12,38,0.95)] backdrop-blur-3xl flex flex-col lg:flex-row items-stretch overflow-hidden relative"
       >
-        <motion.img
-          src={imgSrc}
-          alt={product.title}
-          loading="lazy"
-          style={{ scale: imgScale }}
-          className="absolute inset-0 w-full h-full object-cover will-change-transform"
-        />
+        <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050c26] via-[#050c26]/50 to-[#050c26]/15" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050c26]/65 via-transparent to-transparent" />
+        {/* ─── LEFT COLUMN: REFINED HIGH-END EDITORIAL (54% WIDTH) ─── */}
+        <div className="lg:w-[54%] p-8 sm:p-12 lg:p-14 flex flex-col justify-between relative z-10">
+          <div>
+            {/* Header: Number & Introducing Tagline */}
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-xs font-mono tracking-[0.25em] text-slate-400">
+                {detail.introducingNumber}
+              </span>
+              <span className="h-[1px] w-8 bg-[#7692FF]/40" />
+              <span className="text-[10px] font-mono tracking-[0.35em] text-[#ABD2FA] uppercase font-semibold">
+                INTRODUCING
+              </span>
+            </div>
 
-        {/* Giant Pillar Number watermark */}
-        <div className="absolute top-6 sm:top-8 left-6 sm:left-10 pointer-events-none select-none">
-          <span className="text-[80px] sm:text-[120px] lg:text-[160px] font-serif font-bold text-white/[0.05] leading-none select-none">
-            {pillarNum}
-          </span>
-        </div>
+            {/* Main Headline */}
+            <h3 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold text-white tracking-tight leading-[0.98] mb-3">
+              {detail.mainHeadingLine1}
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ABD2FA] to-[#7692FF]">
+                {detail.mainHeadingLine2}
+              </span>
+            </h3>
 
-        {/* Status Badge */}
-        <div className="absolute top-6 sm:top-8 right-6 sm:right-10 flex flex-col items-end gap-2">
-          <span className="text-[9px] px-3 py-1.5 rounded-full bg-[#091540]/80 backdrop-blur-md border border-[#7692FF]/40 text-[#ABD2FA] font-mono uppercase tracking-[0.2em]">
-            {product.status}
-          </span>
-        </div>
+            {/* Tagline */}
+            <p className="text-sm sm:text-base font-sans text-[#ABD2FA]/90 font-medium mb-4">
+              {detail.tagline}
+            </p>
 
-        {/* Content: Bottom-Left with scroll-driven slide-in */}
-        <motion.div
-          style={{ x: textX, opacity: textOpacity }}
-          className="absolute bottom-0 left-0 right-0 p-6 sm:p-10 lg:p-14"
-        >
-          {/* Title */}
-          <h3 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-white leading-[1.08] mb-3 max-w-3xl">
-            {product.title}
-          </h3>
+            {/* Description Narrative */}
+            <p className="text-base sm:text-lg lg:text-xl font-sans text-slate-200 leading-relaxed mb-7 max-w-xl">
+              {detail.description}
+            </p>
 
-          {/* Quote */}
-          <p className="text-base sm:text-xl font-serif italic text-[#ABD2FA]/85 mb-3 max-w-2xl">
-            "{quote}"
-          </p>
-
-          {/* Short Subtitle */}
-          <p className="text-xs sm:text-sm font-sans text-slate-300/70 max-w-xl leading-relaxed mb-5">
-            {subtitle}
-          </p>
-
-          {/* CTA */}
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/15 hover:border-[#ABD2FA]/50 backdrop-blur-md text-[11px] font-display font-semibold text-white/60 hover:text-white transition-all group/btn">
-            <span>EXPLORE ARCHITECTURE</span>
-            <ExternalLink className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+            {/* Features: Clean Typography List (No Nested Boxes, No Emojis/Icons) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3.5 pt-5 border-t border-white/10 mb-6">
+              {detail.features.map((feat, fIdx) => (
+                <div key={fIdx} className="flex items-center gap-2.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] shrink-0 shadow-[0_0_6px_#ABD2FA]" />
+                  <span className="text-sm font-sans font-medium text-slate-200 tracking-wide">
+                    {feat.title}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        </motion.div>
+
+          {/* Bottom Row: Quote & Action CTA */}
+          <div className="pt-4 border-t border-[#7692FF]/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <p className="text-xs font-serif italic text-slate-400">
+              "{detail.quote}"
+            </p>
+
+            <button
+              onClick={() => onSelect(product)}
+              className="px-6 py-2.5 rounded-full font-display font-semibold text-xs text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] hover:shadow-[0_0_25px_rgba(118,146,255,0.45)] transition-all flex items-center gap-2 border border-[#ABD2FA]/30 group/btn shrink-0"
+            >
+              <span>EXPLORE ARCHITECTURE</span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#ABD2FA] group-hover/btn:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </div>
+
+        {/* ─── RIGHT COLUMN: DEDICATED VISUAL FRAME WITH SPECIFIC ANIMATIONS ─── */}
+        <div className="lg:w-[46%] relative flex items-center justify-center p-6 sm:p-10 overflow-hidden bg-gradient-to-l from-[#091540]/50 to-transparent">
+          <PillarVisualShowcase
+            productId={product.id}
+            scrollYProgress={scrollYProgress}
+          />
+        </div>
       </motion.div>
     </div>
   );
@@ -142,7 +762,7 @@ export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onSelectProd
   return (
     <section id="ecosystem" className="relative">
       {/* Intro Screen */}
-      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 relative z-10">
+      <div className="min-h-[45vh] flex flex-col items-center justify-center text-center px-4 relative z-10">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -156,7 +776,7 @@ export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onSelectProd
         </motion.h2>
       </div>
 
-      {/* Stacked Cards */}
+      {/* Stacked Cards Container */}
       <div className="relative px-4 sm:px-6 lg:px-8">
         {primaryEight.map((product, idx) => (
           <StickyProductCard

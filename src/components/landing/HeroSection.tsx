@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, ChevronDown, Sparkles, MapPin } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import animatedVideo from '../../../assets/animated_video.mp4';
 import { VeloraSignature } from '../brand/VeloraSignature';
 
@@ -20,24 +20,44 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <section className="relative w-full min-h-screen flex flex-col justify-center items-center overflow-hidden">
-      {/* Full-Screen Animated Video Background - Plays Only Once */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
+      {/* Background Frame Layer: Deep Blue Cinematic Vignette & Ambient Glow */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        {/* Full-Screen Animated Video */}
         <video
           autoPlay
           muted
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover opacity-75"
         >
           <source src={animatedVideo} type="video/mp4" />
           <source src="/assets/animated_video.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050c26]/75 via-[#050c26]/45 to-[#050c26]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#091540]/60 via-transparent to-[#091540]/60" />
+
+        {/* Ambient Cosmic Radial Glow - Exactly like the loader: Center light/luminous */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-[1300px] h-[580px] bg-gradient-to-tr from-[#1B2CC1]/40 via-[#7692FF]/30 to-[#ABD2FA]/20 rounded-full blur-[150px] pointer-events-none animate-pulse-glow" />
+
+        {/* Glowing Cyber Grid matching the loader */}
+        <div className="absolute inset-0 bg-cyber-grid opacity-20 pointer-events-none" />
+
+        {/* Deep Blue Frame: Dark on the sides, fading inward */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050c26] via-[#050c26]/20 to-[#050c26] pointer-events-none" />
+
+        {/* Top and Bottom Dark Transitions */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050c26]/85 via-transparent to-[#050c26] pointer-events-none" />
+
+        {/* Deep Blue Cinematic Elliptical Vignette Frame */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse 85% 70% at 50% 50%, rgba(9, 21, 64, 0.2) 0%, rgba(5, 12, 38, 0.65) 65%, #050c26 100%)',
+          }}
+        />
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-32 pb-16">
-        {/* Animated Brand Signature: VELORA (Zoom-In Calligraphic Reveal) */}
+      <div className="relative z-10 w-full max-w-[1700px] mx-auto px-4 sm:px-8 lg:px-12 text-center pt-24 pb-12 sm:pt-28 sm:pb-14">
+        {/* Animated Brand Signature: VELORA (Zoom-In Calligraphic Reveal - Width Expanded) */}
         <motion.div
           initial={{ scale: 0.5, opacity: 0, filter: 'blur(16px)' }}
           animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
@@ -46,23 +66,45 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             delay: 0.15,
             ease: [0.16, 1, 0.3, 1],
           }}
-          className="relative inline-block w-[320px] sm:w-[520px] md:w-[660px] lg:w-[800px] max-w-[90vw] mx-auto mb-3"
+          className="relative inline-block w-[340px] sm:w-[620px] md:w-[840px] lg:w-[1060px] xl:w-[1240px] max-w-[96vw] mx-auto mb-4"
         >
           {/* Ambient Behind-Glow */}
-          <div className="absolute inset-0 -inset-x-8 bg-gradient-to-r from-[#1B2CC1]/25 via-[#7692FF]/30 to-[#ABD2FA]/20 blur-3xl rounded-full pointer-events-none" />
+          <div className="absolute inset-0 -inset-x-12 bg-gradient-to-r from-[#1B2CC1]/30 via-[#7692FF]/35 to-[#ABD2FA]/25 blur-3xl rounded-full pointer-events-none" />
 
           <VeloraSignature animated={true} delay={0.25} />
         </motion.div>
 
-        {/* Slogan */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
+        {/* Distinctive Editorial Typographic Slogan */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.85 }}
-          className="mt-6 text-sm sm:text-base font-mono tracking-[0.3em] text-[#ABD2FA]/85 uppercase"
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="mt-6 sm:mt-8 flex flex-col items-center justify-center gap-1.5 sm:gap-2 select-none"
         >
-          INFINITE OPPORTUNITIES · LIMITLESS WEALTH
-        </motion.p>
+          {/* THE FUTURE */}
+          <span className="font-sans font-light tracking-[0.38em] text-xs sm:text-sm md:text-base text-slate-300/90 uppercase">
+            THE FUTURE
+          </span>
+
+          {/* OF FINANCE */}
+          <span className="font-serif italic font-normal tracking-[0.18em] text-xl sm:text-3xl md:text-4xl text-white drop-shadow-[0_0_25px_rgba(171,210,250,0.6)] uppercase">
+            OF FINANCE
+          </span>
+
+          {/* IS AN */}
+          <div className="flex items-center gap-3 my-0.5 sm:my-1">
+            <span className="h-[1px] w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#7692FF]/60" />
+            <span className="font-mono text-[11px] sm:text-xs tracking-[0.45em] text-[#7692FF] uppercase font-semibold">
+              IS AN
+            </span>
+            <span className="h-[1px] w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#7692FF]/60" />
+          </div>
+
+          {/* ECOSYSTEM */}
+          <span className="font-display font-black tracking-[0.24em] text-2xl sm:text-4xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ABD2FA] to-[#7692FF] uppercase drop-shadow-[0_0_35px_rgba(118,146,255,0.9)]">
+            ECOSYSTEM
+          </span>
+        </motion.div>
 
         {/* CTA Buttons */}
         <motion.div
@@ -73,35 +115,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         >
           <button
             onClick={onExploreEcosystem}
-            className="w-full sm:w-auto px-9 py-4 rounded-full font-display font-bold text-sm sm:text-base text-white bg-gradient-to-r from-[#1B2CC1] via-[#7692FF] to-[#ABD2FA] hover:shadow-[0_0_40px_rgba(118,146,255,0.55)] transition-all flex items-center justify-center gap-3 group border border-[#ABD2FA]/40"
+            className="w-full sm:w-auto px-9 py-4 rounded-full font-display font-bold text-sm sm:text-base text-white bg-[#1B2CC1] hover:bg-[#15239e] hover:shadow-[0_0_35px_rgba(27,44,193,0.7)] transition-all flex items-center justify-center gap-3 group border border-[#7692FF]/40 shadow-[0_0_20px_rgba(27,44,193,0.4)]"
           >
-            <Sparkles className="w-4 h-4" />
             <span>ENTER THE ECOSYSTEM</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 text-[#ABD2FA] group-hover:translate-x-1 transition-transform" />
           </button>
 
           <button
             onClick={scrollToRoadmap}
-            className="w-full sm:w-auto px-8 py-4 rounded-full font-display font-semibold text-sm sm:text-base text-white/90 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-[#ABD2FA]/50 backdrop-blur-md transition-all flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-8 py-4 rounded-full font-display font-semibold text-sm sm:text-base text-white/90 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-[#ABD2FA]/50 backdrop-blur-md transition-all flex items-center justify-center gap-2 group"
           >
-            <MapPin className="w-4 h-4 text-[#7692FF]" />
             <span>FOLLOW THE ROADMAP</span>
-          </button>
-        </motion.div>
-
-        {/* Clean Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.8 }}
-          className="mt-16"
-        >
-          <button
-            onClick={onExploreVision}
-            className="text-white/40 hover:text-[#ABD2FA] transition-colors mx-auto block"
-            aria-label="Scroll to explore"
-          >
-            <ChevronDown className="w-6 h-6 animate-bounce" />
+            <ArrowRight className="w-4 h-4 text-[#ABD2FA] group-hover:translate-x-1 transition-transform" />
           </button>
         </motion.div>
       </div>

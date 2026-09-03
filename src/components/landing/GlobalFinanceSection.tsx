@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Activity } from 'lucide-react';
 import { CanvasWrapper } from '../3d/CanvasWrapper';
 import { GlobalGlobe3D } from '../3d/GlobalGlobe3D';
 
@@ -85,8 +84,8 @@ export const GlobalFinanceSection: React.FC = () => {
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs font-display font-bold text-white">{reg.name}</span>
-                <span className="text-[10px] font-mono text-[#ABD2FA] flex items-center gap-1">
-                  <Activity className="w-3 h-3" /> {reg.latency}
+                <span className="text-[10px] font-mono text-[#ABD2FA]">
+                  {reg.latency}
                 </span>
               </div>
               <span className="text-xs text-slate-400 font-sans">{reg.hub}</span>

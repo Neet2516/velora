@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export const SectionDivider: React.FC = () => {
   return (
-    <div className="relative py-12 flex items-center justify-center overflow-hidden max-w-7xl mx-auto px-4">
+    <div className="relative py-4 sm:py-5 flex items-center justify-center overflow-hidden max-w-[1700px] mx-auto px-4 sm:px-8">
       {/* Background line */}
       <div className="absolute inset-x-12 h-[1px] bg-gradient-to-r from-transparent via-[#7692FF]/20 to-transparent" />
 

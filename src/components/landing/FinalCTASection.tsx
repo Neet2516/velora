@@ -8,49 +8,65 @@ interface FinalCTASectionProps {
 
 export const FinalCTASection: React.FC<FinalCTASectionProps> = ({ onExploreEcosystem }) => {
   return (
-    <section className="relative py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
-      {/* Full-Width Thank You Podium Image */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.97 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-        className="relative rounded-3xl overflow-hidden border border-[#7692FF]/30 shadow-card-lux group"
-      >
-        <img
-          src="/images/thank_you_podium.png"
-          alt="Velora Global Podium"
-          loading="lazy"
-          className="w-full h-72 sm:h-96 lg:h-[550px] object-cover group-hover:scale-105 transition-transform duration-700"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050c26] via-[#050c26]/50 to-transparent" />
+    <section className="relative py-24 sm:py-32 px-4 sm:px-8 max-w-5xl mx-auto text-center">
+      {/* Soft Ambient Radial Cosmic Glow seamlessly on page background */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[1000px] h-[450px] sm:h-[650px] rounded-full bg-radial-ambient opacity-50 blur-[130px] pointer-events-none" />
 
-        {/* CTA Content Overlaid on Image */}
-        <div className="absolute inset-0 flex flex-col items-center justify-end pb-12 sm:pb-20 px-4">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-white text-center leading-[1.1] mb-6 max-w-3xl"
+      {/* Content Container (Completely Seamless, No Box, No Border) */}
+      <div className="relative z-10 flex flex-col items-center justify-center select-none">
+        {/* "Thank you" in Betania Patmos Font with Generous Spacing */}
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="mb-12 sm:mb-16 lg:mb-20"
+        >
+          <h2
+            style={{ fontFamily: "'Betania Patmos', cursive" }}
+            className="text-7xl sm:text-9xl lg:text-[145px] font-normal text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ABD2FA] to-[#7692FF] leading-[1.25] pb-4 sm:pb-6 filter drop-shadow-[0_0_35px_rgba(171,210,250,0.4)] select-none"
           >
-            Are You Ready for{' '}
-            <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#ABD2FA] to-[#7692FF]">
-              the Future?
-            </span>
-          </motion.h2>
+            Thank you
+          </h2>
+        </motion.div>
 
-          <motion.button
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            onClick={onExploreEcosystem}
-            className="px-10 py-4 rounded-full font-display font-bold text-base text-white bg-gradient-to-r from-[#1B2CC1] via-[#7692FF] to-[#ABD2FA] hover:shadow-[0_0_40px_rgba(118,146,255,0.55)] transition-all flex items-center gap-3 border border-[#ABD2FA]/40 group/btn"
-          >
-            <span>ENTER THE ECOSYSTEM</span>
-            <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1.5 transition-transform" />
-          </motion.button>
-        </div>
-      </motion.div>
+        {/* Vision Statement */}
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="text-2xl sm:text-4xl lg:text-5xl font-serif text-white max-w-2xl mx-auto leading-snug mb-4 tracking-tight"
+        >
+          Are You Ready for{' '}
+          <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#ABD2FA] via-[#7692FF] to-[#1B2CC1]">
+            the Future?
+          </span>
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.25 }}
+          className="text-xs sm:text-sm font-mono text-[#ABD2FA]/80 tracking-[0.25em] uppercase mb-10"
+        >
+          Infinite Opportunities · Limitless Wealth
+        </motion.p>
+
+        {/* CTA Button */}
+        <motion.button
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          onClick={onExploreEcosystem}
+          className="px-10 sm:px-12 py-4 sm:py-5 rounded-full font-display font-bold text-sm sm:text-base text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] hover:shadow-[0_0_45px_rgba(118,146,255,0.65)] hover:scale-[1.03] active:scale-[0.98] transition-all flex items-center gap-3 border border-[#ABD2FA]/40 shadow-[0_0_30px_rgba(27,44,193,0.5)] group/btn"
+        >
+          <span>ENTER THE ECOSYSTEM</span>
+          <ArrowRight className="w-5 h-5 text-[#ABD2FA] group-hover/btn:translate-x-1.5 transition-transform" />
+        </motion.button>
+      </div>
     </section>
   );
 };

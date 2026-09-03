@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { CheckCircle2 } from 'lucide-react';
 
 interface StageMeta {
   id: string;
@@ -8,10 +7,9 @@ interface StageMeta {
   title: string;
   subtitle: string;
   theme: string;
-  iconEmoji: string;
   bgImage: string;
   quote: string;
-  tagline: string;
+  tagline?: string;
   highlights: string[];
 }
 
@@ -22,16 +20,11 @@ const ROADMAP_METAS: StageMeta[] = [
     title: 'LAUNCH',
     subtitle: 'THE BEGINNING',
     theme: 'Dawn / Genesis',
-    iconEmoji: '🚀',
     bgImage: '/images/roadmap_launch.jpg',
     quote: 'The first spark of Velora Global — the foundation of one complete financial ecosystem is laid.',
-    tagline: 'Brand Inauguration · Genesis Liquidity · Foundation Protocol',
     highlights: [
-      'Global Launch Event & Brand Inauguration',
       'Velora Core Architecture & Infinity Protocol Deployment',
-      'Community Onboarding & Early Pioneer Access',
-      'Foundational Prime Liquidity Alliances',
-      'Velora Future Education Framework Unveiling',
+      'Community Onboarding & Foundational Liquidity Alliances',
     ],
   },
   {
@@ -40,16 +33,11 @@ const ROADMAP_METAS: StageMeta[] = [
     title: 'GROWTH',
     subtitle: 'BUILDING MOMENTUM',
     theme: 'Growing Futuristic City',
-    iconEmoji: '🏙️',
     bgImage: '/images/velora_global_skyline_1788452911616.jpg',
     quote: "Expanding the ecosystem's core pillars as traders and partners begin to join the movement.",
-    tagline: 'AI Co-Pilot · Multi-Asset Ingestion · Copy Trading Engine',
     highlights: [
       'Velora AI Agent Suite Deployment (Real-time Signals & Sentiment)',
       'Fund Management Infrastructure & Portfolio Launch',
-      'AI Automation License Bot Beta Rollout for Top Leaders',
-      'Multi-Market Feeds across Forex, Crypto, Gold, and Indices',
-      'Global Pioneer Community Network Activation',
     ],
   },
   {
@@ -58,16 +46,11 @@ const ROADMAP_METAS: StageMeta[] = [
     title: 'EXPANSION',
     subtitle: 'BREAKING BOUNDARIES',
     theme: 'Global Network',
-    iconEmoji: '🌍',
     bgImage: '/images/world_complete_ecosystem.png',
     quote: 'Reaching further across global markets — Forex, Gold, Crypto and beyond, all in one ecosystem.',
-    tagline: 'Prop Firm Allocation · Arbitrage Engine · Luxury Forex Cards',
     highlights: [
       'Velora Funded Prop Firm Official Launch (Capital up to $200K+)',
-      'High-Frequency Crypto Arbitrage Engine Activation',
       'Velora Global Forex Cards Trio (Sapphire, Obsidian, Diamond)',
-      'Middle East & Asia-Pacific Institutional Nodes Launch',
-      'International Bonanza Reveal & Destination Gala',
     ],
   },
   {
@@ -76,16 +59,11 @@ const ROADMAP_METAS: StageMeta[] = [
     title: 'COLLABORATION',
     subtitle: 'STRONGER TOGETHER',
     theme: 'Connected Nodes',
-    iconEmoji: '🤝',
     bgImage: '/images/roadmap_nodes.jpg',
     quote: 'Uniting traders, leaders and partners worldwide through strong, transparent partnerships.',
-    tagline: 'Hybrid Broker House · Blue Diamond Rank · Global Governance',
     highlights: [
       'Velora Hybrid Broker House Public Deployment (MM + STP/ECN)',
       'Prime Tier-1 Liquidity Aggregation & Zero-Slippage Mesh',
-      'Blue Diamond Leadership Council Formation & Governance',
-      'Institutional Asset Custody & Bank Segregation Protocols',
-      'Global Master Affiliate & Revenue-Share Engine',
     ],
   },
   {
@@ -94,16 +72,11 @@ const ROADMAP_METAS: StageMeta[] = [
     title: 'LEGACY',
     subtitle: 'BUILDING THE FUTURE',
     theme: 'Giant Glowing Diamond',
-    iconEmoji: '💎',
     bgImage: '/images/roadmap_diamond.jpg',
     quote: "One rank, one team, one vision — building the world's complete finance ecosystem for the long term.",
-    tagline: 'Complete Ecosystem · Sovereign Wealth · Generational Impact',
     highlights: [
       'Full Interoperability across all 8+ Velora Ecosystem Verticals',
       'Velora Sovereign Super-App (Web, iOS, Android, Desktop)',
-      'Blue Diamond Global Annual Assembly & Strategic Direction',
-      'Generational Wealth Custody & Decentralized Reserve Vaults',
-      'Permanent Global Endowment: Infinite Opportunities, Limitless Wealth',
     ],
   },
 ];
@@ -159,9 +132,9 @@ export const RoadmapSection: React.FC = () => {
       </div>
 
       {/* Content Container */}
-      <div className="relative z-10 -mt-[100vh] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+      <div className="relative z-10 -mt-[100vh] w-full max-w-[1700px] mx-auto px-4 sm:px-8 lg:px-12 pb-16 sm:pb-20">
         {/* Section Intro Header */}
-        <div className="min-h-[70vh] flex flex-col items-center justify-center text-center pt-28 pb-12">
+        <div className="min-h-[50vh] flex flex-col items-center justify-center text-center pt-20 pb-8">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -198,8 +171,7 @@ export const RoadmapSection: React.FC = () => {
                 onClick={() => scrollToStage(i)}
                 className="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium text-slate-300 hover:text-white hover:bg-[#1B2CC1]/40 transition-all flex items-center gap-1.5"
               >
-                <span>{stage.iconEmoji}</span>
-                <span className="hidden sm:inline">0{stage.stepNumber}.</span>
+                <span className="text-[#ABD2FA] font-bold">0{stage.stepNumber}.</span>
                 <span>{stage.title}</span>
               </button>
             ))}
@@ -217,9 +189,10 @@ export const RoadmapSection: React.FC = () => {
             />
             <motion.div
               style={{ top: rocketY }}
-              className="absolute -left-4 -translate-y-1/2 w-9 h-9 rounded-full bg-[#050c26] border-2 border-[#ABD2FA] shadow-[0_0_25px_rgba(171,210,250,0.9)] flex items-center justify-center text-sm z-30"
+              className="absolute -left-3.5 -translate-y-1/2 w-8 h-8 rounded-full bg-[#050c26] border-2 border-[#ABD2FA] shadow-[0_0_20px_rgba(171,210,250,0.85)] flex items-center justify-center z-30"
             >
-              🚀
+              <div className="w-2.5 h-2.5 rounded-full bg-[#ABD2FA] shadow-[0_0_10px_#ffffff] animate-ping opacity-75" />
+              <div className="absolute w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#ffffff]" />
             </motion.div>
           </div>
 
@@ -243,12 +216,14 @@ export const RoadmapSection: React.FC = () => {
                       whileInView={{ scale: 1, opacity: 1 }}
                       viewport={{ once: true, margin: '-50px' }}
                       transition={{ duration: 0.5 }}
-                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-br from-[#0e1d52] via-[#091540] to-[#050c26] border-2 border-[#ABD2FA]/60 shadow-[0_0_35px_rgba(118,146,255,0.45)] flex flex-col items-center justify-center text-2xl group hover:scale-110 transition-transform cursor-pointer"
+                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-br from-[#0e1d52] via-[#091540] to-[#050c26] border-2 border-[#ABD2FA]/60 shadow-[0_0_35px_rgba(118,146,255,0.45)] flex flex-col items-center justify-center group hover:scale-110 transition-transform cursor-pointer"
                       onClick={() => scrollToStage(index)}
                     >
-                      <span className="text-2xl sm:text-3xl">{stage.iconEmoji}</span>
-                      <span className="text-[9px] font-mono text-[#ABD2FA] font-bold">
+                      <span className="text-2xl sm:text-3xl font-serif font-extrabold text-white tracking-wider">
                         0{stage.stepNumber}
+                      </span>
+                      <span className="text-[8px] sm:text-[9px] font-mono tracking-[0.25em] text-[#ABD2FA] uppercase font-bold mt-0.5">
+                        PHASE
                       </span>
                     </motion.div>
                   </div>
@@ -274,19 +249,15 @@ export const RoadmapSection: React.FC = () => {
                       "{stage.quote}"
                     </p>
 
-                    <p className="text-xs font-mono text-slate-400 mb-6">
-                      {stage.tagline}
-                    </p>
-
-                    <div className="space-y-2.5 pt-4 border-t border-[#7692FF]/20">
-                      {stage.highlights.map((item, hIdx) => (
+                    <div className="space-y-2.5 pt-4 border-t border-[#7692FF]/20 mt-2">
+                      {stage.highlights.slice(0, 2).map((item, hIdx) => (
                         <div
                           key={hIdx}
                           className={`flex items-start gap-2.5 text-xs sm:text-sm text-slate-200 font-sans ${
                             isEven ? 'md:flex-row-reverse md:text-right' : 'md:flex-row md:text-left'
                           }`}
                         >
-                          <CheckCircle2 className="w-4 h-4 text-[#ABD2FA] shrink-0 mt-0.5" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] shrink-0 mt-2 shadow-[0_0_6px_#ABD2FA]" />
                           <span>{item}</span>
                         </div>
                       ))}

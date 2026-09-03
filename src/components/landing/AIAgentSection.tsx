@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Bot, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export const AIAgentSection: React.FC = () => {
   const [messages, setMessages] = useState<{ sender: 'ai' | 'user'; text: string }[]>([
@@ -97,7 +97,7 @@ export const AIAgentSection: React.FC = () => {
           {/* Terminal Header */}
           <div className="flex items-center gap-3 pb-3 border-b border-[#7692FF]/20">
             <div className="w-9 h-9 rounded-lg bg-[#1B2CC1]/30 border border-[#7692FF]/40 flex items-center justify-center text-[#ABD2FA]">
-              <Bot className="w-4 h-4" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#ABD2FA] shadow-[0_0_8px_#ABD2FA]" />
             </div>
             <div>
               <h4 className="text-sm font-display font-bold text-white flex items-center gap-2">
@@ -126,7 +126,7 @@ export const AIAgentSection: React.FC = () => {
               <div key={idx} className={`flex gap-2 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {m.sender === 'ai' && (
                   <div className="w-5 h-5 rounded-md bg-[#1B2CC1]/40 border border-[#7692FF]/40 flex items-center justify-center text-[#ABD2FA] shrink-0 mt-0.5">
-                    <Sparkles className="w-2.5 h-2.5" />
+                    <span className="text-[9px] font-mono font-bold text-[#ABD2FA]">AI</span>
                   </div>
                 )}
                 <div
@@ -163,8 +163,9 @@ export const AIAgentSection: React.FC = () => {
             <button
               onClick={() => handleSend()}
               className="p-2 rounded-xl bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] text-white shrink-0"
+              aria-label="Send"
             >
-              <Send className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </motion.div>

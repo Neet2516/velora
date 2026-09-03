@@ -4,6 +4,7 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  publicDir: 'public',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -11,9 +12,10 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    open: true,
+    open: false,
     watch: {
-      ignored: ['**/images/**', '**/*.mp4', '**/.git/**'],
+      // Ignore binary fonts and videos from OS file watcher so OneDrive syncing does not throw EBUSY
+      ignored: ['**/*.ttf', '**/*.otf', '**/*.woff', '**/*.woff2', '**/*.mp4', '**/.git/**'],
     },
   },
 });

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import { ArrowRight, ShieldCheck } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface HorizonScene {
   id: string;
@@ -142,7 +142,7 @@ export const UpcomingSection: React.FC = () => {
       ref={sectionRef}
       className="relative bg-[#050c26] text-white select-none"
     >
-      {/* Desktop Horizontal Scroll */}
+      {/* ─── DESKTOP HORIZONTAL SCROLL (ORIGINAL CINEMATIC LAYOUT RESTORED) ─── */}
       <div className="hidden md:block h-[450vh] relative">
         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between bg-[#050c26]">
           <div className="absolute inset-0 bg-cyber-grid opacity-20 pointer-events-none" />
@@ -160,7 +160,7 @@ export const UpcomingSection: React.FC = () => {
               </span>
             </h2>
 
-            {/* Quick Navigation Dots */}
+            {/* Quick Navigation Pills */}
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
                 {HORIZON_SCENES.map((scene, i) => (
@@ -204,9 +204,9 @@ export const UpcomingSection: React.FC = () => {
                         filter: isActive ? 'blur(0px)' : 'blur(4px)',
                       }}
                       transition={{ duration: 0.5, ease: 'easeOut' }}
-                      className="relative w-full max-w-7xl h-full rounded-[2.5rem] overflow-hidden border border-[#7692FF]/30 shadow-card-lux bg-gradient-to-br from-[#091540]/80 via-[#0e1d52]/70 to-[#050c26]/90 backdrop-blur-2xl flex flex-col lg:flex-row items-stretch group"
+                      className="relative w-full max-w-[1680px] h-full rounded-[2.5rem] overflow-hidden border border-[#7692FF]/30 shadow-card-lux bg-gradient-to-br from-[#091540]/80 via-[#0e1d52]/70 to-[#050c26]/90 backdrop-blur-2xl flex flex-col lg:flex-row items-stretch group"
                     >
-                      {/* Left Visual Area */}
+                      {/* Left Visual Area (Original Full-Bleed Parallax Image) */}
                       <div className="lg:w-[58%] relative overflow-hidden flex items-center justify-center p-6 lg:p-10">
                         <motion.img
                           src={scene.image}
@@ -225,14 +225,7 @@ export const UpcomingSection: React.FC = () => {
                           </span>
                         </div>
 
-                        {/* Status Pill */}
-                        <div className="absolute top-8 left-8 z-10">
-                          <span
-                            className={`text-[10px] font-mono px-3.5 py-1.5 rounded-full border backdrop-blur-md uppercase tracking-[0.25em] font-semibold ${scene.statusColor}`}
-                          >
-                            {scene.status}
-                          </span>
-                        </div>
+
 
                         {/* Quote Over Image */}
                         <div className="absolute bottom-8 left-8 right-8 z-10">
@@ -259,12 +252,12 @@ export const UpcomingSection: React.FC = () => {
                             {scene.metrics.map((m, mIdx) => (
                               <div
                                 key={mIdx}
-                                className="flex items-center justify-between p-3 rounded-2xl bg-[#050c26]/60 border border-[#7692FF]/15"
+                                className="flex items-center justify-between p-3.5 rounded-2xl bg-[#050c26]/60 border border-[#7692FF]/20 backdrop-blur-md"
                               >
-                                <span className="text-[10px] font-mono uppercase text-slate-400">
+                                <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
                                   {m.label}
                                 </span>
-                                <span className="text-xs font-mono font-bold text-[#ABD2FA]">
+                                <span className="text-xs sm:text-sm font-mono font-bold text-[#ABD2FA]">
                                   {m.value}
                                 </span>
                               </div>
@@ -272,19 +265,18 @@ export const UpcomingSection: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* CTA */}
-                        <div className="pt-6 mt-6 border-t border-[#7692FF]/20 flex items-center justify-between">
-                          <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-                            <ShieldCheck className="w-4 h-4 text-[#ABD2FA]" />
-                            <span>Velora Ecosystem Tier</span>
-                          </div>
+                        {/* Bottom CTA */}
+                        <div className="pt-6 border-t border-[#7692FF]/20 flex items-center justify-between">
+                          <span className="text-xs font-mono text-slate-400">
+                            Upcoming Release
+                          </span>
 
                           <button
                             onClick={() => {
                               const elem = document.getElementById('ecosystem');
                               if (elem) elem.scrollIntoView({ behavior: 'smooth' });
                             }}
-                            className="px-5 py-2.5 rounded-full font-display font-semibold text-xs text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] hover:shadow-[0_0_25px_rgba(118,146,255,0.45)] transition-all flex items-center gap-2 border border-[#ABD2FA]/30 group/btn"
+                            className="px-6 py-3 rounded-full font-display font-semibold text-xs text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] hover:shadow-[0_0_25px_rgba(118,146,255,0.45)] transition-all flex items-center gap-2 border border-[#ABD2FA]/30 group/btn"
                           >
                             <span>{scene.ctaText}</span>
                             <ArrowRight className="w-3.5 h-3.5 text-[#ABD2FA] group-hover/btn:translate-x-1 transition-transform" />
@@ -336,9 +328,9 @@ export const UpcomingSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Cinematic Vertical Adaptation */}
-      <div className="md:hidden px-4 py-20 space-y-12">
-        <div className="text-center mb-8">
+      {/* ─── MOBILE CINEMATIC VERTICAL ADAPTATION (CLEAN MOBILE ONLY) ─── */}
+      <div className="md:hidden px-4 py-16 space-y-10">
+        <div className="text-center mb-6">
           <h2 className="text-3xl font-serif font-bold text-white leading-tight">
             Something Extraordinary{' '}
             <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#ABD2FA] to-[#7692FF]">
@@ -347,12 +339,12 @@ export const UpcomingSection: React.FC = () => {
           </h2>
         </div>
 
-        {HORIZON_SCENES.map((scene, idx) => (
+        {HORIZON_SCENES.map((scene) => (
           <motion.div
             key={scene.id}
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
+            viewport={{ once: true, margin: '-30px' }}
             transition={{ duration: 0.6 }}
             className="rounded-3xl overflow-hidden border border-[#7692FF]/30 bg-[#091540]/80 shadow-card-lux"
           >
@@ -364,11 +356,7 @@ export const UpcomingSection: React.FC = () => {
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#091540] via-transparent to-transparent" />
-              <div className="absolute top-4 left-4">
-                <span className={`text-[9px] font-mono px-3 py-1 rounded-full border ${scene.statusColor}`}>
-                  {scene.status}
-                </span>
-              </div>
+
               <div className="absolute bottom-3 left-4 right-4">
                 <p className="text-base font-serif italic text-white/90">
                   "{scene.quote}"
