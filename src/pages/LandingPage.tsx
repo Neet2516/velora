@@ -6,11 +6,11 @@ import { EcosystemSection } from '../components/landing/EcosystemSection';
 import { AIAgentSection } from '../components/landing/AIAgentSection';
 import { RoadmapSection } from '../components/landing/RoadmapSection';
 import { UpcomingSection } from '../components/landing/UpcomingSection';
-import { GlobalFinanceSection } from '../components/landing/GlobalFinanceSection';
 import { FinalCTASection } from '../components/landing/FinalCTASection';
 import { Footer } from '../components/landing/Footer';
 import { ProductModal } from '../components/landing/ProductModal';
 import { SectionDivider } from '../components/ui/SectionDivider';
+import { VeloraHandwritingLoader } from '../components/ui/VeloraHandwritingLoader';
 import { useLenis } from '../hooks/useLenis';
 import { EcosystemProduct } from '../types';
 
@@ -32,6 +32,9 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#050c26] text-slate-100 flex flex-col relative selection:bg-[#7692FF]/30 selection:text-[#ABD2FA]">
+      {/* Cursive Handwriting Signature Preloader */}
+      <VeloraHandwritingLoader />
+
       {/* Top sticky navbar */}
       <Navbar onExploreEcosystem={handleExploreEcosystem} />
 
@@ -61,10 +64,6 @@ export const LandingPage: React.FC = () => {
         <SectionDivider label="UPCOMING HORIZONS" />
 
         <UpcomingSection />
-
-        <SectionDivider label="GLOBAL LIQUIDITY MESH" />
-
-        <GlobalFinanceSection />
 
         <SectionDivider label="THE FUTURE OF FINANCE" />
 

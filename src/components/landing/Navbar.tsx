@@ -25,7 +25,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
     { name: 'AI Agent', href: '#ai-agent' },
     { name: 'Roadmap', href: '#roadmap' },
     { name: 'Upcoming', href: '#upcoming' },
-    { name: 'Global Network', href: '#global-finance' },
   ];
 
   const scrollToSection = (href: string) => {

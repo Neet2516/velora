@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-5 text-xs font-sans text-slate-300">
-            {['Vision', 'Ecosystem', 'AI Agent', 'Roadmap', 'Upcoming', 'Global'].map((item) => (
+            {['Vision', 'Ecosystem', 'AI Agent', 'Roadmap', 'Upcoming'].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase().replace(' ', '-')}`}
