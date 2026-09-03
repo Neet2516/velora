@@ -1,220 +1,378 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Rocket, TrendingUp, Globe, Handshake, Diamond, CheckCircle, Clock } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { Rocket, TrendingUp, Globe, Handshake, Gem, CheckCircle2, Sparkles, ChevronRight } from 'lucide-react';
 import { ROADMAP_STAGES } from '../../data/roadmapData';
-import { RoadmapStage } from '../../types';
 
-const stageIcons: Record<string, React.ElementType> = {
-  Rocket,
-  TrendingUp,
-  Globe,
-  Handshake,
-  Diamond,
-};
+interface StageMeta {
+  id: string;
+  stepNumber: number;
+  title: string;
+  subtitle: string;
+  theme: string;
+  iconEmoji: string;
+  bgImage: string;
+  quote: string;
+  tagline: string;
+  highlights: string[];
+}
 
-// Exact descriptions from reference site https://velora-global.vercel.app
-const referenceDescriptions: Record<string, { title: string; subtitle: string; desc: string }> = {
-  launch: {
+const ROADMAP_METAS: StageMeta[] = [
+  {
+    id: 'launch',
+    stepNumber: 1,
     title: 'LAUNCH',
     subtitle: 'THE BEGINNING',
-    desc: 'The first spark of Velora Global — the foundation of one complete financial ecosystem is laid.',
+    theme: '🌅 Dawn / Genesis',
+    iconEmoji: '🚀',
+    bgImage: '/images/roadmap_launch.jpg',
+    quote: 'The first spark of Velora Global — the foundation of one complete financial ecosystem is laid.',
+    tagline: 'Brand Inauguration · Genesis Liquidity · Foundation Protocol',
+    highlights: [
+      'Global Launch Event & Brand Inauguration',
+      'Velora Core Architecture & Infinity Protocol Deployment',
+      'Community Onboarding & Early Pioneer Access',
+      'Foundational Prime Liquidity Alliances',
+      'Velora Future Education Framework Unveiling',
+    ],
   },
-  growth: {
+  {
+    id: 'growth',
+    stepNumber: 2,
     title: 'GROWTH',
     subtitle: 'BUILDING MOMENTUM',
-    desc: "Expanding the ecosystem's core pillars as traders and partners begin to join the movement.",
+    theme: '🏙️ Growing Futuristic City',
+    iconEmoji: '🏙️',
+    bgImage: '/images/velora_global_skyline_1788452911616.jpg',
+    quote: "Expanding the ecosystem's core pillars as traders and partners begin to join the movement.",
+    tagline: 'AI Co-Pilot · Multi-Asset Ingestion · Copy Trading Engine',
+    highlights: [
+      'Velora AI Agent Suite Deployment (Real-time Signals & Sentiment)',
+      'Fund Management Infrastructure & Portfolio Launch',
+      'AI Automation License Bot Beta Rollout for Top Leaders',
+      'Multi-Market Feeds across Forex, Crypto, Gold, and Indices',
+      'Global Pioneer Community Network Activation',
+    ],
   },
-  expansion: {
+  {
+    id: 'expansion',
+    stepNumber: 3,
     title: 'EXPANSION',
     subtitle: 'BREAKING BOUNDARIES',
-    desc: 'Reaching further across global markets — Forex, Gold, Crypto and beyond, all in one ecosystem.',
+    theme: '🌍 Global Network',
+    iconEmoji: '🌍',
+    bgImage: '/images/world_complete_ecosystem.png',
+    quote: 'Reaching further across global markets — Forex, Gold, Crypto and beyond, all in one ecosystem.',
+    tagline: 'Prop Firm Allocation · Arbitrage Engine · Luxury Forex Cards',
+    highlights: [
+      'Velora Funded Prop Firm Official Launch (Capital up to $200K+)',
+      'High-Frequency Crypto Arbitrage Engine Activation',
+      'Velora Global Forex Cards Trio (Sapphire, Obsidian, Diamond)',
+      'Middle East & Asia-Pacific Institutional Nodes Launch',
+      'International Bonanza Reveal & Destination Gala',
+    ],
   },
-  collaboration: {
+  {
+    id: 'collaboration',
+    stepNumber: 4,
     title: 'COLLABORATION',
     subtitle: 'STRONGER TOGETHER',
-    desc: 'Uniting traders, leaders and partners worldwide through strong, transparent partnerships.',
+    theme: '🤝 Connected Nodes',
+    iconEmoji: '🤝',
+    bgImage: '/images/roadmap_nodes.jpg',
+    quote: 'Uniting traders, leaders and partners worldwide through strong, transparent partnerships.',
+    tagline: 'Hybrid Broker House · Blue Diamond Rank · Global Governance',
+    highlights: [
+      'Velora Hybrid Broker House Public Deployment (MM + STP/ECN)',
+      'Prime Tier-1 Liquidity Aggregation & Zero-Slippage Mesh',
+      'Blue Diamond Leadership Council Formation & Governance',
+      'Institutional Asset Custody & Bank Segregation Protocols',
+      'Global Master Affiliate & Revenue-Share Engine',
+    ],
   },
-  legacy: {
+  {
+    id: 'legacy',
+    stepNumber: 5,
     title: 'LEGACY',
     subtitle: 'BUILDING THE FUTURE',
-    desc: "One rank, one team, one vision — building the world's complete finance ecosystem for the long term.",
+    theme: '💎 Giant Glowing Diamond',
+    iconEmoji: '💎',
+    bgImage: '/images/roadmap_diamond.jpg',
+    quote: "One rank, one team, one vision — building the world's complete finance ecosystem for the long term.",
+    tagline: 'Complete Ecosystem · Sovereign Wealth · Generational Impact',
+    highlights: [
+      'Full Interoperability across all 8+ Velora Ecosystem Verticals',
+      'Velora Sovereign Super-App (Web, iOS, Android, Desktop)',
+      'Blue Diamond Global Annual Assembly & Strategic Direction',
+      'Generational Wealth Custody & Decentralized Reserve Vaults',
+      'Permanent Global Endowment: Infinite Opportunities, Limitless Wealth',
+    ],
   },
-};
+];
 
 export const RoadmapSection: React.FC = () => {
-  const [selectedStage, setSelectedStage] = useState<RoadmapStage>(ROADMAP_STAGES[0]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [activeStageIndex, setActiveStageIndex] = useState(0);
 
-  const currentRef = referenceDescriptions[selectedStage.id] || {
-    title: selectedStage.title,
-    subtitle: selectedStage.subtitle,
-    desc: selectedStage.description,
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  // Background opacity cross-fades linked to scroll progress (5 stages = 0 to 1)
+  const bgOpacity0 = useTransform(scrollYProgress, [0, 0.15, 0.25], [1, 1, 0]);
+  const bgOpacity1 = useTransform(scrollYProgress, [0.15, 0.25, 0.4, 0.5], [0, 1, 1, 0]);
+  const bgOpacity2 = useTransform(scrollYProgress, [0.4, 0.5, 0.65, 0.75], [0, 1, 1, 0]);
+  const bgOpacity3 = useTransform(scrollYProgress, [0.65, 0.75, 0.85, 0.92], [0, 1, 1, 0]);
+  const bgOpacity4 = useTransform(scrollYProgress, [0.85, 0.95, 1], [0, 1, 1]);
+
+  const bgOpacities = [bgOpacity0, bgOpacity1, bgOpacity2, bgOpacity3, bgOpacity4];
+
+  // Path line progress (0% to 100%)
+  const pathLength = useTransform(scrollYProgress, [0.05, 0.95], [0, 1]);
+  const rocketY = useTransform(scrollYProgress, [0.05, 0.95], ['4%', '96%']);
+
+  const scrollToStage = (index: number) => {
+    setActiveStageIndex(index);
+    const targetElement = document.getElementById(`roadmap-stage-${index}`);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
 
   return (
-    <section id="roadmap" className="relative py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-r from-[#1B2CC1]/15 via-[#7692FF]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+    <section id="roadmap" ref={containerRef} className="relative w-full">
+      {/* ─── STICKY CINEMATIC BACKGROUND SYSTEM ─── */}
+      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden z-0 pointer-events-none">
+        {ROADMAP_METAS.map((stage, idx) => (
+          <motion.div
+            key={stage.id}
+            style={{ opacity: bgOpacities[idx] }}
+            className="absolute inset-0 w-full h-full will-change-transform"
+          >
+            <img
+              src={stage.bgImage}
+              alt={stage.title}
+              className="w-full h-full object-cover animate-ken-burns scale-105"
+            />
+            {/* Cinematic Gradient Overlays for high readability */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#050c26]/80 via-[#050c26]/55 to-[#050c26]/90" />
+            <div className="absolute inset-0 bg-radial-ambient opacity-60" />
+          </motion.div>
+        ))}
 
-      {/* Header matching reference */}
-      <div className="text-center max-w-3xl mx-auto mb-16">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#091540]/80 border border-[#7692FF]/30 text-[#ABD2FA] text-xs sm:text-sm font-semibold tracking-widest uppercase mb-4 font-mono"
-        >
-          <span>THE JOURNEY AHEAD</span>
-          <span className="text-[#7692FF]">∞</span>
-        </motion.div>
+        {/* Ambient Vignette & Tint */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050c26] via-transparent to-[#050c26]/90" />
 
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight leading-tight"
-        >
-          ROADMAP OF{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ABD2FA] via-[#7692FF] to-[#1B2CC1]">
-            VELORA GLOBAL
+        {/* Floating Top Indicator HUD */}
+        <div className="absolute top-24 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-3 px-4 py-1.5 rounded-full bg-[#091540]/80 border border-[#7692FF]/30 backdrop-blur-xl shadow-card-lux">
+          <span className="w-2 h-2 rounded-full bg-[#ABD2FA] animate-ping" />
+          <span className="text-[10px] sm:text-xs font-mono tracking-[0.25em] text-[#ABD2FA] uppercase font-semibold">
+            ROAD THROUGH THE FUTURE
           </span>
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          className="mt-4 text-base sm:text-lg text-slate-300"
-        >
-          Five defining milestones in the progressive realization of the world's complete finance ecosystem.
-        </motion.p>
+          <span className="text-[#7692FF] font-bold text-sm">∞</span>
+        </div>
       </div>
 
-      {/* Interactive Horizontal Timeline */}
-      <div className="relative mb-14">
-        {/* Connecting Track Line */}
-        <div className="hidden md:block absolute top-8 left-12 right-12 h-1 bg-gradient-to-r from-[#1B2CC1] via-[#7692FF] to-[#ABD2FA] rounded-full shadow-[0_0_15px_rgba(118,146,255,0.4)]" />
+      {/* ─── CONTENT CONTAINER (SCROLL OVERLAY) ─── */}
+      <div className="relative z-10 -mt-[100vh] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+        {/* Section Intro Header */}
+        <div className="min-h-[75vh] flex flex-col items-center justify-center text-center pt-28 pb-12">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-block text-xs font-mono tracking-[0.35em] text-[#ABD2FA] uppercase mb-3"
+          >
+            ROADMAP OF VELORA GLOBAL
+          </motion.span>
 
-        {/* Stage Selector Tabs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 relative z-10">
-          {ROADMAP_STAGES.map((stage) => {
-            const Icon = stageIcons[stage.iconName] || Rocket;
-            const isSelected = selectedStage.id === stage.id;
-            const refInfo = referenceDescriptions[stage.id];
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold text-white leading-[1.05]"
+          >
+            Road Through{' '}
+            <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#ABD2FA] via-[#7692FF] to-[#1B2CC1]">
+              the Future
+            </span>
+          </motion.h2>
 
-            return (
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15 }}
+            className="mt-4 text-base sm:text-lg text-slate-300 max-w-xl mx-auto font-sans"
+          >
+            Scroll to travel through the 5 transformational milestones of the world's complete finance ecosystem.
+          </motion.p>
+
+          {/* Quick Nav Waypoints Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.25 }}
+            className="mt-8 flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-full bg-[#091540]/85 border border-[#7692FF]/30 backdrop-blur-xl shadow-card-lux"
+          >
+            {ROADMAP_METAS.map((stage, i) => (
               <button
                 key={stage.id}
-                onClick={() => setSelectedStage(stage)}
-                className={`group text-left md:text-center p-4 rounded-2xl transition-all flex md:flex-col items-center gap-4 md:gap-3 ${
-                  isSelected
-                    ? 'bg-[#0e1d52] border-2 border-[#ABD2FA] shadow-[0_0_25px_rgba(118,146,255,0.4)]'
-                    : 'bg-[#091540]/60 border border-[#7692FF]/20 hover:border-[#7692FF]/40'
-                }`}
+                onClick={() => scrollToStage(i)}
+                className="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium text-slate-300 hover:text-white hover:bg-[#1B2CC1]/40 transition-all flex items-center gap-1.5"
               >
-                <div
-                  className={`w-14 h-14 rounded-full flex items-center justify-center shrink-0 transition-all ${
-                    isSelected
-                      ? 'bg-gradient-to-tr from-[#1B2CC1] to-[#7692FF] text-white shadow-[0_0_20px_rgba(118,146,255,0.6)] scale-110'
-                      : 'bg-[#050c26] text-slate-400 border border-[#7692FF]/30 group-hover:text-white group-hover:border-[#ABD2FA]'
-                  }`}
-                >
-                  <Icon className="w-6 h-6" />
-                </div>
-
-                <div>
-                  <div className="text-[10px] font-mono tracking-widest text-[#ABD2FA] uppercase font-semibold">
-                    STAGE 0{stage.stepNumber}
-                  </div>
-                  <div className="text-base sm:text-lg font-display font-bold text-white tracking-wide">
-                    {refInfo.title}
-                  </div>
-                  <div className="text-[11px] font-medium text-[#7692FF]">
-                    {refInfo.subtitle}
-                  </div>
-                </div>
+                <span>{stage.iconEmoji}</span>
+                <span className="hidden sm:inline">0{stage.stepNumber}.</span>
+                <span>{stage.title}</span>
               </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Selected Stage Detail Card */}
-      <motion.div
-        key={selectedStage.id}
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="p-6 sm:p-10 rounded-3xl bg-gradient-to-br from-[#0e1d52]/90 via-[#091540]/95 to-[#050c26]/95 border border-[#7692FF]/30 backdrop-blur-2xl shadow-card-lux"
-      >
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-[#7692FF]/20">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className="text-xs px-3 py-1 rounded-full font-mono font-semibold bg-[#1B2CC1]/30 border border-[#7692FF]/30 text-[#ABD2FA]">
-                STAGE 0{selectedStage.stepNumber}
-              </span>
-              <span className="text-xs px-3 py-1 rounded-full font-semibold bg-[#091540] border border-[#7692FF]/30 text-white capitalize flex items-center gap-1.5">
-                {selectedStage.status === 'active' ? (
-                  <>
-                    <CheckCircle className="w-3.5 h-3.5 text-[#ABD2FA]" />
-                    <span>In Active Foundation</span>
-                  </>
-                ) : (
-                  <>
-                    <Clock className="w-3.5 h-3.5 text-[#7692FF]" />
-                    <span>Upcoming Milestone</span>
-                  </>
-                )}
-              </span>
-            </div>
-
-            <h3 className="text-2xl sm:text-4xl font-display font-extrabold text-white mt-2">
-              {currentRef.title} —{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ABD2FA] to-[#7692FF]">
-                {currentRef.subtitle}
-              </span>
-            </h3>
-            <p className="text-sm sm:text-base text-slate-200 mt-2 max-w-3xl leading-relaxed italic border-l-2 border-[#7692FF] pl-3">
-              "{currentRef.desc}"
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-2 shrink-0">
-            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold font-mono">
-              Core Pillars In Focus
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {selectedStage.ecosystemHighlights.map((hl, i) => (
-                <span
-                  key={i}
-                  className="text-xs px-3 py-1 rounded-lg bg-[#050c26] border border-[#7692FF]/30 text-slate-200 font-medium"
-                >
-                  {hl}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Milestones Checklist */}
-        <div className="mt-8">
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4 font-mono">
-            Key Architecture Deliverables & Objectives
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-            {selectedStage.milestones.map((m, idx) => (
-              <div
-                key={idx}
-                className="flex items-start gap-3 p-3.5 rounded-xl bg-[#091540]/60 border border-[#7692FF]/20 text-xs sm:text-sm text-slate-200"
-              >
-                <div className="w-5 h-5 rounded-full bg-[#1B2CC1]/30 border border-[#7692FF]/40 flex items-center justify-center text-[#ABD2FA] shrink-0 mt-0.5">
-                  <CheckCircle className="w-3.5 h-3.5" />
-                </div>
-                <span>{m}</span>
-              </div>
             ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="mt-12 flex flex-col items-center gap-1 text-white/30"
+          >
+            <span className="text-[9px] font-mono tracking-[0.3em] uppercase">SCROLL TO TRAVEL</span>
+            <div className="w-[1px] h-12 bg-gradient-to-b from-[#7692FF] to-transparent animate-pulse" />
+          </motion.div>
+        </div>
+
+        {/* ─── THE GLOWING ROAD TRAIL & MILESTONE STATIONS ─── */}
+        <div className="relative">
+          {/* Central Glowing Trail Track (Desktop/Tablet) */}
+          <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 hidden md:block pointer-events-none">
+            {/* Ambient track beam */}
+            <div className="w-full h-full bg-gradient-to-b from-[#7692FF]/15 via-[#ABD2FA]/25 to-[#1B2CC1]/20 rounded-full" />
+
+            {/* Glowing active path line drawn on scroll */}
+            <motion.div
+              style={{ scaleY: pathLength, transformOrigin: 'top' }}
+              className="absolute inset-0 w-full bg-gradient-to-b from-[#ABD2FA] via-[#7692FF] to-[#1B2CC1] rounded-full shadow-[0_0_20px_rgba(171,210,250,0.8)]"
+            />
+
+            {/* Traveling Rocket Indicator */}
+            <motion.div
+              style={{ top: rocketY }}
+              className="absolute -left-4 -translate-y-1/2 w-9 h-9 rounded-full bg-[#050c26] border-2 border-[#ABD2FA] shadow-[0_0_25px_rgba(171,210,250,0.9)] flex items-center justify-center text-sm z-30"
+            >
+              🚀
+            </motion.div>
+          </div>
+
+          {/* 5 Milestone Sections */}
+          <div className="space-y-40 sm:space-y-52 pt-12 pb-24">
+            {ROADMAP_METAS.map((stage, index) => {
+              const isEven = index % 2 === 0;
+
+              return (
+                <div
+                  id={`roadmap-stage-${index}`}
+                  key={stage.id}
+                  className={`relative flex flex-col md:flex-row items-center ${
+                    isEven ? 'md:flex-row' : 'md:flex-row-reverse'
+                  } gap-8 lg:gap-16`}
+                >
+                  {/* Central Node Indicator on the Road */}
+                  <div className="md:absolute md:left-1/2 md:-translate-x-1/2 z-20 flex flex-col items-center">
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      viewport={{ once: true, margin: '-50px' }}
+                      transition={{ duration: 0.5 }}
+                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-br from-[#0e1d52] via-[#091540] to-[#050c26] border-2 border-[#ABD2FA]/60 shadow-[0_0_35px_rgba(118,146,255,0.45)] flex flex-col items-center justify-center text-2xl group hover:scale-110 transition-transform cursor-pointer"
+                      onClick={() => scrollToStage(index)}
+                    >
+                      <span className="text-2xl sm:text-3xl">{stage.iconEmoji}</span>
+                      <span className="text-[9px] font-mono text-[#ABD2FA] font-bold">
+                        0{stage.stepNumber}
+                      </span>
+                    </motion.div>
+                  </div>
+
+                  {/* Stage Detail Glass Card */}
+                  <motion.div
+                    initial={{ opacity: 0, x: isEven ? -40 : 40, y: 20 }}
+                    whileInView={{ opacity: 1, x: 0, y: 0 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.7, ease: 'easeOut' }}
+                    className={`w-full md:w-[calc(50%-4rem)] p-7 sm:p-9 rounded-3xl bg-[#091540]/80 hover:bg-[#0e1d52]/90 border border-[#7692FF]/30 hover:border-[#ABD2FA]/50 backdrop-blur-2xl shadow-card-lux transition-all ${
+                      isEven ? 'md:text-right' : 'md:text-left'
+                    }`}
+                  >
+                    {/* Theme & Phase Header */}
+                    <div
+                      className={`flex items-center gap-2.5 mb-3 ${
+                        isEven ? 'md:justify-end' : 'md:justify-start'
+                      }`}
+                    >
+                      <span className="text-[10px] px-3 py-1 rounded-full font-mono font-semibold bg-[#1B2CC1]/30 border border-[#7692FF]/40 text-[#ABD2FA] uppercase tracking-wider">
+                        STAGE 0{stage.stepNumber} · {stage.theme}
+                      </span>
+                    </div>
+
+                    {/* Stage Title */}
+                    <h3 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight leading-tight">
+                      {stage.title}
+                    </h3>
+                    <p className="text-xs font-mono uppercase tracking-[0.25em] text-[#7692FF] mt-1 mb-4 font-semibold">
+                      {stage.subtitle}
+                    </p>
+
+                    {/* Quote */}
+                    <p className="text-base sm:text-lg font-serif italic text-[#ABD2FA]/90 leading-relaxed mb-4">
+                      "{stage.quote}"
+                    </p>
+
+                    <p className="text-xs font-mono text-slate-400 mb-6">
+                      {stage.tagline}
+                    </p>
+
+                    {/* Milestones Bullets */}
+                    <div className="space-y-2.5 pt-4 border-t border-[#7692FF]/20">
+                      {stage.highlights.map((item, hIdx) => (
+                        <div
+                          key={hIdx}
+                          className={`flex items-start gap-2.5 text-xs sm:text-sm text-slate-200 font-sans ${
+                            isEven ? 'md:flex-row-reverse md:text-right' : 'md:flex-row md:text-left'
+                          }`}
+                        >
+                          <CheckCircle2 className="w-4 h-4 text-[#ABD2FA] shrink-0 mt-0.5" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* Empty Spacer Column for Desktop alternating alignment */}
+                  <div className="hidden md:block md:w-[calc(50%-4rem)]" />
+                </div>
+              );
+            })}
           </div>
         </div>
-      </motion.div>
+
+        {/* Bottom Horizon Arrival Indicator */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center pt-16 border-t border-[#7692FF]/25"
+        >
+          <span className="text-xs font-mono tracking-[0.3em] text-[#ABD2FA] uppercase block mb-2">
+            DESTINATION REACHED
+          </span>
+          <h4 className="text-2xl sm:text-3xl font-serif font-bold text-white">
+            "ONE RANK. ONE TEAM. ONE VISION."
+          </h4>
+          <p className="text-xs font-mono text-[#7692FF] uppercase tracking-widest mt-1">
+            Infinite Opportunities · Limitless Wealth
+          </p>
+        </motion.div>
+      </div>
     </section>
   );
 };

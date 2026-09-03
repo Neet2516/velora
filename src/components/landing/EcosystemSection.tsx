@@ -1,17 +1,6 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import {
-  Building2,
-  ShieldCheck,
-  Layers,
-  BrainCircuit,
-  GraduationCap,
-  CreditCard,
-  Vault,
-  Bot,
-  ExternalLink,
-  Sparkles,
-} from 'lucide-react';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { ExternalLink } from 'lucide-react';
 import { VELORA_PRODUCTS } from '../../data/productsData';
 import { EcosystemProduct } from '../../types';
 
@@ -19,167 +8,210 @@ interface EcosystemSectionProps {
   onSelectProduct: (product: EcosystemProduct) => void;
 }
 
-const iconMap: Record<string, React.ElementType> = {
-  Building2,
-  ShieldCheck,
-  Layers,
-  BrainCircuit,
-  GraduationCap,
-  CreditCard,
-  Vault,
-  Bot,
+const productImages: Record<string, string> = {
+  'broker-house': '/images/broker_house_phone.png',
+  'prop-firm': '/images/prop_firm_golden_bull.png',
+  'crypto-arbitrage': '/images/crypto_arbitrage_cube.png',
+  'ai-agent': '/images/ai_agent_neural_brain.png',
+  'education-platform': '/images/education_platform_academy.png',
+  'forex-cards': '/images/forex_cards_luxury_trio.png',
+  'fund-management': '/images/fund_management_wealth.png',
+  'automation-bot': '/images/ai_automation_robot.png',
 };
 
-const quotesMap: Record<string, string> = {
-  'broker-house': '“We are building a Hybrid Broker — the best of both worlds. Technology + Trust + Flexibility + Security + Innovation + Execution.”',
-  'prop-firm': '“We fund. You trade. Together, we build the future.”',
-  'crypto-arbitrage': '“Stay tuned. Stay ahead. The future of arbitrage is almost here.”',
-  'ai-agent': '“Real-time insights. AI-powered precision. Endless possibilities.”',
-  'education-platform': '“Learn. Trade. Grow. Together with Velora Global.”',
-  'forex-cards': '“YOUR MONEY. YOUR WORLD. Exclusive. Global. Limitless.”',
-  'fund-management': '“Your growth. Our expertise. Limitless possibilities.”',
-  'automation-bot': '“Automate. Copy. Grow. The future of trading is here.”',
+const productQuotes: Record<string, string> = {
+  'broker-house': 'Technology + Trust + Flexibility + Security + Innovation + Execution.',
+  'prop-firm': 'We fund. You trade. Together, we build the future.',
+  'crypto-arbitrage': 'The future of arbitrage is almost here.',
+  'ai-agent': 'Think. Analyze. Decide. Evolve.',
+  'education-platform': 'Learn. Trade. Grow.',
+  'forex-cards': 'YOUR MONEY. YOUR WORLD. Exclusive. Global. Limitless.',
+  'fund-management': 'Expertise you trust. Growth you deserve.',
+  'automation-bot': 'Intelligence that trades. Automation that delivers.',
 };
 
-export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onSelectProduct }) => {
-  const [activeCategory, setActiveCategory] = useState<string>('all');
+const productSubtitles: Record<string, string> = {
+  'broker-house': 'Hybrid Broker — the best of MM + STP/ECN with deep liquidity and bank-grade segregation.',
+  'prop-firm': 'Funded accounts up to $200,000+. Zero personal risk. 85–90% profit split.',
+  'crypto-arbitrage': 'Sub-millisecond price disparity capture across Tier-1 crypto order books.',
+  'ai-agent': 'Neural AI powering real-time sentiment, risk scoring, and strategy co-piloting.',
+  'education-platform': 'Foundational basics to institutional masterclasses. Live mentors & webinars.',
+  'forex-cards': 'Three luxury tiers — Sapphire, Obsidian, Diamond. 190+ countries accepted.',
+  'fund-management': 'Professional portfolio management. Institutional strategies. Transparent reporting.',
+  'automation-bot': 'License-based trading bots with copy-trade and intelligent execution.',
+};
 
-  const categories = [
-    { id: 'all', label: 'All Eight Pillars' },
-    { id: 'trading', label: 'Trading & Markets' },
-    { id: 'capital', label: 'Capital & Prop' },
-    { id: 'ai', label: 'AI & Automation' },
-    { id: 'wealth', label: 'Fund Management' },
-    { id: 'lifestyle', label: 'Cards & Lifestyle' },
-  ];
+/* ─── Single Sticky Card ─── */
+function StickyProductCard({
+  product,
+  index,
+  total,
+  onSelect,
+}: {
+  product: EcosystemProduct;
+  index: number;
+  total: number;
+  onSelect: (p: EcosystemProduct) => void;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  // We show the primary 8 pillars from the reference site
-  const primaryEight = VELORA_PRODUCTS.slice(0, 8);
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ['start end', 'end start'],
+  });
 
-  const filteredProducts =
-    activeCategory === 'all'
-      ? primaryEight
-      : primaryEight.filter((p) => p.category === activeCategory);
+  /* scroll‑driven animations */
+  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.55, 0.82], [0, 1, 1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.15, 0.55, 0.82], [0.93, 1, 1, 0.95]);
+  const imgScale = useTransform(scrollYProgress, [0, 0.25, 0.65], [1.12, 1, 1.04]);
+  const y = useTransform(scrollYProgress, [0, 0.15], [50, 0]);
+  const textX = useTransform(scrollYProgress, [0.05, 0.22], [-30, 0]);
+  const textOpacity = useTransform(scrollYProgress, [0.08, 0.25], [0, 1]);
+
+  const pillarNum = (index + 1).toString().padStart(2, '0');
+  const imgSrc = productImages[product.id] || '/images/ecosystem_vision_hub.png';
+  const quote = productQuotes[product.id] || '';
+  const subtitle = productSubtitles[product.id] || product.description;
 
   return (
-    <section id="ecosystem" className="relative py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      {/* Glow Backdrops */}
-      <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-[#1B2CC1]/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#7692FF]/10 rounded-full blur-3xl pointer-events-none" />
+    <div
+      ref={cardRef}
+      className="h-[110vh] flex items-center justify-center"
+    >
+      <motion.div
+        style={{ opacity, scale, y }}
+        className="sticky top-[7vh] w-full max-w-7xl mx-auto h-[86vh] rounded-3xl overflow-hidden border border-[#7692FF]/25 shadow-card-lux cursor-pointer group"
+        onClick={() => onSelect(product)}
+      >
+        {/* Full Image Background with parallax zoom */}
+        <motion.img
+          src={imgSrc}
+          alt={product.title}
+          loading="lazy"
+          style={{ scale: imgScale }}
+          className="absolute inset-0 w-full h-full object-cover will-change-transform"
+        />
 
-      {/* Header from reference: "THE PRODUCT UNIVERSE" & "Eight pillars. One infinite ecosystem." */}
-      <div className="text-center max-w-3xl mx-auto mb-16">
+        {/* Dark Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050c26] via-[#050c26]/50 to-[#050c26]/15" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050c26]/65 via-transparent to-transparent" />
+
+        {/* Giant Pillar Number watermark */}
+        <div className="absolute top-6 sm:top-8 left-6 sm:left-10 pointer-events-none">
+          <span className="text-[80px] sm:text-[120px] lg:text-[160px] font-serif font-bold text-white/[0.05] leading-none select-none">
+            {pillarNum}
+          </span>
+        </div>
+
+        {/* Status Badge */}
+        <div className="absolute top-6 sm:top-8 right-6 sm:right-10 flex flex-col items-end gap-2">
+          <span className="text-[9px] px-3 py-1.5 rounded-full bg-[#091540]/80 backdrop-blur-md border border-[#7692FF]/40 text-[#ABD2FA] font-mono uppercase tracking-[0.2em]">
+            {product.status}
+          </span>
+          <span className="text-[10px] font-mono text-white/25 tracking-wider">
+            {pillarNum} / {total.toString().padStart(2, '0')}
+          </span>
+        </div>
+
+        {/* Content: Bottom-Left with scroll-driven slide-in */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#091540]/80 border border-[#7692FF]/30 text-[#ABD2FA] text-xs sm:text-sm font-semibold tracking-widest uppercase mb-4 font-mono"
+          style={{ x: textX, opacity: textOpacity }}
+          className="absolute bottom-0 left-0 right-0 p-6 sm:p-10 lg:p-14"
         >
-          <Sparkles className="w-3.5 h-3.5 text-[#ABD2FA]" />
-          <span>THE PRODUCT UNIVERSE</span>
+          {/* Pillar Label */}
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-[10px] font-mono tracking-[0.35em] text-[#ABD2FA] uppercase">
+              PILLAR {pillarNum}
+            </span>
+            <span className="h-[1px] w-12 bg-gradient-to-r from-[#7692FF] to-transparent" />
+          </div>
+
+          {/* Title */}
+          <h3 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-white leading-[1.08] mb-3 max-w-3xl">
+            {product.title}
+          </h3>
+
+          {/* Quote */}
+          <p className="text-base sm:text-xl font-serif italic text-[#ABD2FA]/85 mb-3 max-w-2xl">
+            "{quote}"
+          </p>
+
+          {/* Short Subtitle */}
+          <p className="text-xs sm:text-sm font-sans text-slate-300/70 max-w-xl leading-relaxed mb-5">
+            {subtitle}
+          </p>
+
+          {/* CTA */}
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/15 hover:border-[#ABD2FA]/50 backdrop-blur-md text-[11px] font-display font-semibold text-white/60 hover:text-white transition-all group/btn">
+            <span>EXPLORE ARCHITECTURE</span>
+            <ExternalLink className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+          </div>
         </motion.div>
+
+        {/* Scroll hint */}
+        {index < total - 1 && (
+          <div className="absolute bottom-6 right-6 sm:right-10 flex flex-col items-center gap-1 text-white/20 pointer-events-none">
+            <span className="text-[8px] font-mono tracking-[0.3em] uppercase">NEXT</span>
+            <div className="w-[1px] h-8 bg-gradient-to-b from-[#7692FF]/40 to-transparent" />
+          </div>
+        )}
+      </motion.div>
+    </div>
+  );
+}
+
+/* ─── Main Section ─── */
+export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onSelectProduct }) => {
+  const primaryEight = VELORA_PRODUCTS.slice(0, 8);
+
+  return (
+    <section id="ecosystem" className="relative">
+      {/* Intro Screen */}
+      <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4 relative z-10">
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="inline-block text-xs font-mono tracking-[0.4em] text-[#ABD2FA] uppercase mb-4"
+        >
+          THE PRODUCT UNIVERSE
+        </motion.span>
 
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight leading-tight"
+          viewport={{ once: true }}
+          className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold text-white leading-[1.05] max-w-4xl"
         >
           Eight Pillars.{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ABD2FA] via-[#7692FF] to-[#1B2CC1]">
+          <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#ABD2FA] to-[#7692FF]">
             One Infinite Ecosystem.
           </span>
         </motion.h2>
 
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          className="mt-4 text-base sm:text-lg text-slate-300"
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="mt-10 flex flex-col items-center gap-1.5 text-white/25"
         >
-          Converging broker house, prop funding, high-frequency arbitrage, AI intelligence, and multi-currency lifestyle into one universe.
-        </motion.p>
-
-        {/* Category Filters */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
-                activeCategory === cat.id
-                  ? 'bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] text-white shadow-[0_0_15px_rgba(118,146,255,0.4)] border border-[#ABD2FA]/40'
-                  : 'bg-[#091540]/60 text-slate-400 hover:text-white hover:bg-[#0e1d52] border border-[#7692FF]/20'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
+          <span className="text-[9px] font-mono tracking-[0.35em] uppercase">BEGIN THE JOURNEY</span>
+          <div className="w-[1px] h-14 bg-gradient-to-b from-[#7692FF]/50 to-transparent animate-pulse" />
+        </motion.div>
       </div>
 
-      {/* 8 Product Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {filteredProducts.map((product, idx) => {
-          const Icon = iconMap[product.iconName] || Sparkles;
-          const quote = quotesMap[product.id] || '';
-          const pillarNum = (idx + 1).toString().padStart(2, '0');
-
-          return (
-            <motion.div
-              key={product.id}
-              layout
-              initial={{ opacity: 0, scale: 0.96 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.4 }}
-              onClick={() => onSelectProduct(product)}
-              className="group relative p-6 rounded-3xl bg-[#091540]/65 hover:bg-[#0e1d52]/85 border border-[#7692FF]/20 hover:border-[#ABD2FA]/50 backdrop-blur-xl shadow-card-lux transition-all cursor-pointer flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-[#0e1d52] border border-[#7692FF]/30 flex items-center justify-center text-[#ABD2FA] group-hover:scale-105 transition-all shadow-[0_0_15px_rgba(118,146,255,0.25)]">
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <span className="text-xs font-mono font-bold text-[#ABD2FA]">
-                    {pillarNum}
-                  </span>
-                </div>
-
-                <div className="mb-2">
-                  <span className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold border border-[#7692FF]/40 bg-[#1B2CC1]/20 text-[#ABD2FA] font-mono uppercase">
-                    {product.status}
-                  </span>
-                </div>
-
-                <h3 className="text-lg sm:text-xl font-display font-bold text-white group-hover:text-[#ABD2FA] transition-colors mt-2">
-                  {product.title}
-                </h3>
-                <p className="text-xs font-semibold text-[#7692FF] mt-0.5 mb-2.5">
-                  {product.tagline}
-                </p>
-
-                <p className="text-xs sm:text-sm text-slate-300 line-clamp-3 leading-relaxed font-normal">
-                  {product.description}
-                </p>
-
-                {/* Reference quote if present */}
-                {quote && (
-                  <p className="mt-3 text-[11px] italic text-[#ABD2FA]/80 border-l-2 border-[#7692FF] pl-2.5 font-mono">
-                    {quote}
-                  </p>
-                )}
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-[#7692FF]/20 flex items-center justify-between text-xs font-semibold text-slate-300 group-hover:text-[#ABD2FA] transition-colors">
-                <span>View Architecture</span>
-                <div className="w-7 h-7 rounded-full bg-[#050c26] group-hover:bg-[#7692FF] group-hover:text-white flex items-center justify-center transition-all">
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
+      {/* Stacked Cards */}
+      <div className="relative px-4 sm:px-6 lg:px-8">
+        {primaryEight.map((product, idx) => (
+          <StickyProductCard
+            key={product.id}
+            product={product}
+            index={idx}
+            total={primaryEight.length}
+            onSelect={onSelectProduct}
+          />
+        ))}
       </div>
     </section>
   );
