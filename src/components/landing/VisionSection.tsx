@@ -12,16 +12,7 @@ export const VisionSection: React.FC = () => {
   return (
     <section id="vision" className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="text-center max-w-3xl mx-auto mb-12">
-        <motion.span
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="inline-block text-xs font-mono tracking-[0.3em] text-[#ABD2FA] uppercase mb-3"
-        >
-          THE VELORA VISION
-        </motion.span>
-
+      <div className="text-center max-w-3xl mx-auto mb-14">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -95,7 +86,6 @@ export const VisionSection: React.FC = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#050c26] via-transparent to-transparent" />
           <div className="absolute bottom-5 left-5 right-5">
-            <span className="text-xs font-mono text-[#ABD2FA] uppercase tracking-widest">WE FUND. YOU TRADE.</span>
             <h3 className="text-xl font-serif font-bold text-white mt-1">Together, We Build the Future.</h3>
           </div>
         </motion.div>
@@ -115,7 +105,6 @@ export const VisionSection: React.FC = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#050c26] via-transparent to-transparent" />
           <div className="absolute bottom-5 left-5 right-5">
-            <span className="text-xs font-mono text-[#ABD2FA] uppercase tracking-widest">ONE ECOSYSTEM</span>
             <h3 className="text-xl font-serif font-bold text-white mt-1">One Vision. Limitless Future.</h3>
           </div>
         </motion.div>

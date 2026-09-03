@@ -1,15 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-interface SectionDividerProps {
-  label?: string;
-}
-
-export const SectionDivider: React.FC<SectionDividerProps> = ({ label = 'VELORA GLOBAL' }) => {
+export const SectionDivider: React.FC = () => {
   return (
-    <div className="relative py-10 flex items-center justify-center overflow-hidden max-w-7xl mx-auto px-4">
+    <div className="relative py-12 flex items-center justify-center overflow-hidden max-w-7xl mx-auto px-4">
       {/* Background line */}
-      <div className="absolute inset-x-12 h-[1px] bg-gradient-to-r from-transparent via-[#7692FF]/25 to-transparent" />
+      <div className="absolute inset-x-12 h-[1px] bg-gradient-to-r from-transparent via-[#7692FF]/20 to-transparent" />
 
       {/* Animated glow pulse */}
       <motion.div
@@ -20,17 +16,15 @@ export const SectionDivider: React.FC<SectionDividerProps> = ({ label = 'VELORA 
         className="absolute inset-x-24 h-[1px] bg-gradient-to-r from-transparent via-[#ABD2FA]/60 to-transparent shadow-[0_0_10px_rgba(171,210,250,0.5)]"
       />
 
-      {/* Label Node */}
+      {/* Elegant central glowing infinity node */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         whileInView={{ scale: 1, opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="relative z-10 px-4 py-1 rounded-full bg-[#091540] border border-[#7692FF]/35 flex items-center gap-2"
+        className="relative z-10 w-8 h-8 rounded-full bg-[#091540] border border-[#7692FF]/40 shadow-[0_0_15px_rgba(118,146,255,0.35)] flex items-center justify-center"
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-[#7692FF] animate-pulse" />
-        <span className="text-[9px] font-mono tracking-[0.3em] text-[#ABD2FA] uppercase">{label}</span>
-        <span className="text-[#7692FF] font-serif text-sm">∞</span>
+        <span className="text-[#ABD2FA] text-xs font-serif leading-none select-none">∞</span>
       </motion.div>
     </div>
   );

@@ -12,5 +12,8 @@ export default defineConfig({
   server: {
     port: 5173,
     open: true,
+    watch: {
+      ignored: ['**/images/**', '**/*.mp4', '**/.git/**'],
+    },
   },
 });

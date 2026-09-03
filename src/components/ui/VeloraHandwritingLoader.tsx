@@ -83,20 +83,20 @@ export const VeloraHandwritingLoader: React.FC<VeloraHandwritingLoaderProps> = (
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#050c26] text-white overflow-hidden pointer-events-auto"
         >
           {/* Ambient Cosmic Radial Glow */}
-          <div className="absolute w-[600px] h-[600px] bg-gradient-to-tr from-[#1B2CC1]/30 via-[#7692FF]/20 to-[#ABD2FA]/15 rounded-full blur-[140px] pointer-events-none animate-pulse-glow" />
+          <div className="absolute w-[90vw] max-w-[1200px] h-[500px] bg-gradient-to-tr from-[#1B2CC1]/35 via-[#7692FF]/25 to-[#ABD2FA]/20 rounded-full blur-[160px] pointer-events-none animate-pulse-glow" />
 
           {/* Glowing Cyber Grid */}
           <div className="absolute inset-0 bg-cyber-grid opacity-15 pointer-events-none" />
 
-          {/* Loader Canvas */}
-          <div className="relative z-10 flex flex-col items-center">
+          {/* Loader Canvas - 85-90% Screen Width */}
+          <div className="relative z-10 flex items-center justify-center w-[88vw] max-w-[1600px] mx-auto px-2">
             {/* SVG Calligraphic Handwriting Animation */}
-            <div className="relative w-[340px] sm:w-[480px] h-[130px] sm:h-[160px] flex items-center justify-center">
+            <div className="relative w-full flex items-center justify-center">
               <svg
-                viewBox="0 0 460 140"
+                viewBox="18 4 444 130"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-full h-full drop-shadow-[0_0_25px_rgba(118,146,255,0.65)]"
+                className="w-full h-auto max-h-[85vh] drop-shadow-[0_0_35px_rgba(118,146,255,0.7)]"
               >
                 <defs>
                   {/* Neon Electric Palette Gradient */}
@@ -125,7 +125,7 @@ export const VeloraHandwritingLoader: React.FC<VeloraHandwritingLoaderProps> = (
                 <motion.path
                   d="M 35,38 C 42,28 52,35 56,52 C 64,88 74,118 84,124 C 92,126 100,105 106,78 C 112,50 118,34 126,35 C 132,36 130,50 122,65"
                   stroke="url(#handwritingGrad)"
-                  strokeWidth="4"
+                  strokeWidth="4.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   filter="url(#neonGlow)"
@@ -138,7 +138,7 @@ export const VeloraHandwritingLoader: React.FC<VeloraHandwritingLoaderProps> = (
                 <motion.path
                   d="M 122,65 C 114,80 120,95 130,95 C 142,95 152,82 154,68 C 154,54 144,48 135,52 C 124,58 120,74 125,88 C 130,100 145,104 158,98"
                   stroke="url(#handwritingGrad)"
-                  strokeWidth="3.8"
+                  strokeWidth="4.2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   filter="url(#neonGlow)"
@@ -151,7 +151,7 @@ export const VeloraHandwritingLoader: React.FC<VeloraHandwritingLoaderProps> = (
                 <motion.path
                   d="M 158,98 C 172,92 182,75 190,52 C 200,24 208,12 215,16 C 220,20 216,36 208,60 C 198,90 192,108 200,110 C 208,112 218,98 226,90"
                   stroke="url(#handwritingGrad)"
-                  strokeWidth="4"
+                  strokeWidth="4.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   filter="url(#neonGlow)"
@@ -164,7 +164,7 @@ export const VeloraHandwritingLoader: React.FC<VeloraHandwritingLoaderProps> = (
                 <motion.path
                   d="M 226,90 C 224,80 230,62 242,56 C 255,50 268,60 268,76 C 268,94 254,105 240,103 C 228,100 224,82 232,68 C 238,58 250,56 260,62 C 268,66 276,68 284,68"
                   stroke="url(#handwritingGrad)"
-                  strokeWidth="3.8"
+                  strokeWidth="4.2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   filter="url(#neonGlow)"
@@ -177,7 +177,7 @@ export const VeloraHandwritingLoader: React.FC<VeloraHandwritingLoaderProps> = (
                 <motion.path
                   d="M 284,68 C 290,66 295,55 302,56 C 308,58 306,70 304,82 C 302,96 300,105 308,105 C 314,105 320,95 326,82 C 332,70 340,65 348,72"
                   stroke="url(#handwritingGrad)"
-                  strokeWidth="3.8"
+                  strokeWidth="4.2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   filter="url(#neonGlow)"
@@ -190,7 +190,7 @@ export const VeloraHandwritingLoader: React.FC<VeloraHandwritingLoaderProps> = (
                 <motion.path
                   d="M 348,72 C 344,80 348,92 356,98 C 366,104 378,98 382,85 C 386,72 380,58 368,58 C 356,58 348,72 352,86 C 356,100 370,104 382,98 C 390,94 394,84 398,72 C 400,64 402,82 404,96 C 406,108 416,112 428,108 C 438,104 446,96 452,90"
                   stroke="url(#handwritingGrad)"
-                  strokeWidth="4"
+                  strokeWidth="4.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   filter="url(#neonGlow)"
@@ -203,8 +203,8 @@ export const VeloraHandwritingLoader: React.FC<VeloraHandwritingLoaderProps> = (
                 <motion.path
                   d="M 35,38 C 42,28 52,35 56,52 C 64,88 74,118 84,124 C 92,126 100,105 106,78 C 112,50 118,34 126,35 C 132,36 130,50 122,65 M 122,65 C 114,80 120,95 130,95 C 142,95 152,82 154,68 C 154,54 144,48 135,52 C 124,58 120,74 125,88 C 130,100 145,104 158,98 M 158,98 C 172,92 182,75 190,52 C 200,24 208,12 215,16 C 220,20 216,36 208,60 C 198,90 192,108 200,110 C 208,112 218,98 226,90 M 226,90 C 224,80 230,62 242,56 C 255,50 268,60 268,76 C 268,94 254,105 240,103 C 228,100 224,82 232,68 C 238,58 250,56 260,62 C 268,66 276,68 284,68 M 284,68 C 290,66 295,55 302,56 C 308,58 306,70 304,82 C 302,96 300,105 308,105 C 314,105 320,95 326,82 C 332,70 340,65 348,72 M 348,72 C 344,80 348,92 356,98 C 366,104 378,98 382,85 C 386,72 380,58 368,58 C 356,58 348,72 352,86 C 356,100 370,104 382,98 C 390,94 394,84 398,72 C 400,64 402,82 404,96 C 406,108 416,112 428,108 C 438,104 446,96 452,90"
                   stroke="#ffffff"
-                  strokeWidth="1.2"
-                  strokeOpacity="0.7"
+                  strokeWidth="1.4"
+                  strokeOpacity="0.75"
                   strokeLinecap="round"
                   fill="none"
                   initial={{ pathLength: 0, opacity: 0 }}
@@ -213,30 +213,6 @@ export const VeloraHandwritingLoader: React.FC<VeloraHandwritingLoaderProps> = (
                 />
               </svg>
             </div>
-
-            {/* Subtle Subtitle Fade-in with Calligraphic Charm */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.8, duration: 0.6 }}
-              className="mt-6 flex items-center justify-center gap-3 text-xs font-mono tracking-[0.45em] text-[#ABD2FA] uppercase select-none"
-            >
-              <span className="w-6 h-[1px] bg-gradient-to-r from-transparent to-[#7692FF]" />
-              <span>INFINITE OPPORTUNITIES</span>
-              <span className="w-6 h-[1px] bg-gradient-to-l from-transparent to-[#7692FF]" />
-            </motion.div>
-
-            {/* Subtle Loading Dots Status */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="mt-8 flex items-center gap-2"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] animate-bounce" />
-              <span className="w-1.5 h-1.5 rounded-full bg-[#7692FF] animate-bounce [animation-delay:0.15s]" />
-              <span className="w-1.5 h-1.5 rounded-full bg-[#1B2CC1] animate-bounce [animation-delay:0.3s]" />
-            </motion.div>
           </div>
         </motion.div>
       )}

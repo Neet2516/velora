@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Bot, Sparkles } from 'lucide-react';
-import { AI_AGENT_STATS } from '../../data/aiData';
 
 export const AIAgentSection: React.FC = () => {
   const [messages, setMessages] = useState<{ sender: 'ai' | 'user'; text: string }[]>([
@@ -35,16 +34,7 @@ export const AIAgentSection: React.FC = () => {
   return (
     <section id="ai-agent" className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="text-center max-w-3xl mx-auto mb-12">
-        <motion.span
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="inline-block text-xs font-mono tracking-[0.3em] text-[#ABD2FA] uppercase mb-3"
-        >
-          VELORA AI AGENT
-        </motion.span>
-
+      <div className="text-center max-w-3xl mx-auto mb-14">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

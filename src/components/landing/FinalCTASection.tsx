@@ -26,16 +26,7 @@ export const FinalCTASection: React.FC<FinalCTASectionProps> = ({ onExploreEcosy
         <div className="absolute inset-0 bg-gradient-to-t from-[#050c26] via-[#050c26]/50 to-transparent" />
 
         {/* CTA Content Overlaid on Image */}
-        <div className="absolute inset-0 flex flex-col items-center justify-end pb-10 sm:pb-16 px-4">
-          <motion.span
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-xs font-mono tracking-[0.3em] text-[#ABD2FA] uppercase mb-3"
-          >
-            A SURPRISE IS AWAITING FOR YOU
-          </motion.span>
-
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-12 sm:pb-20 px-4">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -58,10 +49,6 @@ export const FinalCTASection: React.FC<FinalCTASectionProps> = ({ onExploreEcosy
             <span>ENTER THE ECOSYSTEM</span>
             <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1.5 transition-transform" />
           </motion.button>
-
-          <div className="mt-6 text-xs font-mono tracking-[0.25em] text-white/40 uppercase">
-            INFINITE OPPORTUNITIES · LIMITLESS WEALTH
-          </div>
         </div>
       </motion.div>
     </section>

@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Rocket, TrendingUp, Globe, Handshake, Gem, CheckCircle2, Sparkles, ChevronRight } from 'lucide-react';
-import { ROADMAP_STAGES } from '../../data/roadmapData';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { CheckCircle2 } from 'lucide-react';
 
 interface StageMeta {
   id: string;
@@ -22,7 +21,7 @@ const ROADMAP_METAS: StageMeta[] = [
     stepNumber: 1,
     title: 'LAUNCH',
     subtitle: 'THE BEGINNING',
-    theme: '🌅 Dawn / Genesis',
+    theme: 'Dawn / Genesis',
     iconEmoji: '🚀',
     bgImage: '/images/roadmap_launch.jpg',
     quote: 'The first spark of Velora Global — the foundation of one complete financial ecosystem is laid.',
@@ -40,7 +39,7 @@ const ROADMAP_METAS: StageMeta[] = [
     stepNumber: 2,
     title: 'GROWTH',
     subtitle: 'BUILDING MOMENTUM',
-    theme: '🏙️ Growing Futuristic City',
+    theme: 'Growing Futuristic City',
     iconEmoji: '🏙️',
     bgImage: '/images/velora_global_skyline_1788452911616.jpg',
     quote: "Expanding the ecosystem's core pillars as traders and partners begin to join the movement.",
@@ -58,7 +57,7 @@ const ROADMAP_METAS: StageMeta[] = [
     stepNumber: 3,
     title: 'EXPANSION',
     subtitle: 'BREAKING BOUNDARIES',
-    theme: '🌍 Global Network',
+    theme: 'Global Network',
     iconEmoji: '🌍',
     bgImage: '/images/world_complete_ecosystem.png',
     quote: 'Reaching further across global markets — Forex, Gold, Crypto and beyond, all in one ecosystem.',
@@ -76,7 +75,7 @@ const ROADMAP_METAS: StageMeta[] = [
     stepNumber: 4,
     title: 'COLLABORATION',
     subtitle: 'STRONGER TOGETHER',
-    theme: '🤝 Connected Nodes',
+    theme: 'Connected Nodes',
     iconEmoji: '🤝',
     bgImage: '/images/roadmap_nodes.jpg',
     quote: 'Uniting traders, leaders and partners worldwide through strong, transparent partnerships.',
@@ -94,7 +93,7 @@ const ROADMAP_METAS: StageMeta[] = [
     stepNumber: 5,
     title: 'LEGACY',
     subtitle: 'BUILDING THE FUTURE',
-    theme: '💎 Giant Glowing Diamond',
+    theme: 'Giant Glowing Diamond',
     iconEmoji: '💎',
     bgImage: '/images/roadmap_diamond.jpg',
     quote: "One rank, one team, one vision — building the world's complete finance ecosystem for the long term.",
@@ -118,7 +117,6 @@ export const RoadmapSection: React.FC = () => {
     offset: ['start start', 'end end'],
   });
 
-  // Background opacity cross-fades linked to scroll progress (5 stages = 0 to 1)
   const bgOpacity0 = useTransform(scrollYProgress, [0, 0.15, 0.25], [1, 1, 0]);
   const bgOpacity1 = useTransform(scrollYProgress, [0.15, 0.25, 0.4, 0.5], [0, 1, 1, 0]);
   const bgOpacity2 = useTransform(scrollYProgress, [0.4, 0.5, 0.65, 0.75], [0, 1, 1, 0]);
@@ -127,7 +125,6 @@ export const RoadmapSection: React.FC = () => {
 
   const bgOpacities = [bgOpacity0, bgOpacity1, bgOpacity2, bgOpacity3, bgOpacity4];
 
-  // Path line progress (0% to 100%)
   const pathLength = useTransform(scrollYProgress, [0.05, 0.95], [0, 1]);
   const rocketY = useTransform(scrollYProgress, [0.05, 0.95], ['4%', '96%']);
 
@@ -141,7 +138,7 @@ export const RoadmapSection: React.FC = () => {
 
   return (
     <section id="roadmap" ref={containerRef} className="relative w-full">
-      {/* ─── STICKY CINEMATIC BACKGROUND SYSTEM ─── */}
+      {/* Sticky Cinematic Background System */}
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden z-0 pointer-events-none">
         {ROADMAP_METAS.map((stage, idx) => (
           <motion.div
@@ -154,38 +151,17 @@ export const RoadmapSection: React.FC = () => {
               alt={stage.title}
               className="w-full h-full object-cover animate-ken-burns scale-105"
             />
-            {/* Cinematic Gradient Overlays for high readability */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#050c26]/80 via-[#050c26]/55 to-[#050c26]/90" />
             <div className="absolute inset-0 bg-radial-ambient opacity-60" />
           </motion.div>
         ))}
-
-        {/* Ambient Vignette & Tint */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#050c26] via-transparent to-[#050c26]/90" />
-
-        {/* Floating Top Indicator HUD */}
-        <div className="absolute top-24 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-3 px-4 py-1.5 rounded-full bg-[#091540]/80 border border-[#7692FF]/30 backdrop-blur-xl shadow-card-lux">
-          <span className="w-2 h-2 rounded-full bg-[#ABD2FA] animate-ping" />
-          <span className="text-[10px] sm:text-xs font-mono tracking-[0.25em] text-[#ABD2FA] uppercase font-semibold">
-            ROAD THROUGH THE FUTURE
-          </span>
-          <span className="text-[#7692FF] font-bold text-sm">∞</span>
-        </div>
       </div>
 
-      {/* ─── CONTENT CONTAINER (SCROLL OVERLAY) ─── */}
+      {/* Content Container */}
       <div className="relative z-10 -mt-[100vh] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
         {/* Section Intro Header */}
-        <div className="min-h-[75vh] flex flex-col items-center justify-center text-center pt-28 pb-12">
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-block text-xs font-mono tracking-[0.35em] text-[#ABD2FA] uppercase mb-3"
-          >
-            ROADMAP OF VELORA GLOBAL
-          </motion.span>
-
+        <div className="min-h-[70vh] flex flex-col items-center justify-center text-center pt-28 pb-12">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -228,33 +204,17 @@ export const RoadmapSection: React.FC = () => {
               </button>
             ))}
           </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-            className="mt-12 flex flex-col items-center gap-1 text-white/30"
-          >
-            <span className="text-[9px] font-mono tracking-[0.3em] uppercase">SCROLL TO TRAVEL</span>
-            <div className="w-[1px] h-12 bg-gradient-to-b from-[#7692FF] to-transparent animate-pulse" />
-          </motion.div>
         </div>
 
-        {/* ─── THE GLOWING ROAD TRAIL & MILESTONE STATIONS ─── */}
+        {/* The Glowing Road Trail & Milestone Stations */}
         <div className="relative">
-          {/* Central Glowing Trail Track (Desktop/Tablet) */}
+          {/* Central Glowing Trail Track */}
           <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 hidden md:block pointer-events-none">
-            {/* Ambient track beam */}
             <div className="w-full h-full bg-gradient-to-b from-[#7692FF]/15 via-[#ABD2FA]/25 to-[#1B2CC1]/20 rounded-full" />
-
-            {/* Glowing active path line drawn on scroll */}
             <motion.div
               style={{ scaleY: pathLength, transformOrigin: 'top' }}
               className="absolute inset-0 w-full bg-gradient-to-b from-[#ABD2FA] via-[#7692FF] to-[#1B2CC1] rounded-full shadow-[0_0_20px_rgba(171,210,250,0.8)]"
             />
-
-            {/* Traveling Rocket Indicator */}
             <motion.div
               style={{ top: rocketY }}
               className="absolute -left-4 -translate-y-1/2 w-9 h-9 rounded-full bg-[#050c26] border-2 border-[#ABD2FA] shadow-[0_0_25px_rgba(171,210,250,0.9)] flex items-center justify-center text-sm z-30"
@@ -276,7 +236,7 @@ export const RoadmapSection: React.FC = () => {
                     isEven ? 'md:flex-row' : 'md:flex-row-reverse'
                   } gap-8 lg:gap-16`}
                 >
-                  {/* Central Node Indicator on the Road */}
+                  {/* Central Node Indicator */}
                   <div className="md:absolute md:left-1/2 md:-translate-x-1/2 z-20 flex flex-col items-center">
                     <motion.div
                       initial={{ scale: 0.8, opacity: 0 }}
@@ -303,18 +263,6 @@ export const RoadmapSection: React.FC = () => {
                       isEven ? 'md:text-right' : 'md:text-left'
                     }`}
                   >
-                    {/* Theme & Phase Header */}
-                    <div
-                      className={`flex items-center gap-2.5 mb-3 ${
-                        isEven ? 'md:justify-end' : 'md:justify-start'
-                      }`}
-                    >
-                      <span className="text-[10px] px-3 py-1 rounded-full font-mono font-semibold bg-[#1B2CC1]/30 border border-[#7692FF]/40 text-[#ABD2FA] uppercase tracking-wider">
-                        STAGE 0{stage.stepNumber} · {stage.theme}
-                      </span>
-                    </div>
-
-                    {/* Stage Title */}
                     <h3 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight leading-tight">
                       {stage.title}
                     </h3>
@@ -322,7 +270,6 @@ export const RoadmapSection: React.FC = () => {
                       {stage.subtitle}
                     </p>
 
-                    {/* Quote */}
                     <p className="text-base sm:text-lg font-serif italic text-[#ABD2FA]/90 leading-relaxed mb-4">
                       "{stage.quote}"
                     </p>
@@ -331,7 +278,6 @@ export const RoadmapSection: React.FC = () => {
                       {stage.tagline}
                     </p>
 
-                    {/* Milestones Bullets */}
                     <div className="space-y-2.5 pt-4 border-t border-[#7692FF]/20">
                       {stage.highlights.map((item, hIdx) => (
                         <div
@@ -347,7 +293,6 @@ export const RoadmapSection: React.FC = () => {
                     </div>
                   </motion.div>
 
-                  {/* Empty Spacer Column for Desktop alternating alignment */}
                   <div className="hidden md:block md:w-[calc(50%-4rem)]" />
                 </div>
               );
@@ -355,16 +300,13 @@ export const RoadmapSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Horizon Arrival Indicator */}
+        {/* Bottom Horizon */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center pt-16 border-t border-[#7692FF]/25"
         >
-          <span className="text-xs font-mono tracking-[0.3em] text-[#ABD2FA] uppercase block mb-2">
-            DESTINATION REACHED
-          </span>
           <h4 className="text-2xl sm:text-3xl font-serif font-bold text-white">
             "ONE RANK. ONE TEAM. ONE VISION."
           </h4>

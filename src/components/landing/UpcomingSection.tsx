@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import { CreditCard, Box, Gem, Palmtree, Sparkles, ArrowRight, Lock, Eye, Compass, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
 
 interface HorizonScene {
   id: string;
@@ -106,23 +106,15 @@ export const UpcomingSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Monitor vertical scroll inside the pinned container
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
 
-  // Convert vertical scroll progress into horizontal track translation:
-  // We have 4 full cinematic panels. Translating from 0% to -75% covers all 4 scenes smoothly.
   const x = useTransform(scrollYProgress, [0, 1], ['0%', '-75%']);
-
-  // Parallax shifts for background depth
   const bgShift = useTransform(scrollYProgress, [0, 1], ['0%', '-25%']);
-
-  // Smooth progress percentage for HUD
   const progressPercent = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
-  // Update active index indicator based on progress
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (latest < 0.28) {
       setActiveIndex(0);
@@ -150,32 +142,23 @@ export const UpcomingSection: React.FC = () => {
       ref={sectionRef}
       className="relative bg-[#050c26] text-white select-none"
     >
-      {/* ─── DESKTOP CINEMATIC PINNED HORIZONTAL EXPERIENCE ─── */}
+      {/* Desktop Horizontal Scroll */}
       <div className="hidden md:block h-[450vh] relative">
         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between bg-[#050c26]">
-          {/* Ambient Cyber Grid & Glow */}
           <div className="absolute inset-0 bg-cyber-grid opacity-20 pointer-events-none" />
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[140px] pointer-events-none transition-all duration-700"
             style={{ background: activeScene.glowColor }}
           />
 
-          {/* ── TOP HUD / HEADER BAR ── */}
+          {/* Top Bar */}
           <div className="relative z-30 pt-8 px-8 lg:px-16 flex items-center justify-between border-b border-[#7692FF]/15 pb-4 backdrop-blur-md bg-[#050c26]/60">
-            <div className="flex items-center gap-4">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#ABD2FA] animate-ping" />
-              <div>
-                <span className="text-[10px] font-mono tracking-[0.35em] text-[#ABD2FA] uppercase block font-semibold">
-                  UPCOMING HORIZONS · CHAPTER 0{activeIndex + 1}
-                </span>
-                <h2 className="text-xl lg:text-2xl font-serif font-bold text-white tracking-wide">
-                  Something Extraordinary{' '}
-                  <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#ABD2FA] to-[#7692FF]">
-                    is on the Horizon
-                  </span>
-                </h2>
-              </div>
-            </div>
+            <h2 className="text-xl lg:text-2xl font-serif font-bold text-white tracking-wide">
+              Something Extraordinary{' '}
+              <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#ABD2FA] to-[#7692FF]">
+                is on the Horizon
+              </span>
+            </h2>
 
             {/* Quick Navigation Dots */}
             <div className="flex items-center gap-6">
@@ -184,7 +167,7 @@ export const UpcomingSection: React.FC = () => {
                   <button
                     key={scene.id}
                     onClick={() => jumpToScene(i)}
-                    className={`group flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono transition-all ${
+                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono transition-all ${
                       activeIndex === i
                         ? 'bg-[#1B2CC1]/40 border border-[#ABD2FA] text-white shadow-[0_0_15px_rgba(118,146,255,0.5)]'
                         : 'text-slate-400 hover:text-white border border-transparent'
@@ -197,16 +180,10 @@ export const UpcomingSection: React.FC = () => {
                   </button>
                 ))}
               </div>
-
-              {/* Scroll prompt */}
-              <div className="hidden xl:flex items-center gap-2 text-xs font-mono text-slate-400">
-                <span className="text-[10px] tracking-widest text-[#ABD2FA]">SCROLL DOWN TO TRAVEL</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#7692FF] animate-pulse" />
-              </div>
             </div>
           </div>
 
-          {/* ── HORIZONTAL VIEWPORT TRACK ── */}
+          {/* Horizontal Track */}
           <div className="relative z-10 flex-1 overflow-hidden flex items-center">
             <motion.div
               style={{ x }}
@@ -229,9 +206,8 @@ export const UpcomingSection: React.FC = () => {
                       transition={{ duration: 0.5, ease: 'easeOut' }}
                       className="relative w-full max-w-7xl h-full rounded-[2.5rem] overflow-hidden border border-[#7692FF]/30 shadow-card-lux bg-gradient-to-br from-[#091540]/80 via-[#0e1d52]/70 to-[#050c26]/90 backdrop-blur-2xl flex flex-col lg:flex-row items-stretch group"
                     >
-                      {/* Left / Visual Showcase Area (60% width) */}
+                      {/* Left Visual Area */}
                       <div className="lg:w-[58%] relative overflow-hidden flex items-center justify-center p-6 lg:p-10">
-                        {/* Background Parallax Image */}
                         <motion.img
                           src={scene.image}
                           alt={scene.title}
@@ -239,8 +215,6 @@ export const UpcomingSection: React.FC = () => {
                           style={{ x: bgShift }}
                           className="absolute inset-0 w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-1000"
                         />
-
-                        {/* Subtle Cinematic Overlays */}
                         <div className="absolute inset-0 bg-gradient-to-t from-[#050c26] via-[#050c26]/40 to-transparent" />
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#091540]/90 hidden lg:block" />
 
@@ -251,7 +225,7 @@ export const UpcomingSection: React.FC = () => {
                           </span>
                         </div>
 
-                        {/* Floating Status Pill */}
+                        {/* Status Pill */}
                         <div className="absolute top-8 left-8 z-10">
                           <span
                             className={`text-[10px] font-mono px-3.5 py-1.5 rounded-full border backdrop-blur-md uppercase tracking-[0.25em] font-semibold ${scene.statusColor}`}
@@ -260,44 +234,27 @@ export const UpcomingSection: React.FC = () => {
                           </span>
                         </div>
 
-                        {/* Floating Bottom Quote Over Image */}
+                        {/* Quote Over Image */}
                         <div className="absolute bottom-8 left-8 right-8 z-10">
-                          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#ABD2FA] block mb-1">
-                            {scene.category}
-                          </span>
                           <p className="text-xl lg:text-2xl font-serif italic text-white/90 drop-shadow-md">
                             "{scene.quote}"
                           </p>
                         </div>
                       </div>
 
-                      {/* Right / Story & Architecture Info (42% width) */}
+                      {/* Right Info Area */}
                       <div className="lg:w-[42%] p-8 lg:p-12 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-[#7692FF]/20 relative z-10 bg-[#091540]/50 backdrop-blur-xl">
                         <div>
-                          {/* Chapter Breadcrumb */}
-                          <div className="flex items-center gap-3 mb-4">
-                            <span className="text-xs font-mono tracking-[0.35em] text-[#ABD2FA] uppercase font-bold">
-                              CHAPTER 0{index + 1} OF 04
-                            </span>
-                            <span className="h-[1px] w-12 bg-gradient-to-r from-[#7692FF] to-transparent" />
-                          </div>
-
-                          {/* Scene Title */}
                           <h3 className="text-4xl lg:text-6xl font-serif font-bold text-white tracking-tight leading-[1.05] mb-2">
                             {scene.title}
                           </h3>
-
-                          {/* Subheading */}
-                          <p className="text-xs font-mono tracking-[0.25em] text-[#7692FF] uppercase font-semibold mb-6">
+                          <p className="text-xs font-mono uppercase tracking-[0.25em] text-[#7692FF] font-semibold mb-6">
                             {scene.subheading}
                           </p>
-
-                          {/* Short 1-Sentence Description */}
                           <p className="text-sm lg:text-base text-slate-300 font-sans leading-relaxed mb-8">
                             {scene.details}
                           </p>
 
-                          {/* 3 Metric Pills */}
                           <div className="space-y-3 pt-4 border-t border-[#7692FF]/20">
                             {scene.metrics.map((m, mIdx) => (
                               <div
@@ -315,7 +272,7 @@ export const UpcomingSection: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Bottom Action / CTA */}
+                        {/* CTA */}
                         <div className="pt-6 mt-6 border-t border-[#7692FF]/20 flex items-center justify-between">
                           <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
                             <ShieldCheck className="w-4 h-4 text-[#ABD2FA]" />
@@ -341,9 +298,8 @@ export const UpcomingSection: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* ── BOTTOM CINEMATIC CONTROLLER HUD ── */}
+          {/* Bottom HUD Controller */}
           <div className="relative z-30 pb-7 px-8 lg:px-16 flex items-center justify-between backdrop-blur-md bg-[#050c26]/70 border-t border-[#7692FF]/15">
-            {/* Active Chapter Label */}
             <div className="flex items-center gap-3">
               <span className="text-2xl font-serif font-bold text-white">
                 0{activeIndex + 1}
@@ -355,7 +311,6 @@ export const UpcomingSection: React.FC = () => {
               </span>
             </div>
 
-            {/* Glowing Linear Progress Bar */}
             <div className="w-64 lg:w-96 h-1.5 bg-[#0e1d52] rounded-full overflow-hidden relative border border-[#7692FF]/30">
               <motion.div
                 style={{ width: progressPercent }}
@@ -363,7 +318,6 @@ export const UpcomingSection: React.FC = () => {
               />
             </div>
 
-            {/* Interactive Scene Switchers */}
             <div className="flex items-center gap-2">
               {HORIZON_SCENES.map((_, i) => (
                 <button
@@ -382,13 +336,9 @@ export const UpcomingSection: React.FC = () => {
         </div>
       </div>
 
-      {/* ─── MOBILE CINEMATIC VERTICAL ADAPTATION ─── */}
+      {/* Mobile Cinematic Vertical Adaptation */}
       <div className="md:hidden px-4 py-20 space-y-12">
-        {/* Mobile Header */}
         <div className="text-center mb-8">
-          <span className="text-[10px] font-mono tracking-[0.3em] text-[#ABD2FA] uppercase block mb-2 font-semibold">
-            UPCOMING HORIZONS
-          </span>
           <h2 className="text-3xl font-serif font-bold text-white leading-tight">
             Something Extraordinary{' '}
             <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#ABD2FA] to-[#7692FF]">
@@ -397,7 +347,6 @@ export const UpcomingSection: React.FC = () => {
           </h2>
         </div>
 
-        {/* Vertical Storytelling Scenes for Mobile */}
         {HORIZON_SCENES.map((scene, idx) => (
           <motion.div
             key={scene.id}
@@ -407,7 +356,6 @@ export const UpcomingSection: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="rounded-3xl overflow-hidden border border-[#7692FF]/30 bg-[#091540]/80 shadow-card-lux"
           >
-            {/* Visual Header */}
             <div className="relative h-64 overflow-hidden">
               <img
                 src={scene.image}
@@ -428,13 +376,7 @@ export const UpcomingSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Info Body */}
             <div className="p-6">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[10px] font-mono text-[#ABD2FA] font-bold">
-                  0{idx + 1} · {scene.category}
-                </span>
-              </div>
               <h3 className="text-2xl font-serif font-bold text-white mb-2">
                 {scene.title}
               </h3>

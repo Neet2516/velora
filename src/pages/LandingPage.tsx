@@ -15,7 +15,6 @@ import { useLenis } from '../hooks/useLenis';
 import { EcosystemProduct } from '../types';
 
 export const LandingPage: React.FC = () => {
-  // Activate Lenis smooth scrolling
   useLenis();
 
   const [selectedProduct, setSelectedProduct] = useState<EcosystemProduct | null>(null);
@@ -32,48 +31,43 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#050c26] text-slate-100 flex flex-col relative selection:bg-[#7692FF]/30 selection:text-[#ABD2FA]">
-      {/* Cursive Handwriting Signature Preloader */}
       <VeloraHandwritingLoader />
 
-      {/* Top sticky navbar */}
       <Navbar onExploreEcosystem={handleExploreEcosystem} />
 
-      {/* Main landing sections with animated transitions between them */}
       <main className="flex-grow">
         <HeroSection
           onExploreEcosystem={handleExploreEcosystem}
           onExploreVision={handleExploreVision}
         />
 
-        <SectionDivider label="THE VELORA VISION" />
+        <SectionDivider />
 
         <VisionSection />
 
-        <SectionDivider label="COMPLETE ECOSYSTEM" />
+        <SectionDivider />
 
         <EcosystemSection onSelectProduct={(prod) => setSelectedProduct(prod)} />
 
-        <SectionDivider label="INTELLIGENT AI AGENT" />
+        <SectionDivider />
 
         <AIAgentSection />
 
-        <SectionDivider label="STRATEGIC ROADMAP" />
+        <SectionDivider />
 
         <RoadmapSection />
 
-        <SectionDivider label="UPCOMING HORIZONS" />
+        <SectionDivider />
 
         <UpcomingSection />
 
-        <SectionDivider label="THE FUTURE OF FINANCE" />
+        <SectionDivider />
 
         <FinalCTASection onExploreEcosystem={handleExploreEcosystem} />
       </main>
 
-      {/* Footer */}
       <Footer />
 
-      {/* Interactive Detail Modal for any clicked vertical */}
       <ProductModal
         product={selectedProduct}
         onClose={() => setSelectedProduct(null)}
