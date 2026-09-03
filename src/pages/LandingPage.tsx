@@ -10,6 +10,7 @@ import { Footer } from '../components/landing/Footer';
 import { ProductModal } from '../components/landing/ProductModal';
 import { SectionDivider } from '../components/ui/SectionDivider';
 import { VeloraHandwritingLoader } from '../components/ui/VeloraHandwritingLoader';
+import { CursorMoneyTrail } from '../components/ui/CursorMoneyTrail';
 import { useLenis } from '../hooks/useLenis';
 import { EcosystemProduct } from '../types';
 
@@ -30,10 +31,11 @@ export const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050c26] text-slate-100 flex flex-col relative selection:bg-[#7692FF]/30 selection:text-[#ABD2FA]">
-      <VeloraHandwritingLoader onLoaded={() => setIsLoading(false)} />
+    <div className="min-h-screen bg-[#050c26] text-slate-100 flex flex-col relative selection:bg-[#7692FF]/30 selection:text-[#ABD2FA] overflow-x-clip">
+      <CursorMoneyTrail />
+      <VeloraHandwritingLoader />
 
-      {!isLoading && <Navbar onExploreEcosystem={handleExploreEcosystem} />}
+      <Navbar onExploreEcosystem={handleExploreEcosystem} />
 
       <main className="flex-grow">
         <HeroSection

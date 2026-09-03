@@ -19,7 +19,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   };
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-center items-center overflow-hidden">
+    <section className="relative w-full min-h-[100dvh] flex flex-col justify-center items-center" style={{ contain: 'paint' }}>
       {/* Background Frame Layer: Deep Blue Cinematic Vignette & Ambient Glow */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {/* Full-Screen Animated Video */}
@@ -56,22 +56,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 w-full max-w-[1700px] mx-auto px-4 sm:px-8 lg:px-12 text-center pt-24 pb-12 sm:pt-28 sm:pb-14">
-        {/* Animated Brand Signature: VELORA (Zoom-In Calligraphic Reveal - Width Expanded) */}
+      <div className="relative z-10 w-full px-5 sm:px-8 lg:px-12 text-center pt-24 pb-12 sm:pt-28 sm:pb-14 flex flex-col items-center">
         <motion.div
-          initial={{ scale: 0.5, opacity: 0, filter: 'blur(16px)' }}
+          initial={{ scale: 0.7, opacity: 0, filter: 'blur(12px)' }}
           animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
           transition={{
-            duration: 1.3,
-            delay: 0.15,
+            duration: 1.1,
+            delay: 0.1,
             ease: [0.16, 1, 0.3, 1],
           }}
-          className="relative inline-block w-[340px] sm:w-[620px] md:w-[840px] lg:w-[1060px] xl:w-[1240px] max-w-[96vw] mx-auto mb-4"
+          className="relative w-full max-w-[min(92vw,_1200px)] mx-auto mb-4"
         >
           {/* Ambient Behind-Glow */}
-          <div className="absolute inset-0 -inset-x-12 bg-gradient-to-r from-[#1B2CC1]/30 via-[#7692FF]/35 to-[#ABD2FA]/25 blur-3xl rounded-full pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1B2CC1]/30 via-[#7692FF]/35 to-[#ABD2FA]/25 blur-3xl rounded-full pointer-events-none" />
 
-          <VeloraSignature animated={true} delay={0.25} />
+          <VeloraSignature animated={true} delay={0.2} />
         </motion.div>
 
         {/* Distinctive Editorial Typographic Slogan */}
@@ -111,11 +110,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:gap-4 w-full max-w-sm sm:max-w-none sm:flex-row"
         >
           <button
             onClick={onExploreEcosystem}
-            className="w-full sm:w-auto px-9 py-4 rounded-full font-display font-bold text-sm sm:text-base text-white bg-[#1B2CC1] hover:bg-[#15239e] hover:shadow-[0_0_35px_rgba(27,44,193,0.7)] transition-all flex items-center justify-center gap-3 group border border-[#7692FF]/40 shadow-[0_0_20px_rgba(27,44,193,0.4)]"
+            className="w-full sm:w-auto px-8 py-4 rounded-full font-display font-bold text-sm sm:text-base text-white bg-[#1B2CC1] hover:bg-[#15239e] hover:shadow-[0_0_35px_rgba(27,44,193,0.7)] transition-all flex items-center justify-center gap-3 group border border-[#7692FF]/40 shadow-[0_0_20px_rgba(27,44,193,0.4)]"
           >
             <span>ENTER THE ECOSYSTEM</span>
             <ArrowRight className="w-4 h-4 text-[#ABD2FA] group-hover:translate-x-1 transition-transform" />

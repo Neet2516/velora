@@ -674,15 +674,15 @@ function StickyProductCard({
   const detail = PILLAR_DETAILS[product.id] || PILLAR_DETAILS['broker-house'];
 
   return (
-    <div ref={cardRef} className="min-h-[115vh] flex items-center justify-center py-10">
+    <div ref={cardRef} className="min-h-[100vh] sm:min-h-[115vh] flex items-center justify-center py-6 sm:py-10">
       <motion.div
         style={{ opacity, scale, y, x, rotate }}
-        className="sticky top-[8vh] w-full max-w-[1680px] mx-auto min-h-[84vh] rounded-[2.5rem] bg-[#050c26]/95 border border-[#7692FF]/20 shadow-[0_20px_80px_rgba(5,12,38,0.95)] backdrop-blur-3xl flex flex-col lg:flex-row items-stretch overflow-hidden relative"
+        className="sticky top-[8vh] w-full max-w-[1680px] mx-auto min-h-[auto] sm:min-h-[84vh] rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#050c26]/95 border border-[#7692FF]/20 shadow-[0_20px_80px_rgba(5,12,38,0.95)] backdrop-blur-3xl flex flex-col lg:flex-row items-stretch overflow-hidden relative"
       >
         <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
 
         {/* ─── LEFT COLUMN: REFINED HIGH-END EDITORIAL (54% WIDTH) ─── */}
-        <div className="lg:w-[54%] p-8 sm:p-12 lg:p-14 flex flex-col justify-between relative z-10">
+        <div className="w-full lg:w-[54%] p-5 sm:p-8 lg:p-14 flex flex-col justify-between relative z-10">
           <div>
             {/* Header: Number & Introducing Tagline */}
             <div className="flex items-center gap-3 mb-4">
@@ -696,7 +696,7 @@ function StickyProductCard({
             </div>
 
             {/* Main Headline */}
-            <h3 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold text-white tracking-tight leading-[0.98] mb-3">
+            <h3 className="text-3xl sm:text-5xl lg:text-7xl font-serif font-bold text-white tracking-tight leading-[0.98] mb-3">
               {detail.mainHeadingLine1}
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ABD2FA] to-[#7692FF]">
@@ -743,8 +743,8 @@ function StickyProductCard({
           </div>
         </div>
 
-        {/* ─── RIGHT COLUMN: DEDICATED VISUAL FRAME WITH SPECIFIC ANIMATIONS ─── */}
-        <div className="lg:w-[46%] relative flex items-center justify-center p-6 sm:p-10 overflow-hidden bg-gradient-to-l from-[#091540]/50 to-transparent">
+        {/* ─── RIGHT COLUMN: VISUAL FRAME — hidden on mobile, shown on lg+ ─── */}
+        <div className="hidden lg:flex lg:w-[46%] relative items-center justify-center p-4 sm:p-6 lg:p-10 overflow-hidden bg-gradient-to-l from-[#091540]/50 to-transparent">
           <PillarVisualShowcase
             productId={product.id}
             scrollYProgress={scrollYProgress}
@@ -760,7 +760,7 @@ export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onSelectProd
   const primaryEight = VELORA_PRODUCTS.slice(0, 8);
 
   return (
-    <section id="ecosystem" className="relative">
+    <section id="ecosystem" className="relative" style={{ contain: 'paint' }}>
       {/* Intro Screen */}
       <div className="min-h-[45vh] flex flex-col items-center justify-center text-center px-4 relative z-10">
         <motion.h2

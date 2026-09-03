@@ -137,20 +137,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -24, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      <header
+        className={`fixed top-0 left-0 right-0 z-[9998] transition-all duration-500 ${
           isScrolled
-            ? 'bg-[#091540]/70 backdrop-blur-2xl md:backdrop-blur-3xl border-b border-[#7692FF]/25 shadow-[0_12px_40px_rgba(5,12,38,0.7),inset_0_1px_0_rgba(255,255,255,0.12)] py-3 sm:py-3.5'
-            : 'bg-[#050c26]/45 backdrop-blur-xl md:backdrop-blur-2xl border-b border-white/[0.08] shadow-[0_8px_32px_rgba(5,12,38,0.45),inset_0_1px_0_rgba(255,255,255,0.07)] py-4 sm:py-5'
+            ? 'bg-[#091540]/90 backdrop-blur-2xl border-b border-[#7692FF]/25 shadow-[0_12px_40px_rgba(5,12,38,0.7)] py-3'
+            : 'bg-[#050c26]/80 backdrop-blur-xl border-b border-white/[0.08] py-4'
         }`}
       >
-        <div className="w-full max-w-[1700px] mx-auto px-4 sm:px-8 lg:px-12">
-          <div className="relative flex items-center justify-between">
-            {/* LEFT: Brand Logo (Left Aligned) */}
-            <div className="flex items-center justify-start flex-shrink-0 z-10">
+        <div className="w-full max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-12">
+          <div className="relative flex items-center justify-between gap-2">
+            {/* LEFT: Brand Logo (Left Aligned, constrained on mobile) */}
+            <div className="flex items-center justify-start flex-shrink-0 z-10 max-w-[60vw] sm:max-w-none">
               <a
                 href="#"
                 onClick={(e) => {
@@ -235,43 +232,40 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
               </button>
             </div>
 
-            {/* MOBILE: Prominent High-End Hamburger Trigger */}
-            <div className="md:hidden flex items-center z-50">
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="relative p-2.5 rounded-2xl bg-[#091540]/90 hover:bg-[#1B2CC1]/30 border border-[#7692FF]/40 hover:border-[#ABD2FA] text-white transition-all duration-250 focus:outline-none flex flex-col justify-center items-center w-11 h-11 gap-1.5 shadow-[0_0_20px_rgba(27,44,193,0.4)] backdrop-blur-xl active:scale-95"
-                aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
-                aria-expanded={mobileMenuOpen}
-              >
-                {/* Bespoke animated 3-bar hamburger morphing to X */}
-                <motion.span
-                  animate={mobileMenuOpen ? { rotate: 45, y: 7.5 } : { rotate: 0, y: 0 }}
-                  transition={{ duration: 0.25, ease: 'easeInOut' }}
-                  className="w-5 h-[2px] bg-[#ABD2FA] rounded-full origin-center shadow-[0_0_8px_#ABD2FA]"
-                />
-                <motion.span
-                  animate={mobileMenuOpen ? { opacity: 0, x: -8 } : { opacity: 1, x: 0 }}
-                  transition={{ duration: 0.2, ease: 'easeInOut' }}
-                  className="w-5 h-[2px] bg-white rounded-full origin-center"
-                />
-                <motion.span
-                  animate={mobileMenuOpen ? { rotate: -45, y: -7.5 } : { rotate: 0, y: 0 }}
-                  transition={{ duration: 0.25, ease: 'easeInOut' }}
-                  className="w-5 h-[2px] bg-[#ABD2FA] rounded-full origin-center shadow-[0_0_8px_#ABD2FA]"
-                />
-              </button>
-            </div>
+            {/* MOBILE: Hamburger Trigger — bold solid blue, always visible */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden flex-shrink-0 flex flex-col justify-center items-center w-11 h-11 gap-[5px] rounded-xl focus:outline-none active:scale-95 transition-transform"
+              style={{ background: '#1B2CC1', border: '1.5px solid rgba(171,210,250,0.6)' }}
+              aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
+            >
+              <motion.span
+                animate={mobileMenuOpen ? { rotate: 45, y: 7.5 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.2 }}
+                style={{ display: 'block', width: '20px', height: '2px', background: 'white', borderRadius: '99px', transformOrigin: 'center' }}
+              />
+              <motion.span
+                animate={mobileMenuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+                transition={{ duration: 0.15 }}
+                style={{ display: 'block', width: '20px', height: '2px', background: 'white', borderRadius: '99px' }}
+              />
+              <motion.span
+                animate={mobileMenuOpen ? { rotate: -45, y: -7.5 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.2 }}
+                style={{ display: 'block', width: '20px', height: '2px', background: 'white', borderRadius: '99px', transformOrigin: 'center' }}
+              />
+            </button>
           </div>
         </div>
 
-        {/* Subtle Integrated Page Progress Line */}
+        {/* Progress Line */}
         <motion.div
           style={{ scaleX: scrollYProgress, transformOrigin: '0%' }}
-          className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-[#1B2CC1] via-[#7692FF] to-[#ABD2FA] shadow-[0_0_8px_rgba(118,146,255,0.8)] pointer-events-none"
+          className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-[#1B2CC1] via-[#7692FF] to-[#ABD2FA] pointer-events-none"
         />
-      </motion.header>
+      </header>
 
-      {/* MOBILE: Full-Screen Luxury Editorial Drawer (Times New Roman - Bold & Large) */}
+      {/* MOBILE: Full-Screen Luxury Editorial Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -279,7 +273,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 md:hidden bg-[#050c26]/98 backdrop-blur-3xl flex flex-col justify-between pt-28 pb-10 px-8 overflow-y-auto"
+            className="fixed inset-0 z-[9997] md:hidden bg-[#050c26] flex flex-col justify-between pt-28 pb-10 px-8 overflow-y-auto"
           >
             {/* Ambient Background Light Blobs */}
             <div className="absolute top-24 right-0 w-80 h-80 bg-gradient-to-br from-[#1B2CC1]/30 to-[#7692FF]/20 rounded-full blur-[120px] pointer-events-none" />

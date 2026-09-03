@@ -110,7 +110,7 @@ export const RoadmapSection: React.FC = () => {
   };
 
   return (
-    <section id="roadmap" ref={containerRef} className="relative w-full">
+    <section id="roadmap" ref={containerRef} className="relative w-full" style={{ contain: 'paint' }}>
       {/* Sticky Cinematic Background System */}
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden z-0 pointer-events-none">
         {ROADMAP_METAS.map((stage, idx) => (

@@ -180,7 +180,8 @@ export const VisionSection: React.FC = () => {
   return (
     <section
       id="vision"
-      className="relative py-12 sm:py-16 px-4 sm:px-8 lg:px-12 max-w-[1700px] mx-auto overflow-hidden"
+      className="relative py-12 sm:py-16 px-4 sm:px-8 lg:px-12 max-w-[1700px] mx-auto"
+      style={{ contain: 'paint' }}
     >
       {/* ─── SECTION HEADLINE ─── */}
       <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
@@ -210,8 +211,8 @@ export const VisionSection: React.FC = () => {
 
       {/* ─── INTERACTIVE ORBITAL WHEEL: LEFT DESCRIPTION + RIGHT WHEEL ─── */}
       <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-6">
-        {/* Soft Ambient Radial Background Aura */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] sm:w-[800px] h-[550px] sm:h-[800px] rounded-full bg-radial-ambient opacity-45 blur-[120px] pointer-events-none" />
+        {/* Soft Ambient Radial Background Aura - uses percentage so it never overflows */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(90vw,800px)] h-[min(90vw,800px)] rounded-full bg-radial-ambient opacity-45 blur-[120px] pointer-events-none" />
 
         {/* LEFT: Seamless Editorial Typography directly on page background */}
         <div className="order-2 lg:order-1 lg:col-span-5 w-full flex flex-col justify-center z-10 py-4 sm:py-6 pl-2 sm:pl-4">
@@ -394,8 +395,8 @@ export const VisionSection: React.FC = () => {
         </div>
       </div>
 
-      {/* ─── FULL-BLEED INFINITE MARKET STATS MARQUEE (LEFT-TO-RIGHT) ─── */}
-      <div className="relative w-screen left-1/2 -translate-x-1/2 mt-16 sm:mt-24 mb-10 sm:mb-14 overflow-hidden py-4 select-none">
+      {/* ─── FULL-BLEED INFINITE MARKET STATS MARQUEE ─── */}
+      <div className="relative mt-16 sm:mt-24 mb-10 sm:mb-14 overflow-hidden py-4 select-none" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)', width: '100vw' }}>
         {/* Left & Right Cinematic Edge Fade Masks */}
         <div className="absolute left-0 inset-y-0 w-24 sm:w-48 bg-gradient-to-r from-[#050c26] to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 inset-y-0 w-24 sm:w-48 bg-gradient-to-l from-[#050c26] to-transparent z-10 pointer-events-none" />
