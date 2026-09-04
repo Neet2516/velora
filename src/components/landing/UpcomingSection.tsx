@@ -41,28 +41,8 @@ const HORIZON_SCENES: HorizonScene[] = [
     details: 'Seamless profit off-ramp from broker and prop firm accounts with zero international exchange surcharges.',
   },
   {
-    id: 'crypto-arbitrage',
-    step: '02',
-    category: 'HIGH-FREQUENCY ALGORITHMS',
-    title: 'CRYPTO ARBITRAGE',
-    subheading: 'SOMETHING BIG IS COMING',
-    quote: 'The future of arbitrage is almost here.',
-    status: 'REVEALING SOON',
-    statusColor: 'text-[#ABD2FA] border-[#7692FF]/40 bg-[#1B2CC1]/25',
-    ctaText: 'Preview Spread Matrix',
-    image: '/images/crypto_arbitrage_cube.png',
-    accentGradient: 'from-[#1B2CC1] via-[#7692FF] to-[#ABD2FA]',
-    glowColor: 'rgba(27, 44, 193, 0.45)',
-    metrics: [
-      { label: 'EXECUTION', value: '< 1.5ms Sub-Latency' },
-      { label: 'ORDER BOOKS', value: 'Tier-1 Cross-Exchanges' },
-      { label: 'SLIPPAGE MITIGATION', value: 'Automated Shield' },
-    ],
-    details: 'Capturing micro-second price disparities across Tier-1 global liquidity pools with zero manual intervention.',
-  },
-  {
     id: 'blue-diamond',
-    step: '03',
+    step: '02',
     category: 'GOVERNANCE & LEADERSHIP',
     title: 'BLUE DIAMOND',
     subheading: 'UPCOMING CORE TEAM',
@@ -80,26 +60,6 @@ const HORIZON_SCENES: HorizonScene[] = [
     ],
     details: 'Formed exclusively by leaders achieving the highest echelon of excellence to guide global ecosystem expansion.',
   },
-  {
-    id: 'bonanza',
-    step: '04',
-    category: 'LUXURY GLOBAL REWARD',
-    title: 'BONANZA',
-    subheading: 'AN EXTRAORDINARY JOURNEY',
-    quote: 'A reward. A journey. A memory for life.',
-    status: 'UPCOMING',
-    statusColor: 'text-[#ABD2FA] border-[#7692FF]/40 bg-[#1B2CC1]/25',
-    ctaText: 'Destination To Be Disclosed',
-    image: '/images/bonanza_destination_horizon.png',
-    accentGradient: 'from-[#1B2CC1] via-[#7692FF] to-[#ABD2FA]',
-    glowColor: 'rgba(118, 146, 255, 0.4)',
-    metrics: [
-      { label: 'DESTINATION', value: 'To Be Disclosed Soon' },
-      { label: 'HOSPITALITY', value: '5-Star Private Retreats' },
-      { label: 'EXPERIENCE', value: 'All-Inclusive Summit' },
-    ],
-    details: 'An all-inclusive international experience honoring top partners and community champions in a world-class venue.',
-  },
 ];
 
 export const UpcomingSection: React.FC = () => {
@@ -111,28 +71,24 @@ export const UpcomingSection: React.FC = () => {
     offset: ['start start', 'end end'],
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-75%']);
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
   const bgShift = useTransform(scrollYProgress, [0, 1], ['0%', '-25%']);
   const progressPercent = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    if (latest < 0.28) {
+    if (latest < 0.5) {
       setActiveIndex(0);
-    } else if (latest < 0.58) {
-      setActiveIndex(1);
-    } else if (latest < 0.86) {
-      setActiveIndex(2);
     } else {
-      setActiveIndex(3);
+      setActiveIndex(1);
     }
   });
 
-  const activeScene = HORIZON_SCENES[activeIndex];
+  const activeScene = HORIZON_SCENES[activeIndex] || HORIZON_SCENES[0];
 
   const jumpToScene = (idx: number) => {
     if (!sectionRef.current) return;
     const totalHeight = sectionRef.current.offsetHeight - window.innerHeight;
-    const targetY = sectionRef.current.offsetTop + (totalHeight * idx) / 3;
+    const targetY = sectionRef.current.offsetTop + (totalHeight * idx) / Math.max(HORIZON_SCENES.length - 1, 1);
     window.scrollTo({ top: targetY, behavior: 'smooth' });
   };
 
@@ -143,7 +99,7 @@ export const UpcomingSection: React.FC = () => {
       className="relative bg-[#050c26] text-white select-none"
     >
       {/* ─── DESKTOP HORIZONTAL SCROLL (ORIGINAL CINEMATIC LAYOUT RESTORED) ─── */}
-      <div className="hidden md:block h-[450vh] relative">
+      <div className="hidden md:block h-[250vh] relative">
         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between bg-[#050c26]">
           <div className="absolute inset-0 bg-cyber-grid opacity-20 pointer-events-none" />
           <div
@@ -187,7 +143,7 @@ export const UpcomingSection: React.FC = () => {
           <div className="relative z-10 flex-1 overflow-hidden flex items-center">
             <motion.div
               style={{ x }}
-              className="flex items-center h-full w-[400vw] will-change-transform"
+              className="flex items-center h-full w-[200vw] will-change-transform"
             >
               {HORIZON_SCENES.map((scene, index) => {
                 const isActive = activeIndex === index;
@@ -204,9 +160,16 @@ export const UpcomingSection: React.FC = () => {
                         filter: isActive ? 'blur(0px)' : 'blur(4px)',
                       }}
                       transition={{ duration: 0.5, ease: 'easeOut' }}
-                      className="relative w-full max-w-[1680px] h-full rounded-[2.5rem] overflow-hidden border border-[#7692FF]/30 shadow-card-lux bg-gradient-to-br from-[#091540]/80 via-[#0e1d52]/70 to-[#050c26]/90 backdrop-blur-2xl flex flex-col lg:flex-row items-stretch group"
+                      className="relative w-full max-w-[1680px] h-full rounded-[2.5rem] overflow-hidden border border-white/[0.14] hover:border-[#ABD2FA]/40 shadow-[0_24px_80px_rgba(3,8,26,0.85),inset_0_1px_2px_rgba(255,255,255,0.22),inset_0_0_40px_rgba(118,146,255,0.06)] bg-gradient-to-br from-[#091540]/60 via-[#050c26]/75 to-[#0b1b4f]/55 backdrop-blur-2xl backdrop-saturate-150 flex flex-col lg:flex-row items-stretch group transition-all duration-500"
                     >
-                      {/* Left Visual Area (Original Full-Bleed Parallax Image) */}
+                      {/* Specular Top-Edge Glass Reflection */}
+                      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none z-20" />
+
+                      {/* Subtle Ambient Corner Light Blooms for Realistic Glass Depth */}
+                      <div className="absolute -top-32 -left-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#7692FF]/15 rounded-full blur-[100px] pointer-events-none" />
+                      <div className="absolute -bottom-32 -right-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#1B2CC1]/20 rounded-full blur-[110px] pointer-events-none" />
+
+                      {/* Left Visual Area (Parallax Image Blended into Background) */}
                       <div className="lg:w-[58%] relative overflow-hidden flex items-center justify-center p-6 lg:p-10">
                         <motion.img
                           src={scene.image}
@@ -215,49 +178,56 @@ export const UpcomingSection: React.FC = () => {
                           style={{ x: bgShift }}
                           className="absolute inset-0 w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-1000"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#050c26] via-[#050c26]/40 to-transparent" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#091540]/90 hidden lg:block" />
+                        {/* Seamless Multi-Directional Edge Feathering & Ambient Vignette */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#050c26]/95 via-[#050c26]/30 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#050c26]/85 hidden lg:block" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-[#050c26]/40 via-transparent to-transparent" />
+                        <div
+                          className="absolute inset-0 pointer-events-none"
+                          style={{
+                            background:
+                              'radial-gradient(ellipse 90% 85% at 50% 50%, transparent 40%, rgba(5, 12, 38, 0.65) 100%)',
+                          }}
+                        />
 
                         {/* Watermark Step Number */}
                         <div className="absolute top-6 left-8 pointer-events-none select-none">
-                          <span className="text-[120px] lg:text-[160px] font-serif font-bold text-white/[0.07] leading-none">
+                          <span className="text-[120px] lg:text-[180px] font-serif font-bold text-white/[0.07] leading-none">
                             {scene.step}
                           </span>
                         </div>
 
-
-
                         {/* Quote Over Image */}
                         <div className="absolute bottom-8 left-8 right-8 z-10">
-                          <p className="text-xl lg:text-2xl font-serif italic text-white/90 drop-shadow-md">
+                          <p className="text-xl lg:text-3xl font-serif italic text-white/95 drop-shadow-md max-w-xl leading-snug">
                             "{scene.quote}"
                           </p>
                         </div>
                       </div>
 
                       {/* Right Info Area */}
-                      <div className="lg:w-[42%] p-8 lg:p-12 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-[#7692FF]/20 relative z-10 bg-[#091540]/50 backdrop-blur-xl">
+                      <div className="lg:w-[42%] p-8 lg:p-12 xl:p-16 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-white/[0.08] relative z-10 bg-white/[0.02] backdrop-blur-xl">
                         <div>
-                          <h3 className="text-4xl lg:text-6xl font-serif font-bold text-white tracking-tight leading-[1.05] mb-2">
+                          <h3 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-white tracking-tight leading-[1.02] mb-3">
                             {scene.title}
                           </h3>
-                          <p className="text-xs font-mono uppercase tracking-[0.25em] text-[#7692FF] font-semibold mb-6">
+                          <p className="text-xs sm:text-sm lg:text-base font-mono uppercase tracking-[0.25em] text-[#ABD2FA] font-semibold mb-6 sm:mb-8">
                             {scene.subheading}
                           </p>
-                          <p className="text-sm lg:text-base text-slate-300 font-sans leading-relaxed mb-8">
+                          <p className="text-base sm:text-lg lg:text-xl text-slate-200/90 font-sans leading-relaxed mb-8 sm:mb-10 max-w-xl font-normal">
                             {scene.details}
                           </p>
 
-                          <div className="space-y-3 pt-4 border-t border-[#7692FF]/20">
+                          <div className="space-y-4 pt-6 sm:pt-8 border-t border-white/15 mb-6 sm:mb-8">
                             {scene.metrics.map((m, mIdx) => (
                               <div
                                 key={mIdx}
-                                className="flex items-center justify-between p-3.5 rounded-2xl bg-[#050c26]/60 border border-[#7692FF]/20 backdrop-blur-md"
+                                className="flex items-center justify-between p-4 sm:p-5 rounded-2xl bg-white/[0.04] border border-white/[0.12] backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] hover:border-[#ABD2FA]/40 transition-colors"
                               >
-                                <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+                                <span className="text-xs sm:text-sm font-mono text-slate-300 uppercase tracking-wider font-medium">
                                   {m.label}
                                 </span>
-                                <span className="text-xs sm:text-sm font-mono font-bold text-[#ABD2FA]">
+                                <span className="text-sm sm:text-base lg:text-lg font-mono font-bold text-[#ABD2FA]">
                                   {m.value}
                                 </span>
                               </div>
@@ -266,8 +236,8 @@ export const UpcomingSection: React.FC = () => {
                         </div>
 
                         {/* Bottom CTA */}
-                        <div className="pt-6 border-t border-[#7692FF]/20 flex items-center justify-between">
-                          <span className="text-xs font-mono text-slate-400">
+                        <div className="pt-6 border-t border-[#7692FF]/20 flex items-center justify-between gap-4 mt-auto">
+                          <span className="text-xs sm:text-sm font-mono text-slate-300 tracking-wide">
                             Upcoming Release
                           </span>
 
@@ -276,10 +246,10 @@ export const UpcomingSection: React.FC = () => {
                               const elem = document.getElementById('ecosystem');
                               if (elem) elem.scrollIntoView({ behavior: 'smooth' });
                             }}
-                            className="px-6 py-3 rounded-full font-display font-semibold text-xs text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] hover:shadow-[0_0_25px_rgba(118,146,255,0.45)] transition-all flex items-center gap-2 border border-[#ABD2FA]/30 group/btn"
+                            className="px-7 py-3.5 rounded-full font-display font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] hover:shadow-[0_0_30px_rgba(118,146,255,0.5)] transition-all flex items-center gap-2.5 border border-[#ABD2FA]/30 group/btn"
                           >
                             <span>{scene.ctaText}</span>
-                            <ArrowRight className="w-3.5 h-3.5 text-[#ABD2FA] group-hover/btn:translate-x-1 transition-transform" />
+                            <ArrowRight className="w-4 h-4 text-[#ABD2FA] group-hover/btn:translate-x-1 transition-transform" />
                           </button>
                         </div>
                       </div>
@@ -296,7 +266,9 @@ export const UpcomingSection: React.FC = () => {
               <span className="text-2xl font-serif font-bold text-white">
                 0{activeIndex + 1}
               </span>
-              <span className="text-sm font-mono text-slate-500">/ 04</span>
+              <span className="text-sm font-mono text-slate-500">
+                / 0{HORIZON_SCENES.length}
+              </span>
               <span className="h-4 w-[1px] bg-slate-700 mx-1" />
               <span className="text-xs font-mono font-bold text-[#ABD2FA] uppercase tracking-widest">
                 {activeScene.title}
@@ -346,8 +318,11 @@ export const UpcomingSection: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-30px' }}
             transition={{ duration: 0.6 }}
-            className="rounded-3xl overflow-hidden border border-[#7692FF]/30 bg-[#091540]/80 shadow-card-lux"
+            className="relative rounded-3xl overflow-hidden border border-white/[0.14] bg-gradient-to-br from-[#091540]/60 via-[#050c26]/75 to-[#0b1b4f]/55 backdrop-blur-2xl backdrop-saturate-150 shadow-[0_20px_60px_rgba(3,8,26,0.85),inset_0_1px_2px_rgba(255,255,255,0.2)]"
           >
+            {/* Top specular highlight */}
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none z-20" />
+
             <div className="relative h-64 overflow-hidden">
               <img
                 src={scene.image}
@@ -355,28 +330,38 @@ export const UpcomingSection: React.FC = () => {
                 loading="lazy"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#091540] via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050c26]/95 via-[#050c26]/30 to-transparent" />
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    'radial-gradient(ellipse 90% 85% at 50% 50%, transparent 40%, rgba(5, 12, 38, 0.65) 100%)',
+                }}
+              />
 
-              <div className="absolute bottom-3 left-4 right-4">
+              <div className="absolute bottom-3 left-4 right-4 z-10">
                 <p className="text-base font-serif italic text-white/90">
                   "{scene.quote}"
                 </p>
               </div>
             </div>
 
-            <div className="p-6">
-              <h3 className="text-2xl font-serif font-bold text-white mb-2">
+            <div className="p-6 sm:p-8 relative z-10">
+              <h3 className="text-3xl font-serif font-bold text-white mb-1.5">
                 {scene.title}
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed mb-4">
+              <p className="text-xs font-mono uppercase tracking-widest text-[#ABD2FA] font-medium mb-3">
+                {scene.subheading}
+              </p>
+              <p className="text-sm sm:text-base text-slate-200/90 leading-relaxed mb-5">
                 {scene.details}
               </p>
 
-              <div className="grid grid-cols-2 gap-2 mb-5">
+              <div className="grid grid-cols-2 gap-2.5 mb-6">
                 {scene.metrics.slice(0, 2).map((m, mIdx) => (
-                  <div key={mIdx} className="p-2.5 rounded-xl bg-[#050c26]/60 border border-[#7692FF]/20">
-                    <span className="text-[9px] font-mono text-slate-400 block">{m.label}</span>
-                    <span className="text-[11px] font-mono font-bold text-[#ABD2FA]">{m.value}</span>
+                  <div key={mIdx} className="p-3 rounded-xl bg-white/[0.04] border border-white/[0.1] backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.12)]">
+                    <span className="text-[10px] font-mono text-slate-300 uppercase block">{m.label}</span>
+                    <span className="text-xs sm:text-sm font-mono font-bold text-[#ABD2FA]">{m.value}</span>
                   </div>
                 ))}
               </div>
@@ -386,10 +371,10 @@ export const UpcomingSection: React.FC = () => {
                   const elem = document.getElementById('ecosystem');
                   if (elem) elem.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="w-full py-3 rounded-xl font-display font-semibold text-xs text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-xl font-display font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] flex items-center justify-center gap-2 border border-white/20 shadow-[0_0_20px_rgba(118,146,255,0.3)]"
               >
                 <span>{scene.ctaText}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </motion.div>

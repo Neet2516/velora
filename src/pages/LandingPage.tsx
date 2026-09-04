@@ -15,19 +15,17 @@ import { useLenis } from '../hooks/useLenis';
 import { EcosystemProduct } from '../types';
 
 export const LandingPage: React.FC = () => {
-  useLenis();
+  const { scrollTo } = useLenis();
 
   const [isLoading, setIsLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<EcosystemProduct | null>(null);
 
   const handleExploreEcosystem = () => {
-    const elem = document.getElementById('ecosystem');
-    if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+    scrollTo('#ecosystem', { offset: -72 });
   };
 
   const handleExploreVision = () => {
-    const elem = document.getElementById('vision');
-    if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+    scrollTo('#vision', { offset: -72 });
   };
 
   return (
@@ -45,15 +43,15 @@ export const LandingPage: React.FC = () => {
 
         <SectionDivider />
 
+        <RoadmapSection />
+
+        <SectionDivider />
+
         <VisionSection />
 
         <SectionDivider />
 
         <EcosystemSection onSelectProduct={(prod) => setSelectedProduct(prod)} />
-
-        <SectionDivider />
-
-        <RoadmapSection />
 
         <SectionDivider />
 

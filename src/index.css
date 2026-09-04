@@ -20,11 +20,17 @@
     --bg-secondary: #091540;
   }
 
+  html {
+    scroll-behavior: auto !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   html.lenis, html.lenis body {
     height: auto;
   }
 
-  .lenis.lenis-smooth {
+  html.lenis.lenis-smooth {
     scroll-behavior: auto !important;
   }
 
@@ -41,6 +47,14 @@
     color: #f1f6fd;
     font-family: 'Inter', system-ui, sans-serif;
     overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* GPU Compositing Layers */
+  .gpu-layer {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    will-change: transform;
   }
 
   h1, h2, h3, h4, h5, h6 {

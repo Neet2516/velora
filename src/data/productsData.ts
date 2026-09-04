@@ -79,10 +79,10 @@ export const VELORA_PRODUCTS: EcosystemProduct[] = [
   },
   {
     id: 'education-platform',
-    title: 'Education Platform (Velora Future)',
+    title: 'Education Platform',
     tagline: 'Learn. Trade. Grow. Together with Velora Global.',
     category: 'education',
-    description: 'The all-in-one comprehensive academy designed to educate, upskill, and mentor the next generation of smart, profitable traders from beginner to mastery.',
+    description: 'The all-in-one comprehensive platform designed to educate, upskill, and mentor the next generation of smart, profitable traders from beginner to mastery.',
     status: 'Live Soon',
     badgeColor: 'border-amber-500/50 text-amber-400 bg-amber-500/10',
     route: '/dashboard/education',

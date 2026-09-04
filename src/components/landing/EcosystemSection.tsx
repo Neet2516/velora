@@ -120,9 +120,9 @@ const PILLAR_DETAILS: Record<string, PillarDetail> = {
   'education-platform': {
     introducingNumber: '05',
     badgeStatus: 'ACTIVE PORTAL',
-    mainHeadingLine1: 'VELORA',
-    mainHeadingLine2: 'ACADEMY',
-    tagline: 'Learn. Trade. Grow. Master Global Markets.',
+    mainHeadingLine1: 'EDUCATION',
+    mainHeadingLine2: 'PLATFORM',
+    tagline: 'Learn. Trade. Grow. Together with Velora Global.',
     description:
       'Comprehensive masterclasses, live mentor trading desks, and direct pathways to institutional prop funding.',
     features: [
@@ -136,7 +136,7 @@ const PILLAR_DETAILS: Record<string, PillarDetail> = {
       { label: 'LIVE SESSIONS', value: '5 Daily', sub: 'GLOBAL TIMEZONES' },
       { label: 'ACTIVE STUDENTS', value: '28,000+', sub: '120+ COUNTRIES' },
     ],
-    quote: 'Learn. Trade. Grow.',
+    quote: 'Learn. Trade. Grow. Together with Velora Global.',
   },
   'forex-cards': {
     introducingNumber: '06',
@@ -278,7 +278,7 @@ function PillarVisualShowcase({
           <motion.div
             animate={{ y: [-4, 6, -4], x: [-2, 3, -2] }}
             transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -top-2 left-4 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/85 border border-[#7692FF]/50 backdrop-blur-xl shadow-[0_0_20px_rgba(27,44,193,0.5)] flex items-center gap-2"
+            className="absolute -top-2 left-4 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-white/[0.18] backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center gap-2"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] animate-pulse" />
             <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
@@ -289,7 +289,7 @@ function PillarVisualShowcase({
           <motion.div
             animate={{ y: [6, -5, 6], x: [2, -3, 2] }}
             transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-            className="absolute top-1/3 -right-2 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/85 border border-[#ABD2FA]/50 backdrop-blur-xl shadow-[0_0_20px_rgba(118,146,255,0.5)] flex items-center gap-2"
+            className="absolute top-1/3 -right-2 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-white/[0.18] backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center gap-2"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#7692FF] animate-pulse" />
             <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
@@ -300,7 +300,7 @@ function PillarVisualShowcase({
           <motion.div
             animate={{ y: [-5, 5, -5], x: [-3, 2, -3] }}
             transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
-            className="absolute bottom-6 left-6 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/85 border border-[#7692FF]/50 backdrop-blur-xl shadow-[0_0_20px_rgba(27,44,193,0.5)] flex items-center gap-2"
+            className="absolute bottom-6 left-6 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-white/[0.18] backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center gap-2"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
             <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
@@ -596,9 +596,9 @@ function PillarVisualShowcase({
                 ease: 'easeInOut',
                 delay: hIdx * 0.3,
               }}
-              className="p-3 rounded-2xl bg-[#091540]/80 border border-[#7692FF]/35 backdrop-blur-xl shadow-[0_4px_25px_rgba(5,12,38,0.7)] w-38 sm:w-42 text-left"
+              className="p-3.5 rounded-2xl bg-[#091540]/60 border border-white/[0.15] backdrop-blur-2xl shadow-[0_8px_32px_rgba(5,12,38,0.6),inset_0_1px_1px_rgba(255,255,255,0.2)] w-38 sm:w-44 text-left"
             >
-              <span className="text-[9px] font-mono text-slate-400 uppercase block">
+              <span className="text-[9px] font-mono text-slate-300 uppercase block">
                 {hud.label}
               </span>
               <span className="text-sm font-display font-extrabold text-[#ABD2FA] block mt-0.5">
@@ -693,26 +693,33 @@ function StickyProductCard({
     >
       <motion.div
         style={isDesktop ? { opacity, scale, y, x, rotate } : undefined}
-        className="relative lg:sticky lg:top-[8vh] w-full max-w-[1680px] mx-auto min-h-[auto] lg:min-h-[84vh] rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#050c26]/95 border border-[#7692FF]/20 shadow-[0_20px_80px_rgba(5,12,38,0.95)] backdrop-blur-3xl flex flex-col lg:flex-row items-stretch overflow-hidden"
+        className="relative lg:sticky lg:top-[8vh] w-full max-w-[1680px] mx-auto min-h-[auto] lg:min-h-[84vh] rounded-[1.5rem] sm:rounded-[2.5rem] bg-gradient-to-br from-[#091540]/60 via-[#050c26]/75 to-[#0b1b4f]/55 border border-white/[0.14] hover:border-[#ABD2FA]/40 shadow-[0_24px_80px_rgba(3,8,26,0.85),inset_0_1px_2px_rgba(255,255,255,0.22),inset_0_0_40px_rgba(118,146,255,0.06)] backdrop-blur-2xl backdrop-saturate-150 flex flex-col lg:flex-row items-stretch overflow-hidden group transition-all duration-500"
       >
+        {/* Specular Top-Edge Glass Reflection */}
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none z-20" />
+
+        {/* Subtle Ambient Corner Light Blooms for Realistic Glass Depth */}
+        <div className="absolute -top-32 -left-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#7692FF]/15 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute -bottom-32 -right-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#1B2CC1]/20 rounded-full blur-[110px] pointer-events-none" />
+
         <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
 
         {/* ─── LEFT COLUMN: REFINED HIGH-END EDITORIAL (54% WIDTH) ─── */}
-        <div className="w-full lg:w-[54%] p-5 sm:p-8 lg:p-14 flex flex-col justify-between relative z-10">
+        <div className="w-full lg:w-[54%] p-6 sm:p-10 lg:p-14 xl:p-16 flex flex-col justify-between relative z-10">
           <div>
             {/* Header: Number & Introducing Tagline */}
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-xs font-mono tracking-[0.25em] text-slate-400">
+            <div className="flex items-center gap-3.5 mb-5 sm:mb-6">
+              <span className="text-sm sm:text-base font-mono tracking-[0.25em] text-slate-300 font-semibold">
                 {detail.introducingNumber}
               </span>
-              <span className="h-[1px] w-8 bg-[#7692FF]/40" />
-              <span className="text-[10px] font-mono tracking-[0.35em] text-[#ABD2FA] uppercase font-semibold">
+              <span className="h-[1.5px] w-10 bg-[#7692FF]/50" />
+              <span className="text-xs sm:text-sm font-mono tracking-[0.35em] text-[#ABD2FA] uppercase font-semibold">
                 INTRODUCING
               </span>
             </div>
 
             {/* Main Headline */}
-            <h3 className="text-3xl sm:text-5xl lg:text-7xl font-serif font-bold text-white tracking-tight leading-[0.98] mb-3">
+            <h3 className="text-4xl sm:text-6xl lg:text-7xl xl:text-[5.2rem] 2xl:text-[5.8rem] font-serif font-bold text-white tracking-tight leading-[1.02] mb-5 sm:mb-6">
               {detail.mainHeadingLine1}
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ABD2FA] to-[#7692FF]">
@@ -721,21 +728,21 @@ function StickyProductCard({
             </h3>
 
             {/* Tagline */}
-            <p className="text-sm sm:text-base font-sans text-[#ABD2FA]/90 font-medium mb-4">
+            <p className="text-base sm:text-xl lg:text-2xl font-sans text-[#ABD2FA] font-medium tracking-wide mb-5 sm:mb-7">
               {detail.tagline}
             </p>
 
             {/* Description Narrative */}
-            <p className="text-base sm:text-lg lg:text-xl font-sans text-slate-200 leading-relaxed mb-7 max-w-xl">
+            <p className="text-lg sm:text-xl lg:text-2xl font-sans text-slate-200/90 leading-relaxed mb-8 sm:mb-10 max-w-2xl font-normal">
               {detail.description}
             </p>
 
             {/* Features: Clean Typography List (No Nested Boxes, No Emojis/Icons) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3.5 pt-5 border-t border-white/10 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5 lg:gap-y-6 pt-7 sm:pt-8 border-t border-white/15 mb-8 sm:mb-10">
               {detail.features.map((feat, fIdx) => (
-                <div key={fIdx} className="flex items-center gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] shrink-0 shadow-[0_0_6px_#ABD2FA]" />
-                  <span className="text-sm font-sans font-medium text-slate-200 tracking-wide">
+                <div key={fIdx} className="flex items-center gap-3.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ABD2FA] shrink-0 shadow-[0_0_10px_#ABD2FA]" />
+                  <span className="text-base sm:text-lg lg:text-xl font-sans font-medium text-slate-100 tracking-wide">
                     {feat.title}
                   </span>
                 </div>
@@ -744,23 +751,23 @@ function StickyProductCard({
           </div>
 
           {/* Bottom Row: Quote & Action CTA */}
-          <div className="pt-4 border-t border-[#7692FF]/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <p className="text-xs font-serif italic text-slate-400">
+          <div className="pt-6 border-t border-[#7692FF]/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 mt-auto">
+            <p className="text-sm sm:text-base font-serif italic text-slate-300/90 max-w-md leading-relaxed">
               "{detail.quote}"
             </p>
 
             <button
               onClick={() => onSelect(product)}
-              className="px-6 py-2.5 rounded-full font-display font-semibold text-xs text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] hover:shadow-[0_0_25px_rgba(118,146,255,0.45)] transition-all flex items-center gap-2 border border-[#ABD2FA]/30 group/btn shrink-0"
+              className="px-7 py-3.5 rounded-full font-display font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] hover:shadow-[0_0_30px_rgba(118,146,255,0.5)] transition-all flex items-center gap-2.5 border border-[#ABD2FA]/30 group/btn shrink-0"
             >
               <span>EXPLORE ARCHITECTURE</span>
-              <ArrowRight className="w-3.5 h-3.5 text-[#ABD2FA] group-hover/btn:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 text-[#ABD2FA] group-hover/btn:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
 
         {/* ─── RIGHT COLUMN: VISUAL FRAME — hidden on mobile, shown on lg+ ─── */}
-        <div className="hidden lg:flex lg:w-[46%] relative items-center justify-center p-4 sm:p-6 lg:p-10 overflow-hidden bg-gradient-to-l from-[#091540]/50 to-transparent">
+        <div className="hidden lg:flex lg:w-[46%] relative items-center justify-center p-4 sm:p-6 lg:p-10 overflow-hidden bg-gradient-to-l from-[#091540]/30 via-transparent to-transparent">
           <PillarVisualShowcase
             productId={product.id}
             scrollYProgress={scrollYProgress}
@@ -776,7 +783,11 @@ export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onSelectProd
   const primaryEight = VELORA_PRODUCTS.slice(0, 8);
 
   return (
-    <section id="ecosystem" className="relative" style={{ contain: 'paint' }}>
+    <section id="ecosystem" className="relative overflow-hidden" style={{ contain: 'paint' }}>
+      {/* Ambient background light fields for realistic glass refraction */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[90vw] max-w-[1300px] h-[650px] bg-gradient-to-tr from-[#1B2CC1]/20 via-[#7692FF]/15 to-[#ABD2FA]/10 rounded-full blur-[170px] pointer-events-none" />
+      <div className="absolute top-2/3 left-1/4 w-[700px] h-[700px] bg-[#1B2CC1]/15 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-[#7692FF]/15 rounded-full blur-[150px] pointer-events-none" />
       {/* Intro Screen */}
       <div className="min-h-[20vh] sm:min-h-[30vh] lg:min-h-[45vh] flex flex-col items-center justify-center text-center px-4 relative z-10 py-8 sm:py-12">
         <motion.h2

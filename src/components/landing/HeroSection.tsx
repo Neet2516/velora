@@ -4,6 +4,8 @@ import { ArrowRight } from 'lucide-react';
 import animatedVideo from '../../../assets/animated_video.mp4';
 import { VeloraSignature } from '../brand/VeloraSignature';
 
+import { useLenis } from '../../hooks/useLenis';
+
 interface HeroSectionProps {
   onExploreEcosystem: () => void;
   onExploreVision: () => void;
@@ -13,21 +15,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onExploreEcosystem,
   onExploreVision,
 }) => {
+  const { scrollTo } = useLenis();
+
   const scrollToRoadmap = () => {
-    const elem = document.getElementById('roadmap');
-    if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+    scrollTo('#roadmap', { offset: -72 });
   };
 
   return (
     <section className="relative w-full min-h-[100dvh] flex flex-col justify-center items-center" style={{ contain: 'paint' }}>
       {/* Background Frame Layer: Deep Blue Cinematic Vignette & Ambient Glow */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none" style={{ transform: 'translateZ(0)' }}>
         {/* Full-Screen Animated Video */}
         <video
           autoPlay
+          loop
           muted
           playsInline
-          className="w-full h-full object-cover opacity-75"
+          preload="auto"
+          className="w-full h-full object-cover opacity-75 will-change-transform"
         >
           <source src={animatedVideo} type="video/mp4" />
           <source src="/assets/animated_video.mp4" type="video/mp4" />

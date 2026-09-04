@@ -21,9 +21,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
   const { scrollYProgress } = useScroll();
 
   const navItems: NavItem[] = [
+    { id: 'roadmap', name: 'Roadmap', href: '#roadmap' },
     { id: 'vision', name: 'Vision', href: '#vision' },
     { id: 'ecosystem', name: 'Ecosystem', href: '#ecosystem' },
-    { id: 'roadmap', name: 'Roadmap', href: '#roadmap' },
     { id: 'upcoming', name: 'Upcoming', href: '#upcoming', isSpecial: true },
   ];
 
@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
 
   // Robust IntersectionObserver & scroll-spy for active section detection
   useEffect(() => {
-    const sectionIds = ['vision', 'ecosystem', 'ai-agent', 'roadmap', 'upcoming'];
+    const sectionIds = ['roadmap', 'vision', 'ecosystem', 'ai-agent', 'upcoming'];
     const sectionElements = sectionIds
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
