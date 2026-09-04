@@ -215,7 +215,7 @@ export const VisionSection: React.FC = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(90vw,800px)] h-[min(90vw,800px)] rounded-full bg-radial-ambient opacity-45 blur-[120px] pointer-events-none" />
 
         {/* LEFT: Seamless Editorial Typography directly on page background */}
-        <div className="order-2 lg:order-1 lg:col-span-5 w-full flex flex-col justify-center z-10 py-4 sm:py-6 pl-2 sm:pl-4">
+        <div className="order-2 lg:order-1 lg:col-span-5 w-full flex flex-col justify-center z-10 py-4 sm:py-6 px-2 sm:px-4 lg:pl-4 lg:pr-0 mt-8 sm:mt-12 lg:mt-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeNode.id}
@@ -292,8 +292,8 @@ export const VisionSection: React.FC = () => {
               <div className="absolute bottom-1/4 right-0 translate-x-1/2 w-2 h-2 rounded-full bg-gradient-to-tr from-[#1B2CC1] to-[#7692FF] shadow-[0_0_10px_#7692FF]" />
             </motion.div>
 
-            {/* Primary Orbital Ring - Scaled Up */}
-            <div className="absolute w-[220px] h-[220px] xs:w-[250px] xs:h-[250px] sm:w-[395px] sm:h-[395px] lg:w-[440px] lg:h-[440px] xl:w-[490px] xl:h-[490px] rounded-full border border-[#7692FF]/30 shadow-[0_0_40px_rgba(118,146,255,0.25)] pointer-events-none">
+            {/* Primary Orbital Ring - Scaled exactly to 80% (radius = 40%) */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] rounded-full border border-[#7692FF]/30 shadow-[0_0_40px_rgba(118,146,255,0.25)] pointer-events-none">
               {/* Traveling Light Ring */}
               <motion.div
                 animate={{ rotate: 360 }}
@@ -308,7 +308,11 @@ export const VisionSection: React.FC = () => {
             <motion.div
               animate={{ scale: [1, 1.03, 1] }}
               transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-              className="relative z-20 w-28 h-28 xs:w-32 xs:h-32 sm:w-44 sm:h-44 lg:w-52 lg:h-52 rounded-full bg-gradient-to-b from-white via-[#f0f4ff] to-[#e1ecff] text-[#050c26] shadow-[0_0_60px_rgba(171,210,250,0.65),0_10px_35px_rgba(9,21,64,0.4)] flex flex-col items-center justify-center p-2.5 sm:p-4 border-2 border-white select-none group cursor-pointer hover:shadow-[0_0_95px_rgba(171,210,250,0.85)] transition-shadow"
+              style={{
+                x: '-50%',
+                y: '-50%',
+              }}
+              className="absolute top-1/2 left-1/2 z-20 w-28 h-28 xs:w-32 xs:h-32 sm:w-44 sm:h-44 lg:w-52 lg:h-52 rounded-full bg-gradient-to-b from-white via-[#f0f4ff] to-[#e1ecff] text-[#050c26] shadow-[0_0_60px_rgba(171,210,250,0.65),0_10px_35px_rgba(9,21,64,0.4)] flex flex-col items-center justify-center p-2.5 sm:p-4 border-2 border-white select-none group cursor-pointer hover:shadow-[0_0_95px_rgba(171,210,250,0.85)] transition-shadow"
               onClick={() => setActiveNodeId('velora-infinity')}
             >
               {/* Spinning inner micro-ring */}
@@ -336,10 +340,10 @@ export const VisionSection: React.FC = () => {
               </span>
             </motion.div>
 
-            {/* 8 Satellite Outer Nodes with Responsive Sizing */}
+            {/* 8 Satellite Outer Nodes with Precise Angular Alignment */}
             {NODES.map((node) => {
               const rad = (node.angle * Math.PI) / 180;
-              const rPercent = 40; // Percentage from center
+              const rPercent = 40; // Percentage from center (matches 80% ring)
               const left = 50 + rPercent * Math.sin(rad);
               const top = 50 - rPercent * Math.cos(rad);
               const isActive = activeNodeId === node.id;
@@ -357,21 +361,22 @@ export const VisionSection: React.FC = () => {
                     setActiveNodeId(node.id);
                   }}
                   animate={{
-                    y: isActive ? [0, -3, 0] : [0, 2, 0],
+                    scale: isActive ? 1.15 : 1,
                   }}
                   transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
+                    duration: 0.3,
+                    ease: 'easeOut',
                   }}
-                  className={`absolute -translate-x-1/2 -translate-y-1/2 w-9 h-9 xs:w-10 xs:h-10 sm:w-15 sm:h-15 lg:w-18 lg:h-18 rounded-full flex items-center justify-center transition-all duration-500 z-30 cursor-pointer ${
+                  className={`absolute w-9 h-9 xs:w-10 xs:h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center transition-colors duration-300 z-30 cursor-pointer ${
                     isActive
-                      ? 'bg-gradient-to-tr from-[#1B2CC1] via-[#7692FF] to-[#ABD2FA] text-white shadow-[0_0_40px_rgba(118,146,255,0.85)] border-2 border-white scale-115'
+                      ? 'bg-gradient-to-tr from-[#1B2CC1] via-[#7692FF] to-[#ABD2FA] text-white shadow-[0_0_40px_rgba(118,146,255,0.85)] border-2 border-white'
                       : 'bg-[#091540]/90 text-slate-300 hover:text-white hover:bg-[#0e1d52] border border-white/20 hover:border-[#ABD2FA]/60 backdrop-blur-md hover:scale-105 shadow-card-lux'
                   }`}
                   style={{
                     left: `${left}%`,
                     top: `${top}%`,
+                    x: '-50%',
+                    y: '-50%',
                   }}
                   aria-label={node.name}
                 >

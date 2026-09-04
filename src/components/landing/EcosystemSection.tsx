@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ShieldCheck, Zap, Target, MessageSquare, TrendingUp, Shield, BarChart3, Activity, Cpu, Sparkles, HelpCircle, Lock, Unlock } from 'lucide-react';
 import { VELORA_PRODUCTS } from '../../data/productsData';
@@ -643,6 +643,19 @@ function StickyProductCard({
   onSelect: (p: EcosystemProduct) => void;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth >= 1024;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: cardRef,
@@ -674,10 +687,13 @@ function StickyProductCard({
   const detail = PILLAR_DETAILS[product.id] || PILLAR_DETAILS['broker-house'];
 
   return (
-    <div ref={cardRef} className="min-h-[100vh] sm:min-h-[115vh] flex items-center justify-center py-6 sm:py-10">
+    <div
+      ref={cardRef}
+      className="min-h-0 lg:min-h-[115vh] flex items-center justify-center py-4 sm:py-6 lg:py-10"
+    >
       <motion.div
-        style={{ opacity, scale, y, x, rotate }}
-        className="sticky top-[8vh] w-full max-w-[1680px] mx-auto min-h-[auto] sm:min-h-[84vh] rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#050c26]/95 border border-[#7692FF]/20 shadow-[0_20px_80px_rgba(5,12,38,0.95)] backdrop-blur-3xl flex flex-col lg:flex-row items-stretch overflow-hidden relative"
+        style={isDesktop ? { opacity, scale, y, x, rotate } : undefined}
+        className="relative lg:sticky lg:top-[8vh] w-full max-w-[1680px] mx-auto min-h-[auto] lg:min-h-[84vh] rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#050c26]/95 border border-[#7692FF]/20 shadow-[0_20px_80px_rgba(5,12,38,0.95)] backdrop-blur-3xl flex flex-col lg:flex-row items-stretch overflow-hidden"
       >
         <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
 
@@ -762,7 +778,7 @@ export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onSelectProd
   return (
     <section id="ecosystem" className="relative" style={{ contain: 'paint' }}>
       {/* Intro Screen */}
-      <div className="min-h-[45vh] flex flex-col items-center justify-center text-center px-4 relative z-10">
+      <div className="min-h-[20vh] sm:min-h-[30vh] lg:min-h-[45vh] flex flex-col items-center justify-center text-center px-4 relative z-10 py-8 sm:py-12">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -777,7 +793,7 @@ export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onSelectProd
       </div>
 
       {/* Stacked Cards Container */}
-      <div className="relative px-4 sm:px-6 lg:px-8">
+      <div className="relative px-3 sm:px-6 lg:px-8 space-y-6 lg:space-y-0 pb-8 lg:pb-0">
         {primaryEight.map((product, idx) => (
           <StickyProductCard
             key={product.id}
