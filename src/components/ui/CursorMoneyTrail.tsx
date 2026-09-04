@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 // Floating money/sparkle symbols for the smooth motion trail
-const TRAIL_SYMBOLS = ['₹', '₹', '✨', '₹', '$'];
+const TRAIL_SYMBOLS = ['$', '$', '✨', '$', '✦'];
 
 export const CursorMoneyTrail: React.FC = () => {
   useEffect(() => {
@@ -40,15 +40,15 @@ export const CursorMoneyTrail: React.FC = () => {
         filter: drop-shadow(0 6px 22px rgba(171, 210, 250, 0.95)) drop-shadow(0 0 12px #7692FF);
       }
 
-      /* Trailing Silky Smooth Rupee Companion */
-      .velora-rupee-companion {
+      /* Trailing Silky Smooth Dollar Companion */
+      .velora-dollar-companion {
         position: fixed;
         top: 0;
         left: 0;
         pointer-events: none;
         user-select: none;
         z-index: 999995;
-        font-size: 19px;
+        font-size: 20px;
         font-family: 'Times New Roman', serif, -apple-system, sans-serif;
         font-weight: 800;
         color: #ABD2FA;
@@ -79,7 +79,7 @@ export const CursorMoneyTrail: React.FC = () => {
         }
       }
 
-      .velora-rupee-particle {
+      .velora-dollar-particle {
         position: fixed;
         pointer-events: none;
         user-select: none;
@@ -100,11 +100,11 @@ export const CursorMoneyTrail: React.FC = () => {
     mainCursor.textContent = '💸';
     document.body.appendChild(mainCursor);
 
-    // 3. Create Smooth Trailing Rupee Companion Element
-    const rupeeCompanion = document.createElement('div');
-    rupeeCompanion.className = 'velora-rupee-companion';
-    rupeeCompanion.textContent = '₹';
-    document.body.appendChild(rupeeCompanion);
+    // 3. Create Smooth Trailing Dollar Companion Element
+    const dollarCompanion = document.createElement('div');
+    dollarCompanion.className = 'velora-dollar-companion';
+    dollarCompanion.textContent = '$';
+    document.body.appendChild(dollarCompanion);
 
     // Physics & Coordinates Tracking
     let targetX = -100;
@@ -189,13 +189,13 @@ export const CursorMoneyTrail: React.FC = () => {
 
     const spawnParticle = (x: number, y: number) => {
       // Cap maximum active particles in DOM to prevent performance drops during fast motion
-      const currentParticles = document.querySelectorAll('.velora-rupee-particle');
+      const currentParticles = document.querySelectorAll('.velora-dollar-particle');
       if (currentParticles.length >= 12) {
         currentParticles[0]?.remove();
       }
 
       const particle = document.createElement('span');
-      particle.className = 'velora-rupee-particle';
+      particle.className = 'velora-dollar-particle';
       particle.textContent = TRAIL_SYMBOLS[symbolIndex % TRAIL_SYMBOLS.length];
       symbolIndex++;
       particle.style.left = `${x}px`;
@@ -236,7 +236,7 @@ export const CursorMoneyTrail: React.FC = () => {
         mainCursor.style.transform = `translate3d(${mainX.toFixed(2)}px, ${mainY.toFixed(2)}px, 0) scale(${mainScale.toFixed(3)}) rotate(${currentTilt.toFixed(1)}deg)`;
         mainCursor.style.opacity = '1';
 
-        // 2. TRAILING RUPEE ₹ COMPANION PHYSICS
+        // 2. TRAILING DOLLAR $ COMPANION PHYSICS
         // Luxurious magnetic trail lag (lambda = 11)
         const trailLerp = 1 - Math.exp(-11 * dt);
 
@@ -249,8 +249,8 @@ export const CursorMoneyTrail: React.FC = () => {
         // Soft organic floating sine-wave hover when stationary or moving
         const hoverFloat = Math.sin(now * 0.0035) * 2;
 
-        rupeeCompanion.style.transform = `translate3d(${trailX.toFixed(2)}px, ${(trailY + hoverFloat).toFixed(2)}px, 0)`;
-        rupeeCompanion.style.opacity = '0.92';
+        dollarCompanion.style.transform = `translate3d(${trailX.toFixed(2)}px, ${(trailY + hoverFloat).toFixed(2)}px, 0)`;
+        dollarCompanion.style.opacity = '0.92';
 
         // 3. DISTANCE-BASED LUXURY PARTICLE EMISSION
         // Spawns smoothly based on movement distance rather than time alone
@@ -263,7 +263,7 @@ export const CursorMoneyTrail: React.FC = () => {
         }
       } else {
         mainCursor.style.opacity = '0';
-        rupeeCompanion.style.opacity = '0';
+        dollarCompanion.style.opacity = '0';
       }
 
       rafId = requestAnimationFrame(tick);
@@ -287,8 +287,8 @@ export const CursorMoneyTrail: React.FC = () => {
       document.removeEventListener('mouseenter', onMouseEnter);
       cancelAnimationFrame(rafId);
       mainCursor.remove();
-      rupeeCompanion.remove();
-      const existingParticles = document.querySelectorAll('.velora-rupee-particle');
+      dollarCompanion.remove();
+      const existingParticles = document.querySelectorAll('.velora-dollar-particle');
       existingParticles.forEach((p) => p.remove());
     };
   }, []);
