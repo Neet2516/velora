@@ -234,21 +234,23 @@ function PillarVisualShowcase({
       {/* ─── BASE AMBIENT GLOW (Subtle, refined diffused leftward) ─── */}
       <div className="absolute w-[420px] sm:w-[560px] h-[420px] sm:h-[560px] rounded-full bg-gradient-to-l from-[#1B2CC1]/12 via-[#7692FF]/8 to-transparent blur-[120px] pointer-events-none -left-20 sm:-left-36" />
 
-      {/* ─── HOLOGRAPHIC EMITTER PEDESTAL AT BASE ─── */}
-      <div className="absolute bottom-6 sm:bottom-10 w-80 h-24 flex items-center justify-center pointer-events-none">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 26, repeat: Infinity, ease: 'linear' }}
-          className="absolute w-72 h-16 rounded-[100%] border border-[#7692FF]/40 shadow-[0_0_25px_rgba(118,146,255,0.35)]"
-        />
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
-          className="absolute w-56 h-12 rounded-[100%] border border-[#ABD2FA]/50"
-        />
-        <div className="absolute w-44 h-8 rounded-[100%] bg-gradient-to-t from-[#ABD2FA]/40 via-[#7692FF]/20 to-transparent blur-sm" />
-        <div className="absolute -top-36 w-52 h-44 bg-gradient-to-t from-[#7692FF]/25 via-[#ABD2FA]/10 to-transparent blur-xl" />
-      </div>
+      {/* ─── HOLOGRAPHIC EMITTER PEDESTAL AT BASE (Hidden for Fund Management) ─── */}
+      {productId !== 'fund-management' && (
+        <div className="absolute bottom-6 sm:bottom-10 w-80 h-24 flex items-center justify-center pointer-events-none">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 26, repeat: Infinity, ease: 'linear' }}
+            className="absolute w-72 h-16 rounded-[100%] border border-[#7692FF]/40 shadow-[0_0_25px_rgba(118,146,255,0.35)]"
+          />
+          <motion.div
+            animate={{ rotate: -360 }}
+            transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
+            className="absolute w-56 h-12 rounded-[100%] border border-[#ABD2FA]/50"
+          />
+          <div className="absolute w-44 h-8 rounded-[100%] bg-gradient-to-t from-[#ABD2FA]/40 via-[#7692FF]/20 to-transparent blur-sm" />
+          <div className="absolute -top-36 w-52 h-44 bg-gradient-to-t from-[#7692FF]/25 via-[#ABD2FA]/10 to-transparent blur-xl" />
+        </div>
+      )}
 
       {/* ─── CASE 1: BROKER HOUSE (SCROLL-DRIVEN 3D PHONE ROTATION + FLOATING CHIPS) ─── */}
       {productId === 'broker-house' && (
