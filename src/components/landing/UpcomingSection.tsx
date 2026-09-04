@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useLenis } from '../../hooks/useLenis';
 
 interface HorizonScene {
   id: string;
@@ -41,46 +42,64 @@ const HORIZON_SCENES: HorizonScene[] = [
     details: 'Seamless profit off-ramp from broker and prop firm accounts with zero international exchange surcharges.',
   },
   {
-    id: 'blue-diamond',
+    id: 'crypto-arbitrage',
     step: '02',
-    category: 'GOVERNANCE & LEADERSHIP',
-    title: 'BLUE DIAMOND',
-    subheading: 'UPCOMING CORE TEAM',
-    quote: 'One Rank. One Team. One Vision.',
-    status: 'UPCOMING',
+    category: 'ALGORITHMIC LIQUIDITY',
+    title: 'CRYPTO ARBITRAGE',
+    subheading: 'TRIANGULAR SPREAD ENGINE',
+    quote: 'Capturing disparities across global order books with zero directional risk.',
+    status: 'REVEALING SOON',
     statusColor: 'text-[#ABD2FA] border-[#7692FF]/40 bg-[#1B2CC1]/25',
-    ctaText: 'View Leadership Path',
-    image: '/images/core_team_blue_diamond.png',
+    ctaText: 'Explore Arbitrage Engine',
+    image: '/images/crypto_arbitrage_cube.png',
     accentGradient: 'from-[#7692FF] via-[#ABD2FA] to-[#1B2CC1]',
+    glowColor: 'rgba(118, 146, 255, 0.4)',
+    metrics: [
+      { label: 'CYCLE SPEED', value: '< 1.5ms High-Freq' },
+      { label: 'EXCHANGE MESH', value: '14 Tier-1 Venues' },
+      { label: 'AVG SPREAD CAPTURE', value: '+0.42% Per Cycle' },
+    ],
+    details: 'Sub-millisecond triangular price disparity scanning across Tier-1 crypto order books with zero directional risk and automated slippage shields.',
+  },
+  {
+    id: 'ai-agent',
+    step: '03',
+    category: 'NEURAL INTELLIGENCE',
+    title: 'VELORA AI AGENT',
+    subheading: 'INSTITUTIONAL STRATEGY CO-PILOT',
+    quote: 'Real-time insights. AI-powered precision. Endless possibilities.',
+    status: 'IN DEVELOPMENT',
+    statusColor: 'text-[#ABD2FA] border-[#7692FF]/40 bg-[#1B2CC1]/25',
+    ctaText: 'Explore AI Agent',
+    image: '/images/ai_agent_neural_brain.png',
+    accentGradient: 'from-[#1B2CC1] via-[#ABD2FA] to-[#7692FF]',
     glowColor: 'rgba(171, 210, 250, 0.4)',
     metrics: [
-      { label: 'ELIGIBILITY', value: 'Blue Diamond Rank' },
-      { label: 'GOVERNANCE', value: 'Direct Founder Council' },
-      { label: 'EXPANSION', value: 'Global Strategy Voting' },
+      { label: 'SENTIMENT RADAR', value: '87% Bullish EUR/USD' },
+      { label: 'PREDICTIVE MODELS', value: 'Macro & Order Flow' },
+      { label: 'RISK AUTOMATION', value: 'Dynamic Hedging Guard' },
     ],
-    details: 'Formed exclusively by leaders achieving the highest echelon of excellence to guide global ecosystem expansion.',
+    details: 'Institutional-grade artificial intelligence delivering real-time sentiment analysis, predictive market direction, risk scoring, and interactive strategy collaboration.',
   },
 ];
 
 export const UpcomingSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const { scrollTo } = useLenis();
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
-  const bgShift = useTransform(scrollYProgress, [0, 1], ['0%', '-25%']);
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-66.666%']);
   const progressPercent = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    if (latest < 0.5) {
-      setActiveIndex(0);
-    } else {
-      setActiveIndex(1);
-    }
+    const clamped = Math.max(0, Math.min(1, latest));
+    const idx = Math.round(clamped * (HORIZON_SCENES.length - 1));
+    setActiveIndex((prev) => (prev !== idx ? idx : prev));
   });
 
   const activeScene = HORIZON_SCENES[activeIndex] || HORIZON_SCENES[0];
@@ -89,7 +108,7 @@ export const UpcomingSection: React.FC = () => {
     if (!sectionRef.current) return;
     const totalHeight = sectionRef.current.offsetHeight - window.innerHeight;
     const targetY = sectionRef.current.offsetTop + (totalHeight * idx) / Math.max(HORIZON_SCENES.length - 1, 1);
-    window.scrollTo({ top: targetY, behavior: 'smooth' });
+    scrollTo(targetY);
   };
 
   return (
@@ -98,8 +117,8 @@ export const UpcomingSection: React.FC = () => {
       ref={sectionRef}
       className="relative bg-[#050c26] text-white select-none"
     >
-      {/* ─── DESKTOP HORIZONTAL SCROLL (ORIGINAL CINEMATIC LAYOUT RESTORED) ─── */}
-      <div className="hidden md:block h-[250vh] relative">
+      {/* ─── DESKTOP HORIZONTAL SCROLL ─── */}
+      <div className="hidden md:block h-[350vh] relative">
         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between bg-[#050c26]">
           <div className="absolute inset-0 bg-cyber-grid opacity-20 pointer-events-none" />
           <div
@@ -143,7 +162,7 @@ export const UpcomingSection: React.FC = () => {
           <div className="relative z-10 flex-1 overflow-hidden flex items-center">
             <motion.div
               style={{ x }}
-              className="flex items-center h-full w-[200vw] will-change-transform"
+              className="flex items-center h-full w-[300vw] will-change-transform"
             >
               {HORIZON_SCENES.map((scene, index) => {
                 const isActive = activeIndex === index;
@@ -155,11 +174,10 @@ export const UpcomingSection: React.FC = () => {
                   >
                     <motion.div
                       animate={{
-                        scale: isActive ? 1 : 0.94,
-                        opacity: isActive ? 1 : 0.35,
-                        filter: isActive ? 'blur(0px)' : 'blur(4px)',
+                        scale: isActive ? 1 : 0.97,
+                        opacity: isActive ? 1 : 0.8,
                       }}
-                      transition={{ duration: 0.5, ease: 'easeOut' }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
                       className="relative w-full max-w-[1680px] h-full rounded-[2.5rem] overflow-hidden border border-white/[0.14] hover:border-[#ABD2FA]/40 shadow-[0_24px_80px_rgba(3,8,26,0.85),inset_0_1px_2px_rgba(255,255,255,0.22),inset_0_0_40px_rgba(118,146,255,0.06)] bg-gradient-to-br from-[#091540]/60 via-[#050c26]/75 to-[#0b1b4f]/55 backdrop-blur-2xl backdrop-saturate-150 flex flex-col lg:flex-row items-stretch group transition-all duration-500"
                     >
                       {/* Specular Top-Edge Glass Reflection */}
@@ -169,14 +187,15 @@ export const UpcomingSection: React.FC = () => {
                       <div className="absolute -top-32 -left-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#7692FF]/15 rounded-full blur-[100px] pointer-events-none" />
                       <div className="absolute -bottom-32 -right-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#1B2CC1]/20 rounded-full blur-[110px] pointer-events-none" />
 
-                      {/* Left Visual Area (Parallax Image Blended into Background) */}
+                      {/* Left Visual Area */}
                       <div className="lg:w-[58%] relative overflow-hidden flex items-center justify-center p-6 lg:p-10">
-                        <motion.img
+                        <img
                           src={scene.image}
                           alt={scene.title}
                           loading="lazy"
-                          style={{ x: bgShift }}
-                          className="absolute inset-0 w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-1000"
+                          decoding="async"
+                          style={scene.id === 'ai-agent' ? { objectPosition: '14% center' } : undefined}
+                          className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-700"
                         />
                         {/* Seamless Multi-Directional Edge Feathering & Ambient Vignette */}
                         <div className="absolute inset-0 bg-gradient-to-t from-[#050c26]/95 via-[#050c26]/30 to-transparent" />
@@ -243,8 +262,7 @@ export const UpcomingSection: React.FC = () => {
 
                           <button
                             onClick={() => {
-                              const elem = document.getElementById('ecosystem');
-                              if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+                              scrollTo('#ecosystem', { offset: -72 });
                             }}
                             className="px-7 py-3.5 rounded-full font-display font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] hover:shadow-[0_0_30px_rgba(118,146,255,0.5)] transition-all flex items-center gap-2.5 border border-[#ABD2FA]/30 group/btn"
                           >
@@ -328,6 +346,7 @@ export const UpcomingSection: React.FC = () => {
                 src={scene.image}
                 alt={scene.title}
                 loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050c26]/95 via-[#050c26]/30 to-transparent" />
@@ -368,8 +387,7 @@ export const UpcomingSection: React.FC = () => {
 
               <button
                 onClick={() => {
-                  const elem = document.getElementById('ecosystem');
-                  if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+                  scrollTo('#ecosystem', { offset: -72 });
                 }}
                 className="w-full py-3.5 rounded-xl font-display font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] flex items-center justify-center gap-2 border border-white/20 shadow-[0_0_20px_rgba(118,146,255,0.3)]"
               >

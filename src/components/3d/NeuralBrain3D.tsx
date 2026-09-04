@@ -3,14 +3,16 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Float } from '@react-three/drei';
 
-function NeuralNodes({ count = 120 }: { count?: number }) {
+function NeuralNodes({ count }: { count?: number }) {
   const groupRef = useRef<THREE.Group>(null!);
   const { pointer } = useThree();
+  const defaultCount = typeof window !== 'undefined' && window.innerWidth < 768 ? 70 : 120;
+  const nodeCount = count ?? defaultCount;
 
   const [nodePositions, connections] = useMemo(() => {
     const nodes: [number, number, number][] = [];
-    for (let i = 0; i < count; i++) {
-      const isLeft = i < count / 2;
+    for (let i = 0; i < nodeCount; i++) {
+      const isLeft = i < nodeCount / 2;
       const xOffset = isLeft ? -0.4 : 0.4;
       const u = Math.random();
       const v = Math.random();
@@ -39,7 +41,7 @@ function NeuralNodes({ count = 120 }: { count?: number }) {
     }
 
     return [nodes, new Float32Array(lineIndices)];
-  }, [count]);
+  }, [nodeCount]);
 
   useFrame((state, delta) => {
     if (groupRef.current) {

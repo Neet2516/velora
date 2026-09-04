@@ -9,14 +9,14 @@ interface EcosystemSectionProps {
 }
 
 const productImages: Record<string, string> = {
-  'broker-house': '/images/ecosystem_broker_phone.jpg',
-  'prop-firm': '/images/ecosystem_prop_bull.jpg',
-  'crypto-arbitrage': '/images/ecosystem_crypto_cube.jpg',
-  'ai-agent': '/images/ecosystem_ai_brain.jpg',
-  'education-platform': '/images/ecosystem_education_academy.jpg',
+  'broker-house': '/images/mobile.png',
+  'prop-firm': '/images/bull.png',
+  'crypto-arbitrage': '/images/ecosystem_crypto_cube.png',
+  'ai-agent': '/images/brain.png',
+  'education-platform': '/images/ecosystem-education-academy.png',
   'forex-cards': '/images/ecosystem_forex_cards.jpg',
-  'fund-management': '/images/ecosystem_fund_vault.jpg',
-  'automation-bot': '/images/ecosystem_automation_bot.jpg',
+  'fund-management': '/images/ecosystem_fund_vault.png',
+  'automation-bot': '/images/removed_ai_agent.png',
 };
 
 interface PillarDetail {
@@ -227,12 +227,12 @@ function PillarVisualShowcase({
   // 4. Forex Cards 3D Fan-out Active Index
   const [activeCardIndex, setActiveCardIndex] = useState(1); // 0: Sapphire, 1: Obsidian, 2: Diamond
 
-  const imgSrc = productImages[productId] || '/images/ecosystem_broker_phone.jpg';
+  const imgSrc = productImages[productId] || '/images/mobile.png';
 
   return (
     <div className="relative w-full h-full flex items-center justify-center select-none">
-      {/* ─── BASE AMBIENT GLOW ─── */}
-      <div className="absolute w-[440px] h-[440px] rounded-full bg-gradient-to-tr from-[#1B2CC1]/35 via-[#7692FF]/25 to-[#ABD2FA]/15 blur-[120px] pointer-events-none" />
+      {/* ─── BASE AMBIENT GLOW (Diffused leftward for seamless whole-card blend) ─── */}
+      <div className="absolute w-[500px] sm:w-[680px] h-[500px] sm:h-[680px] rounded-full bg-gradient-to-l from-[#1B2CC1]/25 via-[#7692FF]/18 to-transparent blur-[140px] pointer-events-none -left-20 sm:-left-36" />
 
       {/* ─── HOLOGRAPHIC EMITTER PEDESTAL AT BASE ─── */}
       <div className="absolute bottom-6 sm:bottom-10 w-80 h-24 flex items-center justify-center pointer-events-none">
@@ -252,7 +252,7 @@ function PillarVisualShowcase({
 
       {/* ─── CASE 1: BROKER HOUSE (SCROLL-DRIVEN 3D PHONE ROTATION + FLOATING CHIPS) ─── */}
       {productId === 'broker-house' && (
-        <div className="relative w-[340px] sm:w-[420px] aspect-square flex items-center justify-center [perspective:1200px]">
+        <div className="relative w-[340px] sm:w-[420px] lg:w-[450px] xl:w-[480px] aspect-square flex items-center justify-center [perspective:1200px]">
           {/* 3D Rotating Phone Container */}
           <motion.div
             style={{
@@ -260,8 +260,8 @@ function PillarVisualShowcase({
               rotateX: phoneRotateX,
               rotateZ: phoneRotateZ,
               transformStyle: 'preserve-3d',
-              WebkitMaskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
-              maskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
+              WebkitMaskImage: 'radial-gradient(circle at 46% 48%, black 45%, transparent 76%)',
+              maskImage: 'radial-gradient(circle at 46% 48%, black 45%, transparent 76%)',
             }}
             animate={{ y: [-6, 6, -6] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
@@ -270,15 +270,20 @@ function PillarVisualShowcase({
             <img
               src={imgSrc}
               alt="Broker House 3D Phone"
-              className="w-full h-full object-cover scale-105"
+              decoding="async"
+              className="w-full h-full object-cover object-[58%_center] scale-[1.14]"
+              style={{
+                mixBlendMode: 'screen',
+                filter: 'contrast(1.05) brightness(1.08)',
+              }}
             />
           </motion.div>
 
-          {/* Floating Contextual Chips Around Phone (Exact WhatsApp Screenshot) */}
+          {/* Floating Contextual Chips Around Phone */}
           <motion.div
             animate={{ y: [-4, 6, -4], x: [-2, 3, -2] }}
             transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -top-2 left-4 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-white/[0.18] backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center gap-2"
+            className="absolute -top-2 left-2 sm:left-4 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-white/[0.18] backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center gap-2"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] animate-pulse" />
             <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
@@ -289,7 +294,7 @@ function PillarVisualShowcase({
           <motion.div
             animate={{ y: [6, -5, 6], x: [2, -3, 2] }}
             transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-            className="absolute top-1/3 -right-2 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-white/[0.18] backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center gap-2"
+            className="absolute top-2 right-0 sm:right-2 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-white/[0.18] backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center gap-2"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#7692FF] animate-pulse" />
             <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
@@ -300,7 +305,7 @@ function PillarVisualShowcase({
           <motion.div
             animate={{ y: [-5, 5, -5], x: [-3, 2, -3] }}
             transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
-            className="absolute bottom-6 left-6 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-white/[0.18] backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center gap-2"
+            className="absolute bottom-5 left-4 sm:left-6 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-white/[0.18] backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center gap-2"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
             <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
@@ -314,25 +319,22 @@ function PillarVisualShowcase({
       {productId === 'crypto-arbitrage' && (
         <div
           onClick={() => setIsUnveiled(!isUnveiled)}
-          className="relative w-[340px] sm:w-[420px] aspect-square flex items-center justify-center cursor-pointer group"
+          className="relative w-[340px] sm:w-[420px] lg:w-[450px] xl:w-[480px] aspect-square flex items-center justify-center cursor-pointer group"
         >
           {/* Main 3D Cube Container */}
           <motion.div
-            style={{
-              WebkitMaskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
-              maskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
-            }}
             animate={{
               y: [-7, 7, -7],
-              scale: isUnveiled ? 1.08 : 1,
+              scale: isUnveiled ? 1.14 : 1.06,
             }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-full h-full flex items-center justify-center transition-transform duration-500"
+            className="w-full h-full flex items-center justify-center transition-transform duration-500 select-none"
           >
             <img
               src={imgSrc}
               alt="Crypto Arbitrage Cube"
-              className="w-full h-full object-cover scale-105"
+              className="w-full h-full object-contain scale-[1.18] drop-shadow-[0_0_45px_rgba(0,240,255,0.45)] drop-shadow-[0_20px_45px_rgba(27,44,193,0.6)]"
+              loading="eager"
             />
           </motion.div>
 
@@ -538,79 +540,224 @@ function PillarVisualShowcase({
 
       {/* ─── CASE 4: PROP FIRM (GOLDEN BULL CHARGE) ─── */}
       {productId === 'prop-firm' && (
-        <motion.div
-          style={{
-            scale: bullScale,
-            rotateY: bullRotateY,
-            WebkitMaskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
-            maskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
-          }}
-          animate={{ y: [-8, 8, -8] }}
-          transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="relative z-10 w-[320px] sm:w-[420px] aspect-square flex items-center justify-center"
-        >
-          <img
-            src={imgSrc}
-            alt="Prop Firm Golden Bull"
-            className="w-full h-full object-cover scale-105"
-            loading="eager"
-          />
-        </motion.div>
+        <div className="relative w-[340px] sm:w-[440px] aspect-square flex items-center justify-center [perspective:1200px]">
+          {/* Ambient Warm Golden Aura behind the Bull */}
+          <div className="absolute w-[360px] h-[360px] rounded-full bg-gradient-to-tr from-[#d4af37]/22 via-[#b8860b]/14 to-transparent blur-[90px] pointer-events-none animate-pulse-glow" />
+
+          {/* 3D Bull Container with seamless blend into black void */}
+          <motion.div
+            style={{
+              scale: bullScale,
+              rotateY: bullRotateY,
+              WebkitMaskImage: 'radial-gradient(circle at center, black 65%, transparent 88%)',
+              maskImage: 'radial-gradient(circle at center, black 65%, transparent 88%)',
+            }}
+            animate={{ y: [-8, 8, -8] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative z-10 w-full h-full flex items-center justify-center select-none"
+          >
+            <img
+              src={imgSrc}
+              alt="Prop Firm Golden Bull"
+              className="w-full h-full object-contain scale-110 mix-blend-screen select-none pointer-events-none drop-shadow-[0_0_35px_rgba(212,175,55,0.45)]"
+              loading="lazy"
+              decoding="async"
+            />
+          </motion.div>
+        </div>
       )}
 
-      {/* ─── CASE 5: AI AGENT, EDUCATION, FUND MANAGEMENT, AUTOMATION (ORGANIC RADIAL BLEND) ─── */}
+      {/* ─── CASE 5: AI AGENT (NEURAL SYNAPTIC BRAIN WITH FLOATING RADAR CHIPS) ─── */}
+      {productId === 'ai-agent' && (
+        <div className="relative w-[340px] sm:w-[420px] lg:w-[450px] xl:w-[480px] aspect-square flex items-center justify-center [perspective:1200px]">
+          {/* Ambient Cosmic Radial Glow behind the Neural Brain */}
+          <div className="absolute w-[390px] sm:w-[440px] h-[390px] sm:h-[440px] rounded-full bg-gradient-to-tr from-[#1B2CC1]/35 via-[#7692FF]/30 to-[#ABD2FA]/25 blur-[100px] pointer-events-none animate-pulse-glow" />
+
+          {/* 3D Brain Container with seamless blend */}
+          <motion.div
+            style={{
+              WebkitMaskImage: 'radial-gradient(circle at center, black 60%, transparent 84%)',
+              maskImage: 'radial-gradient(circle at center, black 60%, transparent 84%)',
+            }}
+            animate={{ y: [-8, 8, -8] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative z-10 w-full h-full flex items-center justify-center select-none"
+          >
+            <img
+              src={imgSrc}
+              alt="Velora AI Neural Brain"
+              className="w-full h-full object-contain scale-[1.18] mix-blend-screen select-none pointer-events-none drop-shadow-[0_0_45px_rgba(118,146,255,0.6)]"
+              loading="lazy"
+              decoding="async"
+            />
+          </motion.div>
+
+          {/* Floating Contextual Chips (Matching Broker House & Prop style) */}
+          <motion.div
+            animate={{ y: [-4, 6, -4], x: [-2, 3, -2] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-2 left-2 sm:left-4 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-[#ABD2FA]/40 backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              87% Bullish Confidence
+            </span>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [6, -5, 6], x: [2, -3, 2] }}
+            transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+            className="absolute top-1/3 -right-2 sm:right-0 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-[#7692FF]/40 backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#7692FF] animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              Neural Sentiment Radar
+            </span>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [-5, 5, -5], x: [-3, 2, -3] }}
+            transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
+            className="absolute bottom-5 left-4 sm:left-6 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-emerald-400/40 backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              Sub-Millisecond Speed
+            </span>
+          </motion.div>
+        </div>
+      )}
+
+      {/* ─── CASE 6: EDUCATION PLATFORM (TRANSPARENT 3D HOLOGRAPHIC SPHERE & ORBITING CODEX) ─── */}
+      {productId === 'education-platform' && (
+        <div className="relative w-[340px] sm:w-[440px] aspect-square flex items-center justify-center select-none [perspective:1000px]">
+          <motion.div
+            animate={{ y: [-8, 8, -8], rotateY: [-5, 5, -5] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative z-10 w-full h-full flex items-center justify-center select-none"
+          >
+            <img
+              src={imgSrc}
+              alt="Education Academy Holographic Sphere"
+              className="w-full h-full object-contain scale-[1.28] drop-shadow-[0_0_45px_rgba(0,240,255,0.4)] drop-shadow-[0_20px_50px_rgba(27,44,193,0.7)]"
+              loading="lazy"
+              decoding="async"
+            />
+          </motion.div>
+
+          {/* Floating Contextual Chips Around Academy Sphere */}
+          <motion.div
+            animate={{ y: [-4, 6, -4], x: [-2, 3, -2] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-2 left-2 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-[#ABD2FA]/30 backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              140+ Course Hrs
+            </span>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [6, -5, 6], x: [2, -3, 2] }}
+            transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+            className="absolute top-2 right-2 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-[#7692FF]/30 backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#7692FF] animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              Live Trading Rooms
+            </span>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [-5, 5, -5], x: [-3, 2, -3] }}
+            transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
+            className="absolute bottom-6 left-6 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-white/[0.18] backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              Fast-Track Funding
+            </span>
+          </motion.div>
+        </div>
+      )}
+
+      {/* ─── CASE 7: FUND MANAGEMENT (ORGANIC RADIAL BLEND) ─── */}
       {productId !== 'broker-house' &&
         productId !== 'crypto-arbitrage' &&
         productId !== 'forex-cards' &&
-        productId !== 'prop-firm' && (
+        productId !== 'prop-firm' &&
+        productId !== 'ai-agent' &&
+        productId !== 'automation-bot' &&
+        productId !== 'education-platform' && (
           <motion.div
             animate={{ y: [-8, 8, -8] }}
             transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="relative z-10 w-[320px] sm:w-[420px] aspect-square flex items-center justify-center select-none"
+            className="relative z-10 w-[360px] sm:w-[450px] lg:w-[490px] xl:w-[530px] aspect-square flex items-center justify-center select-none"
             style={{
-              WebkitMaskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
-              maskImage: 'radial-gradient(circle at center, black 52%, transparent 78%)',
+              WebkitMaskImage: 'radial-gradient(circle at center, black 62%, rgba(0,0,0,0.7) 80%, transparent 94%)',
+              maskImage: 'radial-gradient(circle at center, black 62%, rgba(0,0,0,0.7) 80%, transparent 94%)',
             }}
           >
             <img
               src={imgSrc}
               alt="Ecosystem 3D Visual"
-              className="w-full h-full object-cover scale-105"
-              loading="eager"
+              className="w-full h-full object-contain scale-120 drop-shadow-[0_15px_40px_rgba(5,12,38,0.7)]"
+              loading="lazy"
+              decoding="async"
             />
           </motion.div>
         )}
 
-      {/* ─── FLOATING HOLOGRAPHIC TELEMETRY HUD CARDS (RIGHT EDGE) ─── */}
-      {productId !== 'forex-cards' && (
-        <div className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 space-y-3 pointer-events-none hidden sm:block">
-          {(PILLAR_DETAILS[productId]?.hudCards || []).map((hud, hIdx) => (
-            <motion.div
-              key={hIdx}
-              animate={{
-                y: hIdx % 2 === 0 ? [-4, 4, -4] : [4, -4, 4],
-              }}
-              transition={{
-                duration: 4 + hIdx * 0.5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: hIdx * 0.3,
-              }}
-              className="p-3.5 rounded-2xl bg-[#091540]/60 border border-white/[0.15] backdrop-blur-2xl shadow-[0_8px_32px_rgba(5,12,38,0.6),inset_0_1px_1px_rgba(255,255,255,0.2)] w-38 sm:w-44 text-left"
-            >
-              <span className="text-[9px] font-mono text-slate-300 uppercase block">
-                {hud.label}
-              </span>
-              <span className="text-sm font-display font-extrabold text-[#ABD2FA] block mt-0.5">
-                {hud.value}
-              </span>
-              {hud.sub && (
-                <span className="text-[9px] font-mono text-[#7692FF] block mt-0.5">
-                  {hud.sub}
-                </span>
-              )}
-            </motion.div>
-          ))}
+      {/* ─── CASE 8: AUTOMATION BOT (SEAMLESS TRANSPARENT 3D ROBOT BUST) ─── */}
+      {productId === 'automation-bot' && (
+        <div className="relative w-[360px] sm:w-[440px] lg:w-[480px] xl:w-[520px] aspect-square flex items-center justify-center select-none [perspective:1000px]">
+          <motion.div
+            animate={{ y: [-8, 8, -8], rotateY: [-5, 5, -5] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+            className="relative z-10 w-full h-full flex items-center justify-center select-none"
+          >
+            <img
+              src={imgSrc}
+              alt="Automation Bot Suite Robot"
+              className="w-full h-full object-contain scale-[1.58] drop-shadow-[0_0_45px_rgba(0,240,255,0.4)] drop-shadow-[0_20px_50px_rgba(5,12,38,0.9)]"
+              loading="lazy"
+              decoding="async"
+            />
+          </motion.div>
+
+          {/* Floating Contextual Chips Around Robot */}
+          <motion.div
+            animate={{ y: [-4, 6, -4], x: [-2, 3, -2] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-3 left-1 sm:left-2 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-[#ABD2FA]/30 backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              Sub-ms VPS
+            </span>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [6, -5, 6], x: [2, -3, 2] }}
+            transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+            className="absolute top-1 -right-1 sm:right-1 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-[#7692FF]/30 backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#7692FF] animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              74.8% Win Rate
+            </span>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [-5, 5, -5], x: [-3, 2, -3] }}
+            transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
+            className="absolute bottom-4 left-3 sm:left-4 z-30 px-3.5 py-1.5 rounded-full bg-[#091540]/70 border border-white/[0.18] backdrop-blur-xl shadow-[0_4px_20px_rgba(5,12,38,0.5)] flex items-center gap-2"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <span className="text-[10px] font-mono font-semibold text-white tracking-wider">
+              1-Click Copy Trading
+            </span>
+          </motion.div>
         </div>
       )}
 
@@ -663,6 +810,7 @@ function StickyProductCard({
   });
 
   const isEven = index % 2 === 0;
+  const isPropFirm = product.id === 'prop-firm';
 
   // Opacity: smoothly becomes clear as it slides in
   const opacity = useTransform(scrollYProgress, [0, 0.22, 0.75, 0.92], [0.15, 1, 1, 0]);
@@ -693,19 +841,19 @@ function StickyProductCard({
     >
       <motion.div
         style={isDesktop ? { opacity, scale, y, x, rotate } : undefined}
-        className="relative lg:sticky lg:top-[8vh] w-full max-w-[1680px] mx-auto min-h-[auto] lg:min-h-[84vh] rounded-[1.5rem] sm:rounded-[2.5rem] bg-gradient-to-br from-[#091540]/60 via-[#050c26]/75 to-[#0b1b4f]/55 border border-white/[0.14] hover:border-[#ABD2FA]/40 shadow-[0_24px_80px_rgba(3,8,26,0.85),inset_0_1px_2px_rgba(255,255,255,0.22),inset_0_0_40px_rgba(118,146,255,0.06)] backdrop-blur-2xl backdrop-saturate-150 flex flex-col lg:flex-row items-stretch overflow-hidden group transition-all duration-500"
+        className="relative lg:sticky lg:top-[8vh] w-full max-w-[1680px] mx-auto min-h-[auto] lg:min-h-[84vh] rounded-[1.5rem] sm:rounded-[2.5rem] bg-gradient-to-br from-[#091540]/75 via-[#050c26]/85 to-[#091540]/75 border border-white/[0.14] hover:border-[#ABD2FA]/40 shadow-[0_24px_80px_rgba(3,8,26,0.85),inset_0_1px_2px_rgba(255,255,255,0.22),inset_0_0_40px_rgba(118,146,255,0.06)] backdrop-blur-2xl backdrop-saturate-150 flex flex-col lg:flex-row items-stretch overflow-hidden group transition-all duration-500"
       >
         {/* Specular Top-Edge Glass Reflection */}
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none z-20" />
 
-        {/* Subtle Ambient Corner Light Blooms for Realistic Glass Depth */}
+        {/* Ambient Lights & Cyber Grid */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[80%] bg-gradient-to-r from-[#1B2CC1]/15 via-[#7692FF]/10 to-[#ABD2FA]/10 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute -top-32 -left-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#7692FF]/15 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute -bottom-32 -right-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#1B2CC1]/20 rounded-full blur-[110px] pointer-events-none" />
-
         <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
 
         {/* ─── LEFT COLUMN: REFINED HIGH-END EDITORIAL (54% WIDTH) ─── */}
-        <div className="w-full lg:w-[54%] p-6 sm:p-10 lg:p-14 xl:p-16 flex flex-col justify-between relative z-10">
+        <div className="w-full lg:w-[54%] p-6 sm:p-10 lg:p-14 xl:p-16 lg:pr-6 xl:pr-8 flex flex-col justify-between relative z-10">
           <div>
             {/* Header: Number & Introducing Tagline */}
             <div className="flex items-center gap-3.5 mb-5 sm:mb-6">
@@ -722,7 +870,13 @@ function StickyProductCard({
             <h3 className="text-4xl sm:text-6xl lg:text-7xl xl:text-[5.2rem] 2xl:text-[5.8rem] font-serif font-bold text-white tracking-tight leading-[1.02] mb-5 sm:mb-6">
               {detail.mainHeadingLine1}
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ABD2FA] to-[#7692FF]">
+              <span
+                className={`text-transparent bg-clip-text bg-gradient-to-r ${
+                  isPropFirm
+                    ? 'from-[#fced96] via-[#f5d77f] to-[#d4af37]'
+                    : 'from-white via-[#ABD2FA] to-[#7692FF]'
+                }`}
+              >
                 {detail.mainHeadingLine2}
               </span>
             </h3>
@@ -741,7 +895,7 @@ function StickyProductCard({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5 lg:gap-y-6 pt-7 sm:pt-8 border-t border-white/15 mb-8 sm:mb-10">
               {detail.features.map((feat, fIdx) => (
                 <div key={fIdx} className="flex items-center gap-3.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ABD2FA] shrink-0 shadow-[0_0_10px_#ABD2FA]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ABD2FA] shadow-[0_0_10px_#ABD2FA] shrink-0" />
                   <span className="text-base sm:text-lg lg:text-xl font-sans font-medium text-slate-100 tracking-wide">
                     {feat.title}
                   </span>
@@ -758,7 +912,7 @@ function StickyProductCard({
 
             <button
               onClick={() => onSelect(product)}
-              className="px-7 py-3.5 rounded-full font-display font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] hover:shadow-[0_0_30px_rgba(118,146,255,0.5)] transition-all flex items-center gap-2.5 border border-[#ABD2FA]/30 group/btn shrink-0"
+              className="px-7 py-3.5 rounded-full font-display font-semibold text-xs sm:text-sm bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] text-white hover:shadow-[0_0_30px_rgba(118,146,255,0.5)] border border-[#ABD2FA]/30 transition-all flex items-center gap-2.5 group/btn shrink-0"
             >
               <span>EXPLORE ARCHITECTURE</span>
               <ArrowRight className="w-4 h-4 text-[#ABD2FA] group-hover/btn:translate-x-1 transition-transform" />
@@ -766,8 +920,8 @@ function StickyProductCard({
           </div>
         </div>
 
-        {/* ─── RIGHT COLUMN: VISUAL FRAME — hidden on mobile, shown on lg+ ─── */}
-        <div className="hidden lg:flex lg:w-[46%] relative items-center justify-center p-4 sm:p-6 lg:p-10 overflow-hidden bg-gradient-to-l from-[#091540]/30 via-transparent to-transparent">
+        {/* ─── RIGHT COLUMN: VISUAL FRAME — seamlessly blended into card, zero partition ─── */}
+        <div className="hidden lg:flex lg:w-[46%] relative items-center justify-center p-4 sm:p-6 lg:p-10 lg:pl-2 xl:pl-4 bg-transparent">
           <PillarVisualShowcase
             productId={product.id}
             scrollYProgress={scrollYProgress}

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { VeloraLogo } from '../brand/VeloraLogo';
+import { useLenis } from '../../hooks/useLenis';
 
 interface NavbarProps {
   onExploreEcosystem: () => void;
@@ -15,6 +16,7 @@ interface NavItem {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
+  const { scrollTo, stop, start } = useLenis();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -27,10 +29,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
     { id: 'upcoming', name: 'Upcoming', href: '#upcoming', isSpecial: true },
   ];
 
-  // Detect scroll position for transparent -> glass transition
+  // Detect scroll position for transparent -> glass transition (guarded against redundant re-renders)
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 25);
+      const scrolled = window.scrollY > 25;
+      setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
     };
 
     handleScroll();
@@ -38,17 +41,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
+  // Lock body scroll and pause Lenis when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
+      stop();
     } else {
       document.body.style.overflow = '';
+      start();
     }
     return () => {
       document.body.style.overflow = '';
+      start();
     };
-  }, [mobileMenuOpen]);
+  }, [mobileMenuOpen, stop, start]);
 
   // Robust IntersectionObserver & scroll-spy for active section detection
   useEffect(() => {
@@ -89,13 +95,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
 
       // Top of hero
       if (scrollY < 220) {
-        setActiveSection('');
+        setActiveSection((prev) => (prev !== '' ? '' : prev));
         return;
       }
 
       // Check if near bottom of page
       if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 80) {
-        setActiveSection('upcoming');
+        setActiveSection((prev) => (prev !== 'upcoming' ? 'upcoming' : prev));
         return;
       }
 
@@ -104,7 +110,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
       for (let i = sectionElements.length - 1; i >= 0; i--) {
         const el = sectionElements[i];
         if (scrollPos >= el.offsetTop) {
-          setActiveSection(el.id);
+          const newId = el.id;
+          setActiveSection((prev) => (prev !== newId ? newId : prev));
           break;
         }
       }
@@ -121,18 +128,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
   const scrollToSection = (id: string) => {
     setActiveSection(id);
     setMobileMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      const yOffset = -72; // accounts for navbar height
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
+    scrollTo(`#${id}`, { offset: -72 });
   };
 
   const scrollToTop = () => {
     setActiveSection('');
     setMobileMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollTo(0);
   };
 
   return (
@@ -169,8 +171,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
                   <button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
-                    style={{ fontFamily: "'Betania Patmos', cursive" }}
-                    className={`relative py-1 text-2xl lg:text-[28px] font-normal tracking-wide transition-colors duration-300 flex items-center gap-2 focus:outline-none ${
+                    style={{ fontFamily: "'Times New Roman', Times, serif" }}
+                    className={`relative py-1 text-xl lg:text-[24px] font-normal tracking-wide transition-colors duration-300 flex items-center gap-2 focus:outline-none ${
                       isActive
                         ? 'text-white drop-shadow-[0_0_14px_rgba(171,210,250,0.7)]'
                         : 'text-slate-300/80 hover:text-white'
@@ -315,10 +317,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onExploreEcosystem }) => {
                         0{index + 1}
                       </span>
 
-                      {/* Title in Betania Patmos Font */}
+                      {/* Title in Times New Roman Font */}
                       <span
-                        style={{ fontFamily: "'Betania Patmos', cursive" }}
-                        className={`text-4xl sm:text-5xl font-normal tracking-wide transition-colors ${
+                        style={{ fontFamily: "'Times New Roman', Times, serif" }}
+                        className={`text-[34px] sm:text-[42px] font-normal tracking-wide transition-colors ${
                           isActive
                             ? 'text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ABD2FA] to-[#7692FF]'
                             : 'text-white/85 group-hover:text-white'

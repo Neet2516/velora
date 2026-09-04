@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2, ArrowRight } from 'lucide-react';
 import { EcosystemProduct } from '../../types';
+import { useLenis } from '../../hooks/useLenis';
 
 interface ProductModalProps {
   product: EcosystemProduct | null;
@@ -9,20 +10,36 @@ interface ProductModalProps {
 }
 
 const productImages: Record<string, string> = {
-  'broker-house': '/images/ecosystem_broker_phone.jpg',
-  'prop-firm': '/images/ecosystem_prop_bull.jpg',
-  'crypto-arbitrage': '/images/ecosystem_crypto_cube.jpg',
-  'ai-agent': '/images/ecosystem_ai_brain.jpg',
-  'education-platform': '/images/ecosystem_education_academy.jpg',
+  'broker-house': '/images/mobile.png',
+  'prop-firm': '/images/bull.png',
+  'crypto-arbitrage': '/images/ecosystem_crypto_cube.png',
+  'ai-agent': '/images/brain.png',
+  'education-platform': '/images/ecosystem-education-academy.png',
   'forex-cards': '/images/ecosystem_forex_cards.jpg',
-  'fund-management': '/images/ecosystem_fund_vault.jpg',
-  'automation-bot': '/images/ecosystem_automation_bot.jpg',
+  'fund-management': '/images/ecosystem_fund_vault.png',
+  'automation-bot': '/images/removed_ai_agent.png',
 };
 
 export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) => {
+  const { scrollTo, stop, start } = useLenis();
+
+  useEffect(() => {
+    if (product) {
+      document.body.style.overflow = 'hidden';
+      stop();
+    } else {
+      document.body.style.overflow = '';
+      start();
+    }
+    return () => {
+      document.body.style.overflow = '';
+      start();
+    };
+  }, [product, stop, start]);
+
   if (!product) return null;
 
-  const imgSrc = productImages[product.id] || '/images/ecosystem_broker_phone.jpg';
+  const imgSrc = productImages[product.id] || '/images/mobile.png';
 
   return (
     <AnimatePresence>
@@ -44,9 +61,27 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
           className="relative w-full max-w-3xl bg-[#091540] border border-[#7692FF]/40 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(27,44,193,0.35)] z-10"
         >
           {/* Image Header */}
-          <div className="relative h-64 sm:h-80 overflow-hidden">
-            <img src={imgSrc} alt={product.title} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#091540] via-transparent to-transparent" />
+          <div className={`relative h-64 sm:h-80 overflow-hidden flex items-center justify-center ${product.id === 'prop-firm' ? 'bg-black' : product.id === 'ai-agent' ? 'bg-[#050c26]' : ''}`}>
+            {product.id === 'prop-firm' && (
+              <div className="absolute w-72 h-72 rounded-full bg-gradient-to-tr from-[#d4af37]/25 via-[#b8860b]/15 to-transparent blur-3xl pointer-events-none" />
+            )}
+            {product.id === 'ai-agent' && (
+              <div className="absolute w-72 h-72 rounded-full bg-gradient-to-tr from-[#1B2CC1]/35 via-[#7692FF]/25 to-[#ABD2FA]/20 blur-3xl pointer-events-none" />
+            )}
+            <img
+              src={imgSrc}
+              alt={product.title}
+              loading="lazy"
+              decoding="async"
+              className={`w-full h-full ${
+                product.id === 'prop-firm' || product.id === 'ai-agent'
+                  ? 'object-contain scale-110 mix-blend-screen'
+                  : product.id === 'fund-management'
+                  ? 'object-contain scale-115'
+                  : 'object-cover'
+              }`}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#091540] via-transparent to-transparent pointer-events-none" />
 
             {/* Close */}
             <button
@@ -89,7 +124,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
               <button
                 onClick={() => {
                   onClose();
-                  document.getElementById('ecosystem')?.scrollIntoView({ behavior: 'smooth' });
+                  scrollTo('#ecosystem', { offset: -72 });
                 }}
                 className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] text-white text-xs font-display font-semibold flex items-center gap-1.5"
               >

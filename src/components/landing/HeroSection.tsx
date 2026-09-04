@@ -32,30 +32,30 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           muted
           playsInline
           preload="auto"
-          className="w-full h-full object-cover opacity-75 will-change-transform"
+          className="w-full h-full object-cover opacity-95 will-change-transform"
         >
           <source src={animatedVideo} type="video/mp4" />
           <source src="/assets/animated_video.mp4" type="video/mp4" />
         </video>
 
-        {/* Ambient Cosmic Radial Glow - Exactly like the loader: Center light/luminous */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-[1300px] h-[580px] bg-gradient-to-tr from-[#1B2CC1]/40 via-[#7692FF]/30 to-[#ABD2FA]/20 rounded-full blur-[150px] pointer-events-none animate-pulse-glow" />
+        {/* Ambient Cosmic Radial Glow - Center luminous accent */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-[1300px] h-[580px] bg-gradient-to-tr from-[#1B2CC1]/25 via-[#7692FF]/20 to-[#ABD2FA]/15 rounded-full blur-[150px] pointer-events-none animate-pulse-glow" />
 
-        {/* Glowing Cyber Grid matching the loader */}
-        <div className="absolute inset-0 bg-cyber-grid opacity-20 pointer-events-none" />
+        {/* Glowing Cyber Grid */}
+        <div className="absolute inset-0 bg-cyber-grid opacity-15 pointer-events-none" />
 
-        {/* Deep Blue Frame: Dark on the sides, fading inward */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050c26] via-[#050c26]/20 to-[#050c26] pointer-events-none" />
+        {/* Soft Side Transitions - Kept translucent so background stays visible */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050c26]/35 via-transparent to-[#050c26]/35 pointer-events-none" />
 
-        {/* Top and Bottom Dark Transitions */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050c26]/85 via-transparent to-[#050c26] pointer-events-none" />
+        {/* Top and Bottom Smooth Transitions */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050c26]/50 via-transparent to-[#050c26]/70 pointer-events-none" />
 
-        {/* Deep Blue Cinematic Elliptical Vignette Frame */}
+        {/* Soft Subtle Vignette */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'radial-gradient(ellipse 85% 70% at 50% 50%, rgba(9, 21, 64, 0.2) 0%, rgba(5, 12, 38, 0.65) 65%, #050c26 100%)',
+              'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 0%, rgba(5, 12, 38, 0.15) 60%, rgba(5, 12, 38, 0.55) 100%)',
           }}
         />
       </div>
@@ -86,12 +86,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           className="mt-6 sm:mt-8 flex flex-col items-center justify-center gap-1.5 sm:gap-2 select-none"
         >
           {/* THE FUTURE */}
-          <span className="font-sans font-light tracking-[0.38em] text-xs sm:text-sm md:text-base text-slate-300/90 uppercase">
+          <span className="font-sans font-light tracking-[0.38em] text-xs sm:text-sm md:text-base text-slate-200 uppercase drop-shadow-[0_2px_10px_rgba(5,12,38,0.95)]">
             THE FUTURE
           </span>
 
           {/* OF FINANCE */}
-          <span className="font-serif italic font-normal tracking-[0.18em] text-xl sm:text-3xl md:text-4xl text-white drop-shadow-[0_0_25px_rgba(171,210,250,0.6)] uppercase">
+          <span className="font-serif italic font-normal tracking-[0.18em] text-xl sm:text-3xl md:text-4xl text-white drop-shadow-[0_4px_25px_rgba(5,12,38,0.9)] drop-shadow-[0_0_25px_rgba(171,210,250,0.6)] uppercase">
             OF FINANCE
           </span>
 

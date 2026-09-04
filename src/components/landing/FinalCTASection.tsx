@@ -14,7 +14,7 @@ export const FinalCTASection: React.FC<FinalCTASectionProps> = ({ onExploreEcosy
 
       {/* Content Container (Completely Seamless, No Box, No Border) */}
       <div className="relative z-10 flex flex-col items-center justify-center select-none">
-        {/* "Thank you" in Betania Patmos Font with Generous Spacing */}
+        {/* "Thank You" in Times New Roman Font */}
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -23,10 +23,10 @@ export const FinalCTASection: React.FC<FinalCTASectionProps> = ({ onExploreEcosy
           className="mb-12 sm:mb-16 lg:mb-20"
         >
           <h2
-            style={{ fontFamily: "'Betania Patmos', cursive" }}
+            style={{ fontFamily: "'Times New Roman', Times, serif" }}
             className="text-7xl sm:text-9xl lg:text-[145px] font-normal text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ABD2FA] to-[#7692FF] leading-[1.25] pb-4 sm:pb-6 filter drop-shadow-[0_0_35px_rgba(171,210,250,0.4)] select-none"
           >
-            Thank you
+            Thank You
           </h2>
         </motion.div>
 

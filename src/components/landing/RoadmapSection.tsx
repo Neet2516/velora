@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { useLenis } from '../../hooks/useLenis';
 
 interface StageMeta {
   id: string;
@@ -101,12 +102,11 @@ export const RoadmapSection: React.FC = () => {
   const pathLength = useTransform(scrollYProgress, [0.05, 0.95], [0, 1]);
   const rocketY = useTransform(scrollYProgress, [0.05, 0.95], ['4%', '96%']);
 
+  const { scrollTo } = useLenis();
+
   const scrollToStage = (index: number) => {
     setActiveStageIndex(index);
-    const targetElement = document.getElementById(`roadmap-stage-${index}`);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    scrollTo(`#roadmap-stage-${index}`, { offset: -72 });
   };
 
   return (
@@ -122,6 +122,8 @@ export const RoadmapSection: React.FC = () => {
             <img
               src={stage.bgImage}
               alt={stage.title}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover animate-ken-burns scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-[#050c26]/80 via-[#050c26]/55 to-[#050c26]/90" />
@@ -134,7 +136,7 @@ export const RoadmapSection: React.FC = () => {
       {/* Content Container */}
       <div className="relative z-10 -mt-[100vh] w-full max-w-[1700px] mx-auto px-4 sm:px-8 lg:px-12 pb-16 sm:pb-20">
         {/* Section Intro Header */}
-        <div className="min-h-[50vh] flex flex-col items-center justify-center text-center pt-20 pb-8">
+        <div className="flex flex-col items-center justify-center text-center pt-24 pb-12 sm:pb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -146,36 +148,6 @@ export const RoadmapSection: React.FC = () => {
               the Future
             </span>
           </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.15 }}
-            className="mt-4 text-base sm:text-lg text-slate-300 max-w-xl mx-auto font-sans"
-          >
-            Scroll to travel through the 5 transformational milestones of the world's complete finance ecosystem.
-          </motion.p>
-
-          {/* Quick Nav Waypoints Bar */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.25 }}
-            className="mt-8 flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-full bg-[#091540]/85 border border-[#7692FF]/30 backdrop-blur-xl shadow-card-lux"
-          >
-            {ROADMAP_METAS.map((stage, i) => (
-              <button
-                key={stage.id}
-                onClick={() => scrollToStage(i)}
-                className="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium text-slate-300 hover:text-white hover:bg-[#1B2CC1]/40 transition-all flex items-center gap-1.5"
-              >
-                <span className="text-[#ABD2FA] font-bold">0{stage.stepNumber}.</span>
-                <span>{stage.title}</span>
-              </button>
-            ))}
-          </motion.div>
         </div>
 
         {/* The Glowing Road Trail & Milestone Stations */}

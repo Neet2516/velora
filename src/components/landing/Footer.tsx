@@ -1,9 +1,11 @@
 import React from 'react';
 import { VeloraLogo } from '../brand/VeloraLogo';
 import { ArrowUp } from 'lucide-react';
+import { useLenis } from '../../hooks/useLenis';
 
 export const Footer: React.FC = () => {
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+  const { scrollTo } = useLenis();
+  const scrollToTop = () => scrollTo(0);
 
   return (
     <footer className="relative border-t border-[#7692FF]/20 bg-[#050c26] py-10 px-4 sm:px-8 lg:px-12">

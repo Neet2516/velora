@@ -61,18 +61,20 @@ function FloatingInfinity() {
   );
 }
 
-function AmbientParticles({ count = 120 }: { count?: number }) {
+function AmbientParticles({ count }: { count?: number }) {
   const pointsRef = useRef<THREE.Points>(null!);
+  const defaultCount = typeof window !== 'undefined' && window.innerWidth < 768 ? 60 : 120;
+  const particleCount = count ?? defaultCount;
 
   const [positions, colors] = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    const col = new Float32Array(count * 3);
+    const pos = new Float32Array(particleCount * 3);
+    const col = new Float32Array(particleCount * 3);
 
     const c1 = new THREE.Color('#ABD2FA');
     const c2 = new THREE.Color('#7692FF');
     const c3 = new THREE.Color('#1B2CC1');
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < particleCount; i++) {
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(Math.random() * 2 - 1);
       const radius = 3.0 + Math.random() * 4.0;
@@ -88,7 +90,7 @@ function AmbientParticles({ count = 120 }: { count?: number }) {
     }
 
     return [pos, col];
-  }, [count]);
+  }, [particleCount]);
 
   useFrame((_, delta) => {
     if (pointsRef.current) {

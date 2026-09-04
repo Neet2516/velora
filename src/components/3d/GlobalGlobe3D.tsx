@@ -39,7 +39,8 @@ export const GlobalGlobe3D: React.FC = () => {
           mid.normalize().multiplyScalar(radius + distance * 0.25);
 
           const curve = new THREE.QuadraticBezierCurve3(v1, mid, v2);
-          lines.push(curve.getPoints(24));
+          const segments = typeof window !== 'undefined' && window.innerWidth < 768 ? 16 : 24;
+          lines.push(curve.getPoints(segments));
         }
       }
     }
