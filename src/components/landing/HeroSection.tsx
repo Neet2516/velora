@@ -25,37 +25,37 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     <section className="relative w-full min-h-[100dvh] flex flex-col justify-center items-center" style={{ contain: 'paint' }}>
       {/* Background Frame Layer: Deep Blue Cinematic Vignette & Ambient Glow */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none" style={{ transform: 'translateZ(0)' }}>
-        {/* Full-Screen Animated Video */}
+        {/* Full-Screen Animated Video with High Visibility */}
         <video
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
-          className="w-full h-full object-cover opacity-95 will-change-transform"
+          className="w-full h-full object-cover opacity-100 will-change-transform"
         >
           <source src={animatedVideo} type="video/mp4" />
           <source src="/assets/animated_video.mp4" type="video/mp4" />
         </video>
 
-        {/* Ambient Cosmic Radial Glow - Center luminous accent */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-[1300px] h-[580px] bg-gradient-to-tr from-[#1B2CC1]/25 via-[#7692FF]/20 to-[#ABD2FA]/15 rounded-full blur-[150px] pointer-events-none animate-pulse-glow" />
+        {/* Ambient Cosmic Radial Glow - Soft subtle accent that leaves logo animation fully visible */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-[1300px] h-[580px] bg-gradient-to-tr from-[#1B2CC1]/6 via-[#7692FF]/4 to-transparent rounded-full blur-[160px] pointer-events-none" />
 
-        {/* Glowing Cyber Grid */}
-        <div className="absolute inset-0 bg-cyber-grid opacity-15 pointer-events-none" />
+        {/* Subtle Cyber Grid */}
+        <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
 
-        {/* Soft Side Transitions - Kept translucent so background stays visible */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050c26]/35 via-transparent to-[#050c26]/35 pointer-events-none" />
+        {/* Very Soft Side Transitions - Keeps background logo animation crystal clear */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050c26]/20 via-transparent to-[#050c26]/20 pointer-events-none" />
 
-        {/* Top and Bottom Smooth Transitions */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050c26]/50 via-transparent to-[#050c26]/70 pointer-events-none" />
+        {/* Soft Top and Bottom Transitions */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050c26]/25 via-transparent to-[#050c26]/40 pointer-events-none" />
 
-        {/* Soft Subtle Vignette */}
+        {/* Minimal Vignette for Maximum Logo Visibility */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 0%, rgba(5, 12, 38, 0.15) 60%, rgba(5, 12, 38, 0.55) 100%)',
+              'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 35%, rgba(5, 12, 38, 0.08) 70%, rgba(5, 12, 38, 0.35) 100%)',
           }}
         />
       </div>
@@ -72,8 +72,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           }}
           className="relative w-full max-w-[min(92vw,_1200px)] mx-auto mb-4"
         >
-          {/* Ambient Behind-Glow */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1B2CC1]/30 via-[#7692FF]/35 to-[#ABD2FA]/25 blur-3xl rounded-full pointer-events-none" />
+          {/* Subtle Clean Ambient Behind-Glow (Toned down to preserve logo visibility & clean handwriting) */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1B2CC1]/8 via-[#7692FF]/6 to-transparent blur-xl rounded-full pointer-events-none" />
 
           <VeloraSignature animated={true} delay={0.2} />
         </motion.div>

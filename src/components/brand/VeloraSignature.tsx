@@ -73,11 +73,11 @@ export const VeloraSignature: React.FC<VeloraSignatureProps> = ({
       viewBox="18 4 444 130"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`${className} ${glow ? 'drop-shadow-[0_0_25px_rgba(118,146,255,0.65)]' : ''}`}
+      className={`${className} ${glow ? 'drop-shadow-[0_0_8px_rgba(118,146,255,0.22)]' : ''}`}
     >
       <defs>
         <filter id={`sigGlow_${filterId}`} x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feGaussianBlur stdDeviation="0.6" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />

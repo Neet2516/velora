@@ -231,8 +231,8 @@ function PillarVisualShowcase({
 
   return (
     <div className="relative w-full h-full flex items-center justify-center select-none">
-      {/* ─── BASE AMBIENT GLOW (Diffused leftward for seamless whole-card blend) ─── */}
-      <div className="absolute w-[500px] sm:w-[680px] h-[500px] sm:h-[680px] rounded-full bg-gradient-to-l from-[#1B2CC1]/25 via-[#7692FF]/18 to-transparent blur-[140px] pointer-events-none -left-20 sm:-left-36" />
+      {/* ─── BASE AMBIENT GLOW (Subtle, refined diffused leftward) ─── */}
+      <div className="absolute w-[420px] sm:w-[560px] h-[420px] sm:h-[560px] rounded-full bg-gradient-to-l from-[#1B2CC1]/12 via-[#7692FF]/8 to-transparent blur-[120px] pointer-events-none -left-20 sm:-left-36" />
 
       {/* ─── HOLOGRAPHIC EMITTER PEDESTAL AT BASE ─── */}
       <div className="absolute bottom-6 sm:bottom-10 w-80 h-24 flex items-center justify-center pointer-events-none">
@@ -692,16 +692,16 @@ function PillarVisualShowcase({
           <motion.div
             animate={{ y: [-8, 8, -8] }}
             transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="relative z-10 w-[360px] sm:w-[450px] lg:w-[490px] xl:w-[530px] aspect-square flex items-center justify-center select-none"
+            className="relative z-10 w-[440px] sm:w-[540px] lg:w-[600px] xl:w-[660px] 2xl:w-[720px] aspect-square flex items-center justify-center select-none"
             style={{
-              WebkitMaskImage: 'radial-gradient(circle at center, black 62%, rgba(0,0,0,0.7) 80%, transparent 94%)',
-              maskImage: 'radial-gradient(circle at center, black 62%, rgba(0,0,0,0.7) 80%, transparent 94%)',
+              WebkitMaskImage: 'radial-gradient(circle at center, black 86%, rgba(0,0,0,0.6) 94%, transparent 100%)',
+              maskImage: 'radial-gradient(circle at center, black 86%, rgba(0,0,0,0.6) 94%, transparent 100%)',
             }}
           >
             <img
               src={imgSrc}
               alt="Ecosystem 3D Visual"
-              className="w-full h-full object-contain scale-120 drop-shadow-[0_15px_40px_rgba(5,12,38,0.7)]"
+              className="w-full h-full object-contain scale-[1.38] drop-shadow-[0_20px_50px_rgba(5,12,38,0.85)] drop-shadow-[0_0_35px_rgba(118,146,255,0.25)]"
               loading="lazy"
               decoding="async"
             />
@@ -847,9 +847,9 @@ function StickyProductCard({
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none z-20" />
 
         {/* Ambient Lights & Cyber Grid */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[80%] bg-gradient-to-r from-[#1B2CC1]/15 via-[#7692FF]/10 to-[#ABD2FA]/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute -top-32 -left-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#7692FF]/15 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute -bottom-32 -right-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#1B2CC1]/20 rounded-full blur-[110px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[80%] bg-gradient-to-r from-[#1B2CC1]/10 via-[#7692FF]/8 to-[#ABD2FA]/6 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute -top-32 -left-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#7692FF]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute -bottom-32 -right-32 w-80 sm:w-96 h-80 sm:h-96 bg-[#1B2CC1]/14 rounded-full blur-[110px] pointer-events-none" />
         <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
 
         {/* ─── LEFT COLUMN: REFINED HIGH-END EDITORIAL (54% WIDTH) ─── */}
