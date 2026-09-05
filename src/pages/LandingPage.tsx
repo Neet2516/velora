@@ -26,9 +26,7 @@ const FinalCTASection = lazy(() =>
 const Footer = lazy(() =>
   import('../components/landing/Footer').then((m) => ({ default: m.Footer }))
 );
-const ProductModal = lazy(() =>
-  import('../components/landing/ProductModal').then((m) => ({ default: m.ProductModal }))
-);
+import { ProductModal } from '../components/landing/ProductModal';
 
 // Zero-CLS Ambient Skeleton Placeholder
 const SectionSkeleton: React.FC<{ minHeight?: string }> = ({ minHeight = 'min-h-[40vh]' }) => (
@@ -96,15 +94,11 @@ export const LandingPage: React.FC = () => {
         <Footer />
       </Suspense>
 
-      {/* ProductModal: Loaded on-demand only when a card is selected */}
-      {selectedProduct && (
-        <Suspense fallback={null}>
-          <ProductModal
-            product={selectedProduct}
-            onClose={() => setSelectedProduct(null)}
-          />
-        </Suspense>
-      )}
+      {/* Product Architecture Modal */}
+      <ProductModal
+        product={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+      />
     </div>
   );
 };

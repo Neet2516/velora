@@ -843,7 +843,7 @@ function StickyProductCard({
     >
       <motion.div
         style={isDesktop ? { opacity, scale, y, x, rotate } : undefined}
-        className="relative lg:sticky lg:top-[8vh] w-full max-w-[1680px] mx-auto min-h-[auto] lg:min-h-[84vh] rounded-[1.5rem] sm:rounded-[2.5rem] bg-gradient-to-br from-[#091540]/75 via-[#050c26]/85 to-[#091540]/75 border border-white/[0.14] hover:border-[#ABD2FA]/40 shadow-[0_24px_80px_rgba(3,8,26,0.85),inset_0_1px_2px_rgba(255,255,255,0.22),inset_0_0_40px_rgba(118,146,255,0.06)] backdrop-blur-2xl backdrop-saturate-150 flex flex-col lg:flex-row items-stretch overflow-hidden group transition-all duration-500"
+        className="relative lg:sticky lg:top-[12vh] w-full max-w-[1680px] mx-auto min-h-[auto] lg:min-h-[84vh] rounded-[1.5rem] sm:rounded-[2.5rem] bg-gradient-to-br from-[#091540]/75 via-[#050c26]/85 to-[#091540]/75 border border-white/[0.14] hover:border-[#ABD2FA]/40 shadow-[0_24px_80px_rgba(3,8,26,0.85),inset_0_1px_2px_rgba(255,255,255,0.22),inset_0_0_40px_rgba(118,146,255,0.06)] backdrop-blur-2xl backdrop-saturate-150 flex flex-col lg:flex-row items-stretch overflow-hidden group transition-all duration-500"
       >
         {/* Specular Top-Edge Glass Reflection */}
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none z-20" />
@@ -912,13 +912,15 @@ function StickyProductCard({
               "{detail.quote}"
             </p>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: '0 0 35px rgba(118,146,255,0.6)' }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => onSelect(product)}
-              className="px-7 py-3.5 rounded-full font-display font-semibold text-xs sm:text-sm bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] text-white hover:shadow-[0_0_30px_rgba(118,146,255,0.5)] border border-[#ABD2FA]/30 transition-all flex items-center gap-2.5 group/btn shrink-0"
+              className="px-7 py-3.5 rounded-full font-display font-semibold text-xs sm:text-sm bg-gradient-to-r from-[#1B2CC1] to-[#7692FF] text-white hover:shadow-[0_0_30px_rgba(118,146,255,0.5)] border border-[#ABD2FA]/30 transition-all flex items-center gap-2.5 group/btn shrink-0 cursor-pointer"
             >
               <span>EXPLORE ARCHITECTURE</span>
               <ArrowRight className="w-4 h-4 text-[#ABD2FA] group-hover/btn:translate-x-1 transition-transform" />
-            </button>
+            </motion.button>
           </div>
         </div>
 
