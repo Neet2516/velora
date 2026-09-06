@@ -10,7 +10,7 @@ interface EcosystemSectionProps {
 
 const productImages: Record<string, string> = {
   'broker-house': '/images/mobile.png',
-  'prop-firm': '/images/bull.png',
+  'prop-firm': '/images/bull.webp',
   'crypto-arbitrage': '/images/ecosystem_crypto_cube.png',
   'ai-agent': '/images/brain.png',
   'education-platform': '/images/ecosystem-education-academy.png',
@@ -224,40 +224,44 @@ function PillarVisualShowcase({
   const [isUnveiled, setIsUnveiled] = useState(false);
   const cubeRotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
 
-  // 4. Forex Cards 3D Fan-out & Top-Left Entry Animation
+  // 4. Forex Cards 3D Fan-out & Entry Animation
   const [activeCardIndex, setActiveCardIndex] = useState(1); // 0: Sapphire, 1: Obsidian, 2: Diamond
   const forexShowcaseRef = useRef<HTMLDivElement>(null);
-  const isForexInView = useInView(forexShowcaseRef, { amount: 0.25, once: false });
+  const isForexInView = useInView(forexShowcaseRef, { amount: 0.15, once: true });
   const [isCardsDealt, setIsCardsDealt] = useState(false);
   const [hasCompletedDeal, setHasCompletedDeal] = useState(false);
+
+  const [isMobileScreen, setIsMobileScreen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < 640;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileScreen(window.innerWidth < 640);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const cardsDeckRotateY = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [-6, 0, 6]);
   const cardsDeckRotateX = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [5, 0, -4]);
 
   useMotionValueEvent(scrollYProgress, 'change', (latest: number) => {
     if (productId === 'forex-cards') {
-      if (latest >= 0.20 && latest <= 0.88 && !isCardsDealt) {
+      if (latest >= 0.12 && !isCardsDealt) {
         setIsCardsDealt(true);
-      } else if ((latest < 0.10 || latest > 0.94) && isCardsDealt) {
-        setIsCardsDealt(false);
-        setHasCompletedDeal(false);
       }
     }
   });
 
   useEffect(() => {
     if (productId === 'forex-cards') {
-      if (isForexInView) {
+      if (isForexInView && !isCardsDealt) {
         setIsCardsDealt(true);
-      } else {
-        const current = scrollYProgress ? scrollYProgress.get() : 0;
-        if (current < 0.12 || current > 0.94) {
-          setIsCardsDealt(false);
-          setHasCompletedDeal(false);
-        }
       }
     }
-  }, [productId, isForexInView, scrollYProgress]);
+  }, [productId, isForexInView, isCardsDealt]);
 
   useEffect(() => {
     if (isCardsDealt && !hasCompletedDeal) {
@@ -267,6 +271,68 @@ function PillarVisualShowcase({
       return () => clearTimeout(timer);
     }
   }, [isCardsDealt, hasCompletedDeal]);
+
+  // Cyclic card slot calculation: 0 = center (active), 1 = right wing, -1 = left wing
+  const getCardSlot = (cardIndex: number, activeIndex: number) => {
+    const diff = (cardIndex - activeIndex + 3) % 3;
+    if (diff === 0) return 0;
+    if (diff === 1) return 1;
+    return -1;
+  };
+
+  const getSlotAnimation = (slot: number) => {
+    const wingX = isMobileScreen ? 120 : 172;
+    if (slot === 0) {
+      return {
+        x: 0,
+        y: -36,
+        rotateZ: 0,
+        rotateX: 0,
+        rotateY: 0,
+        scale: 1.08,
+        opacity: 1,
+        filter: 'blur(0px)',
+        zIndex: 35,
+      };
+    }
+    if (slot === 1) {
+      return {
+        x: wingX,
+        y: -10,
+        rotateZ: 7,
+        rotateX: 3,
+        rotateY: -14,
+        scale: 0.93,
+        opacity: 0.88,
+        filter: 'blur(0px)',
+        zIndex: 15,
+      };
+    }
+    // slot === -1 (Left wing)
+    return {
+      x: -wingX,
+      y: -10,
+      rotateZ: -7,
+      rotateX: 3,
+      rotateY: 14,
+      scale: 0.93,
+      opacity: 0.88,
+      filter: 'blur(0px)',
+      zIndex: 15,
+    };
+  };
+
+  const initialDealState = {
+    x: -540,
+    y: -400,
+    rotateZ: -45,
+    rotateX: 25,
+    rotateY: -20,
+    scale: 0.35,
+    opacity: 0,
+    filter: 'blur(6px)',
+    zIndex: 10,
+  };
 
   const imgSrc = productImages[productId] || '/images/mobile.png';
 
@@ -469,438 +535,325 @@ function PillarVisualShowcase({
             className="absolute bottom-12 w-72 h-14 rounded-[100%] border border-[#7692FF]/30 shadow-[0_0_20px_rgba(118,146,255,0.25)] pointer-events-none"
           />
 
-          {/* Main 3D Zero-Gravity Cards Flight Container */}
+          {/* Main 3D Zero-Gravity Cards Flight Container with Horizontal Drag & Swipe */}
           <motion.div
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.22}
+            onDragEnd={(_e, { offset, velocity }) => {
+              const swipeThreshold = 35;
+              const velocityThreshold = 250;
+              if (offset.x < -swipeThreshold || velocity.x < -velocityThreshold) {
+                // Swiped Left -> Advance to next card
+                setActiveCardIndex((prev) => (prev + 1) % 3);
+              } else if (offset.x > swipeThreshold || velocity.x > velocityThreshold) {
+                // Swiped Right -> Go to previous card
+                setActiveCardIndex((prev) => (prev - 1 + 3) % 3);
+              }
+            }}
             style={{
               rotateY: cardsDeckRotateY,
               rotateX: cardsDeckRotateX,
               transformStyle: 'preserve-3d',
             }}
-            className="relative w-full h-[360px] flex items-center justify-center [perspective:1400px]"
+            className="relative w-full h-[360px] flex items-center justify-center [perspective:1400px] cursor-grab active:cursor-grabbing touch-pan-y"
           >
             {/* ─── CARD 0: SAPPHIRE BLUE EDITION ─── */}
-            <motion.div
-              onClick={() => setActiveCardIndex(0)}
-              initial={{
-                x: -620,
-                y: -440,
-                rotateZ: -50,
-                rotateX: 30,
-                rotateY: -25,
-                scale: 0.35,
-                opacity: 0,
-                filter: 'blur(8px)',
-              }}
-              animate={
-                isCardsDealt
-                  ? activeCardIndex === 0
-                    ? {
-                        x: 0,
-                        y: -44,
-                        rotateZ: 0,
-                        rotateX: 0,
-                        rotateY: 0,
-                        scale: 1.08,
-                        opacity: 1,
-                        filter: 'blur(0px)',
-                        zIndex: 35,
-                      }
-                    : {
-                        x: -168,
-                        y: -14,
-                        rotateZ: -8,
-                        rotateX: 3,
-                        rotateY: 15,
-                        scale: 0.94,
-                        opacity: 1,
-                        filter: 'blur(0px)',
-                        zIndex: 15,
-                      }
-                  : {
-                      x: -620,
-                      y: -440,
-                      rotateZ: -50,
-                      rotateX: 30,
-                      rotateY: -25,
-                      scale: 0.35,
-                      opacity: 0,
-                      filter: 'blur(8px)',
-                      zIndex: 10,
-                    }
-              }
-              transition={
-                !hasCompletedDeal
-                  ? {
-                      type: 'spring',
-                      stiffness: 48,
-                      damping: 11,
-                      mass: 0.85,
-                      delay: 0.06,
-                    }
-                  : {
-                      duration: 0.42,
-                      ease: [0.16, 1, 0.3, 1],
-                    }
-              }
-              whileHover={{
-                scale: activeCardIndex === 0 ? 1.11 : 0.98,
-                y: activeCardIndex === 0 ? -50 : -20,
-              }}
-              className="absolute w-[185px] sm:w-[215px] h-[270px] sm:h-[310px] rounded-2xl bg-gradient-to-b from-[#1b2cc8] via-[#09154a] to-[#040920] border-2 border-[#d4af37]/80 p-4 sm:p-5 shadow-[0_20px_50px_rgba(27,44,200,0.55),0_0_20px_rgba(212,175,55,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] cursor-pointer overflow-hidden group/card"
-            >
-              <motion.div
-                animate={isCardsDealt ? { y: [-3, 3, -3] } : {}}
-                transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut', delay: 0 }}
-                className="w-full h-full relative flex flex-col justify-between"
-              >
-                {/* Holographic Sheen Sweep on Deal */}
+            {(() => {
+              const slot0 = getCardSlot(0, activeCardIndex);
+              return (
                 <motion.div
-                  animate={isCardsDealt ? { x: ['-140%', '240%'] } : { x: '-140%' }}
-                  transition={{ duration: 1.1, delay: 0.35, ease: 'easeOut' }}
-                  className="absolute inset-0 w-1/2 -skew-x-20 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none z-20"
-                />
+                  onClick={() => setActiveCardIndex(0)}
+                  initial={initialDealState}
+                  animate={isCardsDealt ? getSlotAnimation(slot0) : initialDealState}
+                  transition={
+                    !hasCompletedDeal
+                      ? {
+                          type: 'spring',
+                          stiffness: 48,
+                          damping: 12,
+                          mass: 0.85,
+                          delay: 0.06,
+                        }
+                      : {
+                          duration: 0.42,
+                          ease: [0.16, 1, 0.3, 1],
+                        }
+                  }
+                  whileHover={{
+                    scale: slot0 === 0 ? 1.11 : 0.98,
+                    y: slot0 === 0 ? -44 : -18,
+                  }}
+                  className="absolute w-[185px] sm:w-[215px] h-[270px] sm:h-[310px] rounded-2xl bg-gradient-to-b from-[#1b2cc8] via-[#09154a] to-[#040920] border-2 border-[#d4af37]/80 p-4 sm:p-5 shadow-[0_20px_50px_rgba(27,44,200,0.55),0_0_20px_rgba(212,175,55,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] cursor-pointer overflow-hidden group/card"
+                >
+                  <motion.div
+                    animate={isCardsDealt ? { y: [-3, 3, -3] } : {}}
+                    transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut', delay: 0 }}
+                    className="w-full h-full relative flex flex-col justify-between pointer-events-none"
+                  >
+                    {/* Holographic Sheen Sweep on Deal */}
+                    <motion.div
+                      animate={isCardsDealt ? { x: ['-140%', '240%'] } : { x: '-140%' }}
+                      transition={{ duration: 1.1, delay: 0.35, ease: 'easeOut' }}
+                      className="absolute inset-0 w-1/2 -skew-x-20 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none z-20"
+                    />
 
-                {/* Top Row: Tier Name & Metallic Gold Chip */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] animate-pulse" />
-                    <span className="text-[9px] font-mono tracking-widest text-[#ABD2FA] uppercase font-bold">
-                      SAPPHIRE TIER
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Wifi className="w-3.5 h-3.5 rotate-90 text-[#ABD2FA] opacity-80" />
-                    <div className="w-8 h-6 rounded-md bg-gradient-to-br from-[#ffe072] via-[#d4af37] to-[#8c741e] border border-[#fff2b2]/90 shadow-inner relative overflow-hidden flex flex-col justify-center">
-                      <div className="w-full h-[1px] bg-[#8c741e]/60 absolute top-1.5" />
-                      <div className="w-full h-[1px] bg-[#8c741e]/60 absolute bottom-1.5" />
-                      <div className="h-full w-[1px] bg-[#8c741e]/60 absolute left-2.5" />
-                      <div className="h-full w-[1px] bg-[#8c741e]/60 absolute right-2.5" />
+                    {/* Top Row: Tier Name & Metallic Gold Chip */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#ABD2FA] animate-pulse" />
+                        <span className="text-[9px] font-mono tracking-widest text-[#ABD2FA] uppercase font-bold">
+                          SAPPHIRE TIER
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Wifi className="w-3.5 h-3.5 rotate-90 text-[#ABD2FA] opacity-80" />
+                        <div className="w-8 h-6 rounded-md bg-gradient-to-br from-[#ffe072] via-[#d4af37] to-[#8c741e] border border-[#fff2b2]/90 shadow-inner relative overflow-hidden flex flex-col justify-center">
+                          <div className="w-full h-[1px] bg-[#8c741e]/60 absolute top-1.5" />
+                          <div className="w-full h-[1px] bg-[#8c741e]/60 absolute bottom-1.5" />
+                          <div className="h-full w-[1px] bg-[#8c741e]/60 absolute left-2.5" />
+                          <div className="h-full w-[1px] bg-[#8c741e]/60 absolute right-2.5" />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                {/* Center: Luxury Brand Signature */}
-                <div className="text-center space-y-1 my-auto">
-                  <span className="text-xl sm:text-2xl font-serif font-bold tracking-[0.25em] text-white block drop-shadow-md">
-                    VELORA
-                  </span>
-                  <div className="flex items-center justify-center gap-2">
-                    <span className="h-[1px] w-6 bg-gradient-to-r from-transparent to-[#d4af37]" />
-                    <span className="text-[9px] font-mono tracking-[0.35em] text-[#ABD2FA] uppercase font-semibold">
-                      GLOBAL
-                    </span>
-                    <span className="h-[1px] w-6 bg-gradient-to-l from-transparent to-[#d4af37]" />
-                  </div>
-                </div>
+                    {/* Center: Luxury Brand Signature */}
+                    <div className="text-center space-y-1 my-auto">
+                      <span className="text-xl sm:text-2xl font-serif font-bold tracking-[0.25em] text-white block drop-shadow-md">
+                        VELORA
+                      </span>
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="h-[1px] w-6 bg-gradient-to-r from-transparent to-[#d4af37]" />
+                        <span className="text-[9px] font-mono tracking-[0.35em] text-[#ABD2FA] uppercase font-semibold">
+                          GLOBAL
+                        </span>
+                        <span className="h-[1px] w-6 bg-gradient-to-l from-transparent to-[#d4af37]" />
+                      </div>
+                    </div>
 
-                {/* Bottom Row: Gold Infinity & Forex Card Tier */}
-                <div className="flex flex-col items-center gap-1 mt-auto">
-                  <span className="text-2xl font-serif text-[#ffd700] leading-none drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]">
-                    ∞
-                  </span>
-                  <span className="text-[8px] font-mono tracking-[0.3em] uppercase font-bold text-[#d4af37]">
-                    FOREX CARD
-                  </span>
-                </div>
-              </motion.div>
-            </motion.div>
+                    {/* Bottom Row: Gold Infinity & Forex Card Tier */}
+                    <div className="flex flex-col items-center gap-1 mt-auto">
+                      <span className="text-2xl font-serif text-[#ffd700] leading-none drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]">
+                        ∞
+                      </span>
+                      <span className="text-[8px] font-mono tracking-[0.3em] uppercase font-bold text-[#d4af37]">
+                        FOREX CARD
+                      </span>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              );
+            })()}
 
             {/* ─── CARD 1: OBSIDIAN BLACK EDITION (CENTER HERO) ─── */}
-            <motion.div
-              onClick={() => setActiveCardIndex(1)}
-              initial={{
-                x: -620,
-                y: -440,
-                rotateZ: -50,
-                rotateX: 30,
-                rotateY: -25,
-                scale: 0.35,
-                opacity: 0,
-                filter: 'blur(8px)',
-              }}
-              animate={
-                isCardsDealt
-                  ? activeCardIndex === 1
-                    ? {
-                        x: 0,
-                        y: -44,
-                        rotateZ: 0,
-                        rotateX: 0,
-                        rotateY: 0,
-                        scale: 1.08,
-                        opacity: 1,
-                        filter: 'blur(0px)',
-                        zIndex: 35,
-                      }
-                    : activeCardIndex === 0
-                    ? {
-                        x: 168,
-                        y: -14,
-                        rotateZ: 8,
-                        rotateX: 3,
-                        rotateY: -15,
-                        scale: 0.94,
-                        opacity: 1,
-                        filter: 'blur(0px)',
-                        zIndex: 20,
-                      }
-                    : {
-                        x: -168,
-                        y: -14,
-                        rotateZ: -8,
-                        rotateX: 3,
-                        rotateY: 15,
-                        scale: 0.94,
-                        opacity: 1,
-                        filter: 'blur(0px)',
-                        zIndex: 20,
-                      }
-                  : {
-                      x: -620,
-                      y: -440,
-                      rotateZ: -50,
-                      rotateX: 30,
-                      rotateY: -25,
-                      scale: 0.35,
-                      opacity: 0,
-                      filter: 'blur(8px)',
-                      zIndex: 20,
-                    }
-              }
-              transition={
-                !hasCompletedDeal
-                  ? {
-                      type: 'spring',
-                      stiffness: 48,
-                      damping: 11,
-                      mass: 0.85,
-                      delay: 0.18,
-                    }
-                  : {
-                      duration: 0.42,
-                      ease: [0.16, 1, 0.3, 1],
-                    }
-              }
-              whileHover={{
-                scale: activeCardIndex === 1 ? 1.11 : 0.98,
-                y: activeCardIndex === 1 ? -50 : -20,
-              }}
-              className="absolute w-[185px] sm:w-[215px] h-[270px] sm:h-[310px] rounded-2xl bg-gradient-to-b from-[#1a1a22] via-[#0b0b10] to-black border-2 border-[#d4af37]/90 p-4 sm:p-5 shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_25px_rgba(212,175,55,0.35),inset_0_1px_2px_rgba(255,255,255,0.3)] cursor-pointer overflow-hidden group/card"
-            >
-              <motion.div
-                animate={isCardsDealt ? { y: [-3, 3, -3] } : {}}
-                transition={{ duration: 5.6, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-                className="w-full h-full relative flex flex-col justify-between"
-              >
-                {/* Holographic Sheen Sweep on Deal */}
+            {(() => {
+              const slot1 = getCardSlot(1, activeCardIndex);
+              return (
                 <motion.div
-                  animate={isCardsDealt ? { x: ['-140%', '240%'] } : { x: '-140%' }}
-                  transition={{ duration: 1.1, delay: 0.48, ease: 'easeOut' }}
-                  className="absolute inset-0 w-1/2 -skew-x-20 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none z-20"
-                />
+                  onClick={() => setActiveCardIndex(1)}
+                  initial={initialDealState}
+                  animate={isCardsDealt ? getSlotAnimation(slot1) : initialDealState}
+                  transition={
+                    !hasCompletedDeal
+                      ? {
+                          type: 'spring',
+                          stiffness: 48,
+                          damping: 12,
+                          mass: 0.85,
+                          delay: 0.18,
+                        }
+                      : {
+                          duration: 0.42,
+                          ease: [0.16, 1, 0.3, 1],
+                        }
+                  }
+                  whileHover={{
+                    scale: slot1 === 0 ? 1.11 : 0.98,
+                    y: slot1 === 0 ? -44 : -18,
+                  }}
+                  className="absolute w-[185px] sm:w-[215px] h-[270px] sm:h-[310px] rounded-2xl bg-gradient-to-b from-[#1a1a22] via-[#0b0b10] to-black border-2 border-[#d4af37]/90 p-4 sm:p-5 shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_25px_rgba(212,175,55,0.35),inset_0_1px_2px_rgba(255,255,255,0.3)] cursor-pointer overflow-hidden group/card"
+                >
+                  <motion.div
+                    animate={isCardsDealt ? { y: [-3, 3, -3] } : {}}
+                    transition={{ duration: 5.6, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+                    className="w-full h-full relative flex flex-col justify-between pointer-events-none"
+                  >
+                    {/* Holographic Sheen Sweep on Deal */}
+                    <motion.div
+                      animate={isCardsDealt ? { x: ['-140%', '240%'] } : { x: '-140%' }}
+                      transition={{ duration: 1.1, delay: 0.48, ease: 'easeOut' }}
+                      className="absolute inset-0 w-1/2 -skew-x-20 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none z-20"
+                    />
 
-                {/* Top Row: Tier Name & Metallic Gold Chip */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                    <span className="text-[9px] font-mono tracking-widest text-white uppercase font-bold">
-                      OBSIDIAN TIER
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Wifi className="w-3.5 h-3.5 rotate-90 text-[#d4af37] opacity-80" />
-                    <div className="w-8 h-6 rounded-md bg-gradient-to-br from-[#ffd700] via-[#c59b27] to-[#7c5e10] border border-amber-300/80 shadow-inner relative overflow-hidden flex flex-col justify-center">
-                      <div className="w-full h-[1px] bg-[#7c5e10]/60 absolute top-1.5" />
-                      <div className="w-full h-[1px] bg-[#7c5e10]/60 absolute bottom-1.5" />
-                      <div className="h-full w-[1px] bg-[#7c5e10]/60 absolute left-2.5" />
-                      <div className="h-full w-[1px] bg-[#7c5e10]/60 absolute right-2.5" />
+                    {/* Top Row: Tier Name & Metallic Gold Chip */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                        <span className="text-[9px] font-mono tracking-widest text-white uppercase font-bold">
+                          OBSIDIAN TIER
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Wifi className="w-3.5 h-3.5 rotate-90 text-[#d4af37] opacity-80" />
+                        <div className="w-8 h-6 rounded-md bg-gradient-to-br from-[#ffd700] via-[#c59b27] to-[#7c5e10] border border-amber-300/80 shadow-inner relative overflow-hidden flex flex-col justify-center">
+                          <div className="w-full h-[1px] bg-[#7c5e10]/60 absolute top-1.5" />
+                          <div className="w-full h-[1px] bg-[#7c5e10]/60 absolute bottom-1.5" />
+                          <div className="h-full w-[1px] bg-[#7c5e10]/60 absolute left-2.5" />
+                          <div className="h-full w-[1px] bg-[#7c5e10]/60 absolute right-2.5" />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                {/* Center: Luxury Brand Signature */}
-                <div className="text-center space-y-1 my-auto">
-                  <span className="text-xl sm:text-2xl font-serif font-bold tracking-[0.25em] text-white block drop-shadow-md">
-                    VELORA
-                  </span>
-                  <div className="flex items-center justify-center gap-2">
-                    <span className="h-[1px] w-6 bg-gradient-to-r from-transparent to-[#d4af37]" />
-                    <span className="text-[9px] font-mono tracking-[0.35em] text-[#d4af37] uppercase font-semibold">
-                      GLOBAL
-                    </span>
-                    <span className="h-[1px] w-6 bg-gradient-to-l from-transparent to-[#d4af37]" />
-                  </div>
-                </div>
+                    {/* Center: Luxury Brand Signature */}
+                    <div className="text-center space-y-1 my-auto">
+                      <span className="text-xl sm:text-2xl font-serif font-bold tracking-[0.25em] text-white block drop-shadow-md">
+                        VELORA
+                      </span>
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="h-[1px] w-6 bg-gradient-to-r from-transparent to-[#d4af37]" />
+                        <span className="text-[9px] font-mono tracking-[0.35em] text-[#d4af37] uppercase font-semibold">
+                          GLOBAL
+                        </span>
+                        <span className="h-[1px] w-6 bg-gradient-to-l from-transparent to-[#d4af37]" />
+                      </div>
+                    </div>
 
-                {/* Bottom Row: Gold Infinity & Forex Card Tier */}
-                <div className="flex flex-col items-center gap-1 mt-auto">
-                  <span className="text-2xl font-serif text-[#ffd700] leading-none drop-shadow-[0_0_10px_rgba(255,215,0,0.8)]">
-                    ∞
-                  </span>
-                  <span className="text-[8px] font-mono tracking-[0.3em] uppercase font-bold text-[#d4af37]">
-                    FOREX CARD
-                  </span>
-                </div>
-              </motion.div>
-            </motion.div>
+                    {/* Bottom Row: Gold Infinity & Forex Card Tier */}
+                    <div className="flex flex-col items-center gap-1 mt-auto">
+                      <span className="text-2xl font-serif text-[#ffd700] leading-none drop-shadow-[0_0_10px_rgba(255,215,0,0.8)]">
+                        ∞
+                      </span>
+                      <span className="text-[8px] font-mono tracking-[0.3em] uppercase font-bold text-[#d4af37]">
+                        FOREX CARD
+                      </span>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              );
+            })()}
 
             {/* ─── CARD 2: DIAMOND QUARTZ EDITION ─── */}
-            <motion.div
-              onClick={() => setActiveCardIndex(2)}
-              initial={{
-                x: -620,
-                y: -440,
-                rotateZ: -50,
-                rotateX: 30,
-                rotateY: -25,
-                scale: 0.35,
-                opacity: 0,
-                filter: 'blur(8px)',
-              }}
-              animate={
-                isCardsDealt
-                  ? activeCardIndex === 2
-                    ? {
-                        x: 0,
-                        y: -44,
-                        rotateZ: 0,
-                        rotateX: 0,
-                        rotateY: 0,
-                        scale: 1.08,
-                        opacity: 1,
-                        filter: 'blur(0px)',
-                        zIndex: 35,
-                      }
-                    : {
-                        x: 168,
-                        y: -14,
-                        rotateZ: 8,
-                        rotateX: 3,
-                        rotateY: -15,
-                        scale: 0.94,
-                        opacity: 1,
-                        filter: 'blur(0px)',
-                        zIndex: 15,
-                      }
-                  : {
-                      x: -620,
-                      y: -440,
-                      rotateZ: -50,
-                      rotateX: 30,
-                      rotateY: -25,
-                      scale: 0.35,
-                      opacity: 0,
-                      filter: 'blur(8px)',
-                      zIndex: 10,
-                    }
-              }
-              transition={
-                !hasCompletedDeal
-                  ? {
-                      type: 'spring',
-                      stiffness: 48,
-                      damping: 11,
-                      mass: 0.85,
-                      delay: 0.30,
-                    }
-                  : {
-                      duration: 0.42,
-                      ease: [0.16, 1, 0.3, 1],
-                    }
-              }
-              whileHover={{
-                scale: activeCardIndex === 2 ? 1.11 : 0.98,
-                y: activeCardIndex === 2 ? -50 : -20,
-              }}
-              className="absolute w-[185px] sm:w-[215px] h-[270px] sm:h-[310px] rounded-2xl bg-gradient-to-b from-[#ffffff] via-[#e8f0fe] to-[#bcd4f8] text-[#091540] border-2 border-white/95 p-4 sm:p-5 shadow-[0_20px_50px_rgba(171,210,250,0.65),0_0_30px_rgba(255,255,255,0.5),inset_0_1px_2px_rgba(255,255,255,0.95)] cursor-pointer overflow-hidden group/card"
-            >
-              <motion.div
-                animate={isCardsDealt ? { y: [-3, 3, -3] } : {}}
-                transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
-                className="w-full h-full relative flex flex-col justify-between"
-              >
-                {/* Holographic Sheen Sweep on Deal */}
+            {(() => {
+              const slot2 = getCardSlot(2, activeCardIndex);
+              return (
                 <motion.div
-                  animate={isCardsDealt ? { x: ['-140%', '240%'] } : { x: '-140%' }}
-                  transition={{ duration: 1.1, delay: 0.6, ease: 'easeOut' }}
-                  className="absolute inset-0 w-1/2 -skew-x-20 bg-gradient-to-r from-transparent via-white/50 to-transparent pointer-events-none z-20"
-                />
+                  onClick={() => setActiveCardIndex(2)}
+                  initial={initialDealState}
+                  animate={isCardsDealt ? getSlotAnimation(slot2) : initialDealState}
+                  transition={
+                    !hasCompletedDeal
+                      ? {
+                          type: 'spring',
+                          stiffness: 48,
+                          damping: 12,
+                          mass: 0.85,
+                          delay: 0.30,
+                        }
+                      : {
+                          duration: 0.42,
+                          ease: [0.16, 1, 0.3, 1],
+                        }
+                  }
+                  whileHover={{
+                    scale: slot2 === 0 ? 1.11 : 0.98,
+                    y: slot2 === 0 ? -44 : -18,
+                  }}
+                  className="absolute w-[185px] sm:w-[215px] h-[270px] sm:h-[310px] rounded-2xl bg-gradient-to-b from-[#ffffff] via-[#e8f0fe] to-[#bcd4f8] text-[#091540] border-2 border-white/95 p-4 sm:p-5 shadow-[0_20px_50px_rgba(171,210,250,0.65),0_0_30px_rgba(255,255,255,0.5),inset_0_1px_2px_rgba(255,255,255,0.95)] cursor-pointer overflow-hidden group/card"
+                >
+                  <motion.div
+                    animate={isCardsDealt ? { y: [-3, 3, -3] } : {}}
+                    transition={{ duration: 4.8, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
+                    className="w-full h-full relative flex flex-col justify-between pointer-events-none"
+                  >
+                    {/* Holographic Sheen Sweep on Deal */}
+                    <motion.div
+                      animate={isCardsDealt ? { x: ['-140%', '240%'] } : { x: '-140%' }}
+                      transition={{ duration: 1.1, delay: 0.6, ease: 'easeOut' }}
+                      className="absolute inset-0 w-1/2 -skew-x-20 bg-gradient-to-r from-transparent via-white/50 to-transparent pointer-events-none z-20"
+                    />
 
-                {/* Top Row: Tier Name & Metallic Platinum Chip */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1B2CC1] animate-pulse" />
-                    <span className="text-[9px] font-mono tracking-widest text-[#1B2CC1] uppercase font-bold">
-                      DIAMOND QUARTZ
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Wifi className="w-3.5 h-3.5 rotate-90 text-[#1B2CC1] opacity-80" />
-                    <div className="w-8 h-6 rounded-md bg-gradient-to-br from-[#e0e7ff] via-[#cbd5e1] to-[#64748b] border border-white shadow-inner relative overflow-hidden flex flex-col justify-center">
-                      <div className="w-full h-[1px] bg-[#64748b]/40 absolute top-1.5" />
-                      <div className="w-full h-[1px] bg-[#64748b]/40 absolute bottom-1.5" />
-                      <div className="h-full w-[1px] bg-[#64748b]/40 absolute left-2.5" />
-                      <div className="h-full w-[1px] bg-[#64748b]/40 absolute right-2.5" />
+                    {/* Top Row: Tier Name & Metallic Platinum Chip */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#1B2CC1] animate-pulse" />
+                        <span className="text-[9px] font-mono tracking-widest text-[#1B2CC1] uppercase font-bold">
+                          DIAMOND QUARTZ
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Wifi className="w-3.5 h-3.5 rotate-90 text-[#1B2CC1] opacity-80" />
+                        <div className="w-8 h-6 rounded-md bg-gradient-to-br from-[#e0e7ff] via-[#cbd5e1] to-[#64748b] border border-white shadow-inner relative overflow-hidden flex flex-col justify-center">
+                          <div className="w-full h-[1px] bg-[#64748b]/40 absolute top-1.5" />
+                          <div className="w-full h-[1px] bg-[#64748b]/40 absolute bottom-1.5" />
+                          <div className="h-full w-[1px] bg-[#64748b]/40 absolute left-2.5" />
+                          <div className="h-full w-[1px] bg-[#64748b]/40 absolute right-2.5" />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                {/* Center: Luxury Brand Signature */}
-                <div className="text-center space-y-1 my-auto">
-                  <span className="text-xl sm:text-2xl font-serif font-bold tracking-[0.25em] text-[#091540] block drop-shadow-sm">
-                    VELORA
-                  </span>
-                  <div className="flex items-center justify-center gap-2">
-                    <span className="h-[1px] w-6 bg-gradient-to-r from-transparent to-[#1B2CC1]" />
-                    <span className="text-[9px] font-mono tracking-[0.35em] text-[#1B2CC1] uppercase font-semibold">
-                      GLOBAL
-                    </span>
-                    <span className="h-[1px] w-6 bg-gradient-to-l from-transparent to-[#1B2CC1]" />
-                  </div>
-                </div>
+                    {/* Center: Luxury Brand Signature */}
+                    <div className="text-center space-y-1 my-auto">
+                      <span className="text-xl sm:text-2xl font-serif font-bold tracking-[0.25em] text-[#091540] block drop-shadow-sm">
+                        VELORA
+                      </span>
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="h-[1px] w-6 bg-gradient-to-r from-transparent to-[#1B2CC1]" />
+                        <span className="text-[9px] font-mono tracking-[0.35em] text-[#1B2CC1] uppercase font-semibold">
+                          GLOBAL
+                        </span>
+                        <span className="h-[1px] w-6 bg-gradient-to-l from-transparent to-[#1B2CC1]" />
+                      </div>
+                    </div>
 
-                {/* Bottom Row: Platinum Infinity & Forex Card Tier */}
-                <div className="flex flex-col items-center gap-1 mt-auto">
-                  <span className="text-2xl font-serif text-[#1B2CC1] leading-none drop-shadow-[0_0_8px_rgba(27,44,193,0.6)]">
-                    ∞
-                  </span>
-                  <span className="text-[8px] font-mono tracking-[0.3em] uppercase font-bold text-[#1B2CC1]">
-                    FOREX CARD
-                  </span>
-                </div>
-              </motion.div>
-            </motion.div>
+                    {/* Bottom Row: Platinum Infinity & Forex Card Tier */}
+                    <div className="flex flex-col items-center gap-1 mt-auto">
+                      <span className="text-2xl font-serif text-[#1B2CC1] leading-none drop-shadow-[0_0_8px_rgba(27,44,193,0.6)]">
+                        ∞
+                      </span>
+                      <span className="text-[8px] font-mono tracking-[0.3em] uppercase font-bold text-[#1B2CC1]">
+                        FOREX CARD
+                      </span>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              );
+            })()}
           </motion.div>
 
-          {/* Interactive Pagination Dots */}
-          <div className="flex items-center gap-3 mt-1 z-30">
-            <button
-              onClick={() => setActiveCardIndex(0)}
-              className={`transition-all rounded-full cursor-pointer ${
-                activeCardIndex === 0
-                  ? 'w-7 h-2.5 bg-[#d4af37] shadow-[0_0_12px_#d4af37]'
-                  : 'w-2.5 h-2.5 bg-[#7692FF]/40 hover:bg-[#7692FF]'
-              }`}
-              aria-label="Sapphire Card"
-            />
-            <button
-              onClick={() => setActiveCardIndex(1)}
-              className={`transition-all rounded-full cursor-pointer ${
-                activeCardIndex === 1
-                  ? 'w-7 h-2.5 bg-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.8)]'
-                  : 'w-2.5 h-2.5 bg-slate-500 hover:bg-slate-300'
-              }`}
-              aria-label="Obsidian Card"
-            />
-            <button
-              onClick={() => setActiveCardIndex(2)}
-              className={`transition-all rounded-full cursor-pointer ${
-                activeCardIndex === 2
-                  ? 'w-7 h-2.5 bg-white shadow-[0_0_12px_#ffffff]'
-                  : 'w-2.5 h-2.5 bg-white/40 hover:bg-white'
-              }`}
-              aria-label="Diamond Quartz Card"
-            />
+          {/* Interactive Pagination Dots & Swipe Guidance */}
+          <div className="flex flex-col items-center gap-2 mt-2 z-30">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setActiveCardIndex(0)}
+                className={`transition-all rounded-full cursor-pointer ${
+                  activeCardIndex === 0
+                    ? 'w-7 h-2.5 bg-[#d4af37] shadow-[0_0_12px_#d4af37]'
+                    : 'w-2.5 h-2.5 bg-[#7692FF]/40 hover:bg-[#7692FF]'
+                }`}
+                aria-label="Sapphire Card"
+              />
+              <button
+                onClick={() => setActiveCardIndex(1)}
+                className={`transition-all rounded-full cursor-pointer ${
+                  activeCardIndex === 1
+                    ? 'w-7 h-2.5 bg-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.8)]'
+                    : 'w-2.5 h-2.5 bg-slate-500 hover:bg-slate-300'
+                }`}
+                aria-label="Obsidian Card"
+              />
+              <button
+                onClick={() => setActiveCardIndex(2)}
+                className={`transition-all rounded-full cursor-pointer ${
+                  activeCardIndex === 2
+                    ? 'w-7 h-2.5 bg-white shadow-[0_0_12px_#ffffff]'
+                    : 'w-2.5 h-2.5 bg-white/40 hover:bg-white'
+                }`}
+                aria-label="Diamond Quartz Card"
+              />
+            </div>
+            <span className="text-[10px] font-mono tracking-widest text-[#ABD2FA]/70 uppercase">
+              Swipe or click to view editions
+            </span>
           </div>
         </div>
       )}
@@ -923,13 +876,16 @@ function PillarVisualShowcase({
             transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
             className="relative z-10 w-full h-full flex items-center justify-center select-none"
           >
-            <img
-              src={imgSrc}
-              alt="Prop Firm Golden Bull"
-              className="w-full h-full object-contain scale-110 mix-blend-screen select-none pointer-events-none drop-shadow-[0_0_35px_rgba(212,175,55,0.45)]"
-              loading="lazy"
-              decoding="async"
-            />
+            <picture className="w-full h-full flex items-center justify-center pointer-events-none select-none">
+              <source srcSet="/images/bull.webp" type="image/webp" />
+              <img
+                src="/images/bull.png"
+                alt="Prop Firm Golden Bull"
+                className="w-full h-full object-contain scale-110 mix-blend-screen select-none pointer-events-none drop-shadow-[0_0_35px_rgba(212,175,55,0.45)]"
+                loading="eager"
+                decoding="async"
+              />
+            </picture>
           </motion.div>
         </div>
       )}

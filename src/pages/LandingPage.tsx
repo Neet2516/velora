@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Navbar } from '../components/landing/Navbar';
 import { HeroSection } from '../components/landing/HeroSection';
 import { SectionDivider } from '../components/ui/SectionDivider';
@@ -38,6 +38,12 @@ const SectionSkeleton: React.FC<{ minHeight?: string }> = ({ minHeight = 'min-h-
 export const LandingPage: React.FC = () => {
   const { scrollTo } = useLenis();
   const [selectedProduct, setSelectedProduct] = useState<EcosystemProduct | null>(null);
+
+  useEffect(() => {
+    // Eagerly pre-cache the bull logo into memory so it paints instantaneously
+    const preloadBullWebp = new Image();
+    preloadBullWebp.src = '/images/bull.webp';
+  }, []);
 
   const handleExploreEcosystem = () => {
     scrollTo('#ecosystem', { offset: -72 });

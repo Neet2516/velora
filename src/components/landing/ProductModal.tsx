@@ -11,7 +11,7 @@ interface ProductModalProps {
 
 const productImages: Record<string, string> = {
   'broker-house': '/images/mobile.png',
-  'prop-firm': '/images/bull.png',
+  'prop-firm': '/images/bull.webp',
   'crypto-arbitrage': '/images/ecosystem_crypto_cube.png',
   'ai-agent': '/images/brain.png',
   'education-platform': '/images/ecosystem-education-academy.png',
@@ -181,7 +181,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
                 transition={{ delay: 0.12, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                 src={imgSrc}
                 alt={displayProduct.title}
-                loading="lazy"
+                loading={displayProduct.id === 'prop-firm' ? 'eager' : 'lazy'}
                 decoding="async"
                 className={`w-full h-full ${
                   displayProduct.id === 'prop-firm' || displayProduct.id === 'ai-agent'
